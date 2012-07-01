@@ -1,0 +1,6 @@
+A source code component editor based on QPlainTextEdit/QTextDocument/QSyntaxHighlighter and Kate xml language definition files.
+License is still to define, planned is LGPL3 but not final!
+
+Contact:
+    pasnox@gmail.com
+    sacha@labsquare.org
