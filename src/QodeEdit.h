@@ -6,6 +6,8 @@
 class QodeEdit : public QPlainTextEdit
 {
     Q_OBJECT
+    friend class QodeEditPrivate;
+    friend class MarginContainerPrivate;
 
 public:
     enum Ruler {
@@ -25,8 +27,7 @@ public slots:
     void setRulerWidth( int width );
 
 protected:
-    class Private;
-    QodeEdit::Private* d;
+    class QodeEditPrivate* d;
     
     virtual bool event( QEvent* event );
     virtual void paintEvent( QPaintEvent* event );

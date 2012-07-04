@@ -1,30 +1,29 @@
 #include "QodeEdit.h"
+#include "MarginContainer.h"
 
 #include <QStyleOptionFrameV3>
 #include <QPainter>
 
-class QodeEdit::Private : QObject
+// QodeEditPrivate
+
+class QodeEditPrivate : QObject
 {
     Q_OBJECT
 
 public:
-    Private( QodeEdit* _editor )
+    QodeEditPrivate( QodeEdit* _editor )
         : QObject( _editor ),
             editor( _editor ),
+            margins( new MarginContainer( _editor ) ),
             originalPalette( _editor->palette() ),
             rulerMode( QodeEdit::NoRuler ),
             rulerWidth( 80 )
     {
-        editor->setAutoFillBackground( true );
-        
-#if defined( HAS_QT_5 )
-        connect( editor, &QodeEdit::cursorPositionChanged, editor->viewport(), &QWidget::update );
-#else
-        connect( editor, SIGNAL( cursorPositionChanged() ), editor->viewport(), SLOT( update() ) );
-#endif
+        margins->setVisible( MarginContainer::LineNumber, true );
     }
     
     QodeEdit* editor;
+    MarginContainer* margins;
     QPalette originalPalette;
     QodeEdit::Ruler rulerMode;
     int rulerWidth;
@@ -89,10 +88,19 @@ public:
     }
 };
 
+// QodeEdit
+
 QodeEdit::QodeEdit( QWidget* parent )
     : QPlainTextEdit( parent ),
-        d( new QodeEdit::Private( this ) )
+        d( new QodeEditPrivate( this ) )
 {
+    setAutoFillBackground( true );
+    
+#if defined( HAS_QT_5 )
+    connect( this, &QodeEdit::cursorPositionChanged, viewport(), &QWidget::update );
+#else
+    connect( this, SIGNAL( cursorPositionChanged() ), viewport(), SLOT( update() ) );
+#endif
 }
 
 QodeEdit::~QodeEdit()

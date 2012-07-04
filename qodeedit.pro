@@ -14,6 +14,8 @@
 ##
 ###########################################################################################
 
+XUP.QT_VERSION = Qt System (4.8.1)
+
 include( config.pri )
 initializeProject( lib, $${BUILD_TARGET}, $${BUILD_MODE}, $${BUILD_PATH}/$${TARGET_NAME}, $${BUILD_TARGET_PATH}, "", "0.1.0" )
 
@@ -22,6 +24,14 @@ DEPENDPATH *= $${INCLUDEPATH}
 
 FORMS *= 
 
-HEADERS *= 
+HEADERS *=  \
+    src/QodeEdit.h \
+    src/margins/MarginContainer.h \
+    src/margins/AbstractMargin.h \
+    src/margins/LineNumberMargin.h
 
-SOURCES *= 
+SOURCES *=  \
+    src/QodeEdit.cpp \
+    src/margins/MarginContainer.cpp \
+    src/margins/AbstractMargin.cpp \
+    src/margins/LineNumberMargin.cpp
