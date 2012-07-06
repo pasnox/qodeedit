@@ -3,11 +3,15 @@
 
 #include <QPlainTextEdit>
 
+class MarginContainer;
+
 class QodeEdit : public QPlainTextEdit
 {
     Q_OBJECT
     friend class QodeEditPrivate;
     friend class MarginContainerPrivate;
+    friend class AbstractMarginPrivate;
+    friend class AbstractMargin;
 
 public:
     enum Ruler {
@@ -19,8 +23,12 @@ public:
     QodeEdit( QWidget* parent = 0 );
     virtual ~QodeEdit();
     
+    MarginContainer* marginContainer() const;
+    
     QodeEdit::Ruler rulerMode() const;
     int rulerWidth() const;
+    
+    QPoint cursorPosition() const;
 
 public slots:
     void setRulerMode( QodeEdit::Ruler mode );

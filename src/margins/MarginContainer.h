@@ -15,7 +15,8 @@ public:
         LineNumber = 0,
         CodeFolding = 1,
         Bookmarks = 2,
-        LineChange = 3
+        LineChange = 3,
+        Spacing = 4,
     };
     
     MarginContainer( QodeEdit* editor );
@@ -23,6 +24,9 @@ public:
     
     bool isVisible( MarginContainer::Type type ) const;
     void setVisible( MarginContainer::Type type, bool visible );
+    
+public slots:
+    void updateLayout();
 
 private:
     class MarginContainerPrivate* d;

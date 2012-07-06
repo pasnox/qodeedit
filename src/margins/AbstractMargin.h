@@ -13,8 +13,13 @@ public:
     AbstractMargin( QodeEdit* editor );
     virtual ~AbstractMargin();
     
+    QodeEdit* editor() const;
+    
     int lineAt( const QPoint& pos ) const;
     QRect lineRect( int line ) const;
+    
+    int firstVisibleLine() const;
+    int lastVisibleLine() const;
 
 protected:
     virtual void mousePressEvent( QMouseEvent* event );
@@ -32,6 +37,7 @@ signals:
     void doubleClicked( int line, Qt::MouseButton button, Qt::MouseButtons buttons, Qt::KeyboardModifiers modifiers );
     void entered( int line );
     void left( int line );
+    void countChanged( int count );
 };
 
 #endif // ABSTRACTMARGIN_H

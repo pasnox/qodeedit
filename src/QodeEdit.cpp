@@ -20,6 +20,7 @@ public:
             rulerWidth( 80 )
     {
         margins->setVisible( MarginContainer::LineNumber, true );
+        margins->setVisible( MarginContainer::Spacing, true );
     }
     
     QodeEdit* editor;
@@ -45,7 +46,7 @@ public:
     
     QRect caretLineRect() const
     {
-        QRect rect = editor->cursorRect().adjusted( 0, -1, 0, 2 );
+        QRect rect = editor->cursorRect().adjusted( 0, -1, 0, 1 );
         rect.setX( 0 );
         rect.setWidth( editor->viewport()->width() );
         return rect;
@@ -95,6 +96,7 @@ QodeEdit::QodeEdit( QWidget* parent )
         d( new QodeEditPrivate( this ) )
 {
     setAutoFillBackground( true );
+    document()->setDocumentMargin( 0 );
     
 #if defined( HAS_QT_5 )
     connect( this, &QodeEdit::cursorPositionChanged, viewport(), &QWidget::update );
@@ -105,6 +107,11 @@ QodeEdit::QodeEdit( QWidget* parent )
 
 QodeEdit::~QodeEdit()
 {
+}
+
+MarginContainer* QodeEdit::marginContainer() const
+{
+    return d->margins;
 }
 
 QodeEdit::Ruler QodeEdit::rulerMode() const
@@ -127,6 +134,12 @@ void QodeEdit::setRulerWidth( int width )
 {
     d->rulerWidth = width;
     viewport()->update();
+}
+
+QPoint QodeEdit::cursorPosition() const
+{
+    const QTextCursor cursor = textCursor();
+    return cursor.isNull() ? QPoint() : QPoint( cursor.positionInBlock(), cursor.blockNumber() );
 }
 
 bool QodeEdit::event( QEvent* event )

@@ -28,10 +28,12 @@ HEADERS *=  \
     src/QodeEdit.h \
     src/margins/MarginContainer.h \
     src/margins/AbstractMargin.h \
-    src/margins/LineNumberMargin.h
+    src/margins/LineNumberMargin.h \
+    src/margins/SpacingMargin.h
 
 SOURCES *=  \
     src/QodeEdit.cpp \
     src/margins/MarginContainer.cpp \
     src/margins/AbstractMargin.cpp \
-    src/margins/LineNumberMargin.cpp
+    src/margins/LineNumberMargin.cpp \
+    src/margins/SpacingMargin.cpp

@@ -1,26 +1,22 @@
 #include "LineNumberMargin.h"
+#include "QodeEdit.h"
+#include "MarginContainer.h"
 
 #include <QPainter>
-#include <QDebug>
+
+#define LineNumberMarginMargins 4
 
 LineNumberMargin::LineNumberMargin( QodeEdit* editor )
     : AbstractMargin( editor )
 {
-    connect( this, SIGNAL( clicked( int, Qt::MouseButton, Qt::MouseButtons, Qt::KeyboardModifiers ) ), this, SLOT( q_clicked( int, Qt::MouseButton, Qt::MouseButtons, Qt::KeyboardModifiers ) ) );
-    connect( this, SIGNAL( doubleClicked( int, Qt::MouseButton, Qt::MouseButtons, Qt::KeyboardModifiers ) ), this, SLOT( q_doubleClicked( int, Qt::MouseButton, Qt::MouseButtons, Qt::KeyboardModifiers ) ) );
-    connect( this, SIGNAL( entered( int ) ), this, SLOT( q_entered( int ) ) );
-    connect( this, SIGNAL( left( int ) ), this, SLOT( q_left( int ) ) );
+	connect( editor, SIGNAL( cursorPositionChanged() ), this, SLOT( update() ) );
+    connect( this, SIGNAL( entered( int ) ), this, SLOT( update() ) );
+    connect( this, SIGNAL( left( int ) ), this, SLOT( update() ) );
+    connect( this, SIGNAL( countChanged( int ) ), this, SLOT( q_countChanged( int ) ) );
 }
 
 LineNumberMargin::~LineNumberMargin()
 {
-}
-
-QSize LineNumberMargin::minimumSizeHint() const
-{
-    QSize s = AbstractMargin::minimumSizeHint();
-    s.setWidth( 30 );
-    return s;
 }
 
 void LineNumberMargin::paintEvent( QPaintEvent* event )
@@ -28,26 +24,37 @@ void LineNumberMargin::paintEvent( QPaintEvent* event )
     AbstractMargin::paintEvent( event );
     
     QPainter painter( this );
-    painter.setBrush( QColor( Qt::red ) );
-    painter.drawRect( rect().adjusted( 0, 0, -1, -1 ) );
+    
+    const int firstLine = firstVisibleLine();
+    const int lastLine = lastVisibleLine();
+    const int flags = Qt::AlignVCenter | Qt::AlignRight;
+	const QFont painterFont = painter.font();
+	const QColor color = palette().color( QPalette::WindowText );
+	const QColor lightColor = QColor( color.red(), color.green(), color.blue(), 120 );
+	const QPoint cursorPos = editor()->cursorPosition();
+	const QPoint mousePos = mapFromGlobal( QCursor::pos() );
+	const int mouseLine = rect().contains( mousePos ) ? lineAt( mousePos ) : -1;
+    
+	for ( int i = firstLine; i < lastLine; i++ ) {
+        const QRect rect = lineRect( i ).adjusted( 0, 0, -LineNumberMarginMargins, 0 );
+		const bool isCurrentLine = cursorPos.y() == i;
+		bool isHoveredLine = mouseLine == i && !isCurrentLine;
+		
+		if ( !isHoveredLine && ( ( i +1 ) %10 ) == 0 ) {
+			isHoveredLine = true;
+		}
+		
+		QFont font = painterFont;
+		font.setBold( isCurrentLine || isHoveredLine );
+		
+		painter.setFont( font );
+		painter.setPen( isCurrentLine ? color : lightColor );
+		painter.drawText( rect, flags, QString::number( i +1 ) );
+    }
 }
 
-void LineNumberMargin::q_clicked( int line, Qt::MouseButton button, Qt::MouseButtons buttons, Qt::KeyboardModifiers modifiers )
+void LineNumberMargin::q_countChanged( int count )
 {
-    qWarning() << Q_FUNC_INFO << line << button << buttons << modifiers;
-}
-
-void LineNumberMargin::q_doubleClicked( int line, Qt::MouseButton button, Qt::MouseButtons buttons, Qt::KeyboardModifiers modifiers )
-{
-    qWarning() << Q_FUNC_INFO << line << button << buttons << modifiers;
-}
-
-void LineNumberMargin::q_entered( int line )
-{
-    qWarning() << Q_FUNC_INFO << line;
-}
-
-void LineNumberMargin::q_left( int line )
-{
-    qWarning() << Q_FUNC_INFO << line;
+    setMinimumWidth( fontMetrics().width( QString::number( count ) ) +( LineNumberMarginMargins *2 ) );
+    editor()->marginContainer()->updateLayout();
 }

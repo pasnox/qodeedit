@@ -2,6 +2,7 @@
 #include "QodeEdit.h"
 #include "AbstractMargin.h"
 #include "LineNumberMargin.h"
+#include "SpacingMargin.h"
 
 #include <QHBoxLayout>
 #include <QMap>
@@ -79,20 +80,28 @@ public:
                 case MarginContainer::LineChange:
                     //margin = new LineChangeMargin( editor );
                     break;
+                case MarginContainer::Spacing:
+                    margin = new SpacingMargin( editor );
+                    break;
             }
             
             layout->insertWidget( indexOfNewMargin( type ), margin );
+            margins[ type ] = margin;
         }
+    }
+    
+    void updateLayout() {
+        const int margin = editor->frameWidth();
+        const int width = container->minimumSizeHint().width();
+        editor->setViewportMargins( width, 0, 0, 0 );
+        container->setGeometry( QRect( QPoint( margin, margin ), QSize( width, editor->viewport()->height() ) ) );
     }
 
 protected:
     virtual bool eventFilter( QObject* object, QEvent* event ) {
         if ( object == editor ) {
             if ( event->type() == QEvent::Resize ) {
-                const int margin = editor->frameWidth();
-                const int width = container->minimumSizeHint().width();
-                editor->setViewportMargins( width, 0, 0, 0 );
-                container->setGeometry( QRect( QPoint( margin, margin ), QSize( width, editor->viewport()->height() ) ) );
+                updateLayout();
                 return true;
             }
         }
@@ -128,6 +137,11 @@ bool MarginContainer::isVisible( MarginContainer::Type type ) const
 void MarginContainer::setVisible( MarginContainer::Type type, bool visible )
 {
     d->setVisible( type, visible );
+}
+
+void MarginContainer::updateLayout()
+{
+    d->updateLayout();
 }
 
 #include "MarginContainer.moc"

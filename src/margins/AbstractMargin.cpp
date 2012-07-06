@@ -2,6 +2,9 @@
 #include "QodeEdit.h"
 
 #include <QTextBlock>
+#include <QScrollBar>
+#include <QApplication>
+#include <QDebug>
 
 // AbstractMarginPrivate
 
@@ -19,7 +22,8 @@ public:
     }
     
     QRect lineRect( int line ) const {
-        QRect rect = editor->document()->findBlockByNumber( line ).layout()->boundingRect().toRect();
+        const QTextBlock block = editor->document()->findBlockByNumber( line );
+        QRect rect = editor->blockBoundingGeometry( block ).toRect();
         rect.setWidth( margin->width() );
         return rect;
     }
@@ -38,10 +42,19 @@ AbstractMargin::AbstractMargin( QodeEdit* editor )
         d( new AbstractMarginPrivate( this, editor ) )
 {
     setMouseTracking( true );
+    connect( editor->document()->documentLayout(), SIGNAL( update( const QRectF& ) ), this, SLOT( update() ) );
+	connect( editor->verticalScrollBar(), SIGNAL( valueChanged( int ) ), this, SLOT( update() ) );
+	connect( editor, SIGNAL( blockCountChanged( int ) ), this, SLOT( update() ) );
+    connect( editor, SIGNAL( blockCountChanged( int ) ), this, SIGNAL( countChanged( int ) ) );
 }
 
 AbstractMargin::~AbstractMargin()
 {
+}
+
+QodeEdit* AbstractMargin::editor() const
+{
+    return d->editor;
 }
 
 int AbstractMargin::lineAt( const QPoint& pos ) const
@@ -52,6 +65,16 @@ int AbstractMargin::lineAt( const QPoint& pos ) const
 QRect AbstractMargin::lineRect( int line ) const
 {
     return d->lineRect( line );
+}
+
+int AbstractMargin::firstVisibleLine() const
+{
+    return d->lineAt( d->editor->viewport()->rect().topLeft() );
+}
+
+int AbstractMargin::lastVisibleLine() const
+{
+    return d->lineAt( d->editor->viewport()->rect().bottomLeft() );
 }
 
 void AbstractMargin::mousePressEvent( QMouseEvent* event )
@@ -105,9 +128,26 @@ void AbstractMargin::mouseMoveEvent( QMouseEvent* event )
 void AbstractMargin::enterEvent( QEvent* event )
 {
     QWidget::enterEvent( event );
+    
+    const QPoint pos = QCursor::pos();
+    QMouseEvent me( QEvent::MouseMove, mapFromGlobal( pos ), pos, Qt::NoButton, QApplication::mouseButtons(), QApplication::keyboardModifiers() );
+    
+    mouseMoveEvent( &me );
 }
 
 void AbstractMargin::leaveEvent( QEvent* event )
 {
     QWidget::leaveEvent( event );
+    
+    const int line = -1;
+    
+    if ( line == d->line ) {
+        return;
+    }
+    
+    if ( d->line != -1 ) {
+        emit left( d->line );
+    }
+    
+    d->line = line;
 }
