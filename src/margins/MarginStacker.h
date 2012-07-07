@@ -12,6 +12,7 @@ class MarginStacker : public QWidget
 public:
     // the order is important as it defined the default presentation order of the margins
     enum Type {
+        Invalid = -1,
         LineNumber = 0,
         CodeFolding = 1,
         Bookmarks = 2,

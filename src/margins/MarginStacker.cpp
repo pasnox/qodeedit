@@ -83,6 +83,9 @@ public:
                 case MarginStacker::Spacing:
                     margin = new SpacingMargin( stacker );
                     break;
+                default:
+                    Q_ASSERT( 0 );
+                    break;
             }
             
             Q_ASSERT( margin );

@@ -12,7 +12,7 @@ class QodeEdit::Private
 public:
     Private( QodeEdit* _editor )
             : editor( _editor ),
-            margins( 0 ),
+            stacker( 0 ),
             originalPalette( _editor->palette() ),
             rulerMode( QodeEdit::NoRuler ),
             rulerWidth( 80 )
@@ -20,7 +20,7 @@ public:
     }
     
     QodeEdit* editor;
-    MarginStacker* margins;
+    MarginStacker* stacker;
     QPalette originalPalette;
     QodeEdit::Ruler rulerMode;
     int rulerWidth;
@@ -108,23 +108,23 @@ QodeEdit::~QodeEdit()
 
 MarginStacker* QodeEdit::marginStacker() const
 {
-    return d->margins;
+    return d->stacker;
 }
 
 void QodeEdit::setMarginStacker( MarginStacker* marginStacker )
 {
-    if ( d->margins == marginStacker ) {
+    if ( d->stacker == marginStacker ) {
         return;
     }
     
-    if ( d->margins ) {
-        d->margins->deleteLater();
+    if ( d->stacker ) {
+        d->stacker->deleteLater();
     }
     
-    d->margins = marginStacker;
+    d->stacker = marginStacker;
     
-    if ( d->margins ) {
-        d->margins->setEditor( this );
+    if ( d->stacker ) {
+        d->stacker->setEditor( this );
     }
 }
 
