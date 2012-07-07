@@ -3,6 +3,7 @@
 
 #include <QWidget>
 
+class MarginStacker;
 class QodeEdit;
 
 class AbstractMargin : public QWidget
@@ -10,10 +11,13 @@ class AbstractMargin : public QWidget
     Q_OBJECT
     
 public:
-    AbstractMargin( QodeEdit* editor );
+    AbstractMargin( MarginStacker* marginStacker );
     virtual ~AbstractMargin();
     
     QodeEdit* editor() const;
+    virtual void setEditor( QodeEdit* editor );
+    
+    MarginStacker* stacker() const;
     
     int lineAt( const QPoint& pos ) const;
     QRect lineRect( int line ) const;
@@ -22,6 +26,7 @@ public:
     int lastVisibleLine() const;
 
 protected:
+    virtual bool event( QEvent* event );
     virtual void mousePressEvent( QMouseEvent* event );
     virtual void mouseDoubleClickEvent( QMouseEvent* event );
     virtual void mouseReleaseEvent( QMouseEvent* event );
@@ -30,7 +35,8 @@ protected:
     virtual void leaveEvent( QEvent* event );
 
 private:
-    class AbstractMarginPrivate* d;
+    class Private;
+    AbstractMargin::Private* d;
 
 signals:
     void clicked( int line, Qt::MouseButton button, Qt::MouseButtons buttons, Qt::KeyboardModifiers modifiers );
@@ -38,6 +44,8 @@ signals:
     void entered( int line );
     void left( int line );
     void countChanged( int count );
+    void fontChanged();
+    void resized();
 };
 
 #endif // ABSTRACTMARGIN_H

@@ -8,14 +8,16 @@ class LineNumberMargin : public AbstractMargin
     Q_OBJECT
     
 public:
-    LineNumberMargin( QodeEdit* editor );
+    LineNumberMargin( MarginStacker* marginStacker );
     virtual ~LineNumberMargin();
+    
+    virtual void setEditor( QodeEdit* editor );
 
 protected:
     virtual void paintEvent( QPaintEvent* event );
 
 protected slots:
-    void q_countChanged( int count );
+    void updateWidth();
 };
 
 #endif // LINENUMBERMARGIN_H

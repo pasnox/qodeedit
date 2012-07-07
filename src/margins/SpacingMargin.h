@@ -8,7 +8,7 @@ class SpacingMargin : public AbstractMargin
     Q_OBJECT
     
 public:
-    SpacingMargin( QodeEdit* editor );
+    SpacingMargin( MarginStacker* marginStacker );
     virtual ~SpacingMargin();
     
 protected:

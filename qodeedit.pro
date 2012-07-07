@@ -15,9 +15,10 @@
 ###########################################################################################
 
 XUP.QT_VERSION = Qt System (4.8.1)
+XUP.OTHERS_PLATFORM_TARGET_DEFAULT = bin/Linux/qodeedit_debug
 
 include( config.pri )
-initializeProject( lib, $${BUILD_TARGET}, $${BUILD_MODE}, $${BUILD_PATH}/$${TARGET_NAME}, $${BUILD_TARGET_PATH}, "", "0.1.0" )
+initializeProject( app, $${BUILD_TARGET}, $${BUILD_MODE}, $${BUILD_PATH}/$${TARGET_NAME}, $${BUILD_TARGET_PATH}, "", "0.1.0" )
 
 INCLUDEPATH *= $$getFolders( . )
 DEPENDPATH *= $${INCLUDEPATH}
@@ -26,14 +27,14 @@ FORMS *=
 
 HEADERS *=  \
     src/QodeEdit.h \
-    src/margins/MarginContainer.h \
+    src/margins/MarginStacker.h \
     src/margins/AbstractMargin.h \
     src/margins/LineNumberMargin.h \
     src/margins/SpacingMargin.h
 
-SOURCES *=  \
+SOURCES *=  src/main.cpp \
     src/QodeEdit.cpp \
-    src/margins/MarginContainer.cpp \
+    src/margins/MarginStacker.cpp \
     src/margins/AbstractMargin.cpp \
     src/margins/LineNumberMargin.cpp \
     src/margins/SpacingMargin.cpp

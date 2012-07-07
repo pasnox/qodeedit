@@ -1,30 +1,26 @@
 #include "QodeEdit.h"
-#include "MarginContainer.h"
+#include "MarginStacker.h"
 
 #include <QStyleOptionFrameV3>
+#include <QTextBlock>
 #include <QPainter>
 
-// QodeEditPrivate
+// QodeEdit::Private
 
-class QodeEditPrivate : QObject
+class QodeEdit::Private
 {
-    Q_OBJECT
-
 public:
-    QodeEditPrivate( QodeEdit* _editor )
-        : QObject( _editor ),
-            editor( _editor ),
-            margins( new MarginContainer( _editor ) ),
+    Private( QodeEdit* _editor )
+            : editor( _editor ),
+            margins( 0 ),
             originalPalette( _editor->palette() ),
             rulerMode( QodeEdit::NoRuler ),
             rulerWidth( 80 )
     {
-        margins->setVisible( MarginContainer::LineNumber, true );
-        margins->setVisible( MarginContainer::Spacing, true );
     }
     
     QodeEdit* editor;
-    MarginContainer* margins;
+    MarginStacker* margins;
     QPalette originalPalette;
     QodeEdit::Ruler rulerMode;
     int rulerWidth;
@@ -93,25 +89,78 @@ public:
 
 QodeEdit::QodeEdit( QWidget* parent )
     : QPlainTextEdit( parent ),
-        d( new QodeEditPrivate( this ) )
+        d( new QodeEdit::Private( this ) )
 {
     setAutoFillBackground( true );
-    document()->setDocumentMargin( 0 );
+    document()->setDocumentMargin( 0 ); // maybe need to create our own document heriting QTextDocument ?
     
-#if defined( HAS_QT_5 )
-    connect( this, &QodeEdit::cursorPositionChanged, viewport(), &QWidget::update );
-#else
+    QPalette pal = palette();
+    pal.setColor( QPalette::Link, pal.color( QPalette::Link ).lighter( 200 ) );
+    setPalette( pal );
+    
     connect( this, SIGNAL( cursorPositionChanged() ), viewport(), SLOT( update() ) );
-#endif
 }
 
 QodeEdit::~QodeEdit()
 {
+    delete d;
 }
 
-MarginContainer* QodeEdit::marginContainer() const
+MarginStacker* QodeEdit::marginStacker() const
 {
     return d->margins;
+}
+
+void QodeEdit::setMarginStacker( MarginStacker* marginStacker )
+{
+    if ( d->margins == marginStacker ) {
+        return;
+    }
+    
+    if ( d->margins ) {
+        d->margins->deleteLater();
+    }
+    
+    d->margins = marginStacker;
+    
+    if ( d->margins ) {
+        d->margins->setEditor( this );
+    }
+}
+
+QPoint QodeEdit::cursorPosition() const
+{
+    const QTextCursor cursor = textCursor();
+    return cursor.isNull() ? QPoint() : QPoint( cursor.positionInBlock(), cursor.blockNumber() );
+}
+
+void QodeEdit::setCursorPosition( const QPoint& pos )
+{
+    const QTextBlock block = document()->findBlockByLineNumber( pos.y() );
+    const int position = block.position() +( pos.x() < block.length() ? pos.x() : 0 );
+    QTextCursor cursor = textCursor();
+    cursor.setPosition( position, QTextCursor::MoveAnchor );
+    setTextCursor( cursor );
+}
+
+int QodeEdit::currentLine() const
+{
+    return cursorPosition().y();
+}
+
+void QodeEdit::setCurrentLine( int line )
+{
+    setCursorPosition( QPoint( currentColumn(), line ) );
+}
+
+int QodeEdit::currentColumn() const
+{
+    return cursorPosition().x();
+}
+
+void QodeEdit::setCurrentColumn( int column )
+{
+    setCursorPosition( QPoint( column, currentLine() ) );
 }
 
 QodeEdit::Ruler QodeEdit::rulerMode() const
@@ -136,10 +185,10 @@ void QodeEdit::setRulerWidth( int width )
     viewport()->update();
 }
 
-QPoint QodeEdit::cursorPosition() const
+QRect QodeEdit::lineRect( int line ) const
 {
-    const QTextCursor cursor = textCursor();
-    return cursor.isNull() ? QPoint() : QPoint( cursor.positionInBlock(), cursor.blockNumber() );
+    const QTextBlock block = document()->findBlockByNumber( line );
+    return blockBoundingGeometry( block ).toRect();
 }
 
 bool QodeEdit::event( QEvent* event )
@@ -183,5 +232,3 @@ void QodeEdit::paintEvent( QPaintEvent* event )
     // normal editor painting
     QPlainTextEdit::paintEvent( event );
 }
-
-#include "QodeEdit.moc"

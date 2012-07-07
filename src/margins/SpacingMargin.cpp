@@ -3,8 +3,8 @@
 
 #include <QPainter>
 
-SpacingMargin::SpacingMargin( QodeEdit* editor )
-    : AbstractMargin( editor )
+SpacingMargin::SpacingMargin( MarginStacker* marginStacker )
+    : AbstractMargin( marginStacker )
 {
     setMinimumWidth( 2 );
     setMouseTracking( false );
@@ -17,6 +17,9 @@ SpacingMargin::~SpacingMargin()
 void SpacingMargin::paintEvent( QPaintEvent* event )
 {
     QWidget::paintEvent( event );
+    
+    const QodeEdit* editor = this->editor();
+    const QColor color = editor ? editor->palette().color( editor->viewport()->backgroundRole() ) : palette().color( backgroundRole() );
     QPainter painter( this );
-    painter.fillRect( event->rect(), editor()->palette().color( editor()->viewport()->backgroundRole() ) );
+    painter.fillRect( event->rect(), color );
 }
