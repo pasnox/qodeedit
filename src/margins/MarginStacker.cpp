@@ -36,6 +36,10 @@ public:
             return types.count();
         }
         
+        if ( type < types.first() ) {
+            return 0;
+        }
+        
         for ( int i = 0; i < types.count(); i++ ) {
             const MarginStacker::Type current = MarginStacker::Type( types[ i ] );
             
@@ -44,7 +48,7 @@ public:
             }
         }
         
-        qFatal( "%s: You can't be there!", Q_FUNC_INFO );
+        qFatal( "%s: You can't be there (%i)!!!", Q_FUNC_INFO, type );
         return -1;
     }
     
@@ -88,15 +92,18 @@ public:
                     break;
             }
             
-            Q_ASSERT( margin );
+            if ( !margin ) {
+                //Q_ASSERT( margin );
+                return;
+            }
             
             margins[ type ] = margin;
+            
+            connect( margin, SIGNAL( resized() ), stacker, SLOT( updateLayout() ) );
             
             layout->insertWidget( index, margin );
             margin->setVisible( true );
             margin->setEditor( editor );
-            
-            connect( margin, SIGNAL( resized() ), stacker, SLOT( updateLayout() ) );
         }
     }
     

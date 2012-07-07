@@ -27,7 +27,7 @@ public:
     void setEditor( QodeEdit* editor );
     
     bool isVisible( MarginStacker::Type type ) const;
-    void setVisible( MarginStacker::Type type, bool visible );
+    void setVisible( MarginStacker::Type type, bool visible = true );
     
 public slots:
     void updateLayout();
