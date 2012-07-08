@@ -188,7 +188,9 @@ void QodeEdit::setRulerWidth( int width )
 QRect QodeEdit::lineRect( int line ) const
 {
     const QTextBlock block = document()->findBlockByNumber( line );
-    return blockBoundingGeometry( block ).toRect();
+    QRectF rect = blockBoundingGeometry( block );
+    rect.moveTopLeft( rect.topLeft() +contentOffset() );
+    return rect.toRect();
 }
 
 bool QodeEdit::event( QEvent* event )
