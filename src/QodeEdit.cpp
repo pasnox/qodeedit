@@ -29,14 +29,14 @@ public:
     {
         const QPoint offset = editor->contentOffset().toPoint();
         const int x = rulerWidth *QFontMetrics( editor->font() ).averageCharWidth();
-        return QLine( QPoint( x, -4 ) +offset, QPoint( x, editor->viewport()->height() +4 ) +offset );
+        return QLine( QPoint( x +offset.x(), 0 ), QPoint( x +offset.x(), editor->viewport()->height() ) );
     }
     
     QRect rulerRect() const
     {
         const QPoint offset = editor->contentOffset().toPoint();
         const int x = rulerWidth *QFontMetrics( editor->font() ).averageCharWidth();
-        QRect rect( QPoint( x +offset.x(), offset.y() -4 ), QSize( editor->viewport()->size() +QSize( 0, 4 ) ) );
+        QRect rect( QPoint( x +offset.x(), 0 ), QSize( editor->viewport()->size() -QSize( x +offset.x(), 0 ) ) );
         return rect;
     }
     
@@ -185,11 +185,83 @@ void QodeEdit::setRulerWidth( int width )
     viewport()->update();
 }
 
+QBrush QodeEdit::paper() const
+{
+    return palette().brush( viewport()->backgroundRole() );
+}
+
+void QodeEdit::setPaper( const QBrush& brush )
+{
+    QPalette pal = palette();
+    pal.setBrush( viewport()->backgroundRole(), brush );
+    setPalette( pal );
+}
+
+QBrush QodeEdit::pen() const
+{
+    return palette().brush( viewport()->foregroundRole() );
+}
+
+void QodeEdit::setPen( const QBrush& brush )
+{
+    QPalette pal = palette();
+    pal.setBrush( viewport()->foregroundRole(), brush );
+    setPalette( pal );
+}
+
+QBrush QodeEdit::selectionBackground() const
+{
+    return palette().brush( QPalette::Highlight );
+}
+
+void QodeEdit::setSelectionBackground( const QBrush& brush )
+{
+    QPalette pal = palette();
+    pal.setBrush( QPalette::Highlight, brush );
+    setPalette( pal );
+}
+
+QBrush QodeEdit::selectionForeground() const
+{
+    return palette().brush( QPalette::HighlightedText );
+}
+
+void QodeEdit::setSelectionForeground( const QBrush& brush )
+{
+    QPalette pal = palette();
+    pal.setBrush( QPalette::HighlightedText, brush );
+    setPalette( pal );
+}
+
+QBrush QodeEdit::caretLineBackground() const
+{
+    return palette().brush( QPalette::Link );
+}
+
+void QodeEdit::setCaretLineBackground( const QBrush& brush )
+{
+    QPalette pal = palette();
+    pal.setBrush( QPalette::Link, brush );
+    setPalette( pal );
+}
+
+QBrush QodeEdit::caretLineForeground() const
+{
+    return palette().brush( QPalette::LinkVisited );
+}
+
+void QodeEdit::setCaretLineForeground( const QBrush& brush )
+{
+    QPalette pal = palette();
+    pal.setBrush( QPalette::LinkVisited, brush );
+    setPalette( pal );
+}
+
 QRect QodeEdit::lineRect( int line ) const
 {
     const QTextBlock block = document()->findBlockByNumber( line );
     QRectF rect = blockBoundingGeometry( block );
-    rect.moveTopLeft( rect.topLeft() +contentOffset() );
+    rect.moveTopLeft( rect.topLeft() +QPointF( 0, contentOffset().y() ) );
     return rect.toRect();
 }
 
@@ -215,18 +287,18 @@ void QodeEdit::paintEvent( QPaintEvent* event )
         case QodeEdit::NoRuler:
             break;
         case QodeEdit::LineRuler:
-            painter.setPen( palette().color( QPalette::LinkVisited ) );
+            painter.setPen( QPen( caretLineForeground(), painter.pen().widthF() ) );
             painter.drawLine( d->rulerLine() );
             break;
         case QodeEdit::BackgroundRuler:
             painter.setPen( Qt::NoPen );
-            painter.setBrush( palette().color( QPalette::LinkVisited ) );
+            painter.setBrush( caretLineForeground() );
             painter.drawRect( d->rulerRect() );
             break;
     }
     
     // draw caret line
-    painter.fillRect( d->caretLineRect(), palette().color( QPalette::Link ) );
+    painter.fillRect( d->caretLineRect(), caretLineBackground() );
     
     // finished
     painter.end();

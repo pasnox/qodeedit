@@ -29,6 +29,13 @@ public:
     QodeEdit::Ruler rulerMode() const;
     int rulerWidth() const;
     
+    QBrush paper() const;
+    QBrush pen() const;
+    QBrush selectionBackground() const;
+    QBrush selectionForeground() const;
+    QBrush caretLineBackground() const;
+    QBrush caretLineForeground() const;
+    
     QRect lineRect( int line ) const;
 
 public slots:
@@ -37,6 +44,13 @@ public slots:
     void setCurrentColumn( int column );
     void setRulerMode( QodeEdit::Ruler mode );
     void setRulerWidth( int width );
+    
+    void setPaper( const QBrush& brush );
+    void setPen( const QBrush& brush );
+    void setSelectionBackground( const QBrush& brush );
+    void setSelectionForeground( const QBrush& brush );
+    void setCaretLineBackground( const QBrush& brush );
+    void setCaretLineForeground( const QBrush& brush );
 
 protected:
     class Private;
