@@ -12,7 +12,7 @@ LineNumberMargin::LineNumberMargin( MarginStacker* marginStacker )
     connect( this, SIGNAL( entered( int ) ), this, SLOT( update() ) );
     connect( this, SIGNAL( left( int ) ), this, SLOT( update() ) );
     connect( this, SIGNAL( fontChanged() ), this, SLOT( updateWidth() ) );
-	connect( this, SIGNAL( countChanged( int ) ), this, SLOT( updateWidth() ) );
+	connect( this, SIGNAL( lineCountChanged( int ) ), this, SLOT( updateWidth() ) );
 }
 
 LineNumberMargin::~LineNumberMargin()

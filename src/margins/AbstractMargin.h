@@ -43,7 +43,7 @@ signals:
     void doubleClicked( int line, Qt::MouseButton button, Qt::MouseButtons buttons, Qt::KeyboardModifiers modifiers );
     void entered( int line );
     void left( int line );
-    void countChanged( int count );
+    void lineCountChanged( int count );
     void fontChanged();
     void resized();
 };

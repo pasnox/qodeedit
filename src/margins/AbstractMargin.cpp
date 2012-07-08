@@ -71,14 +71,14 @@ void AbstractMargin::setEditor( QodeEdit* editor )
 		disconnect( oldEditor->document()->documentLayout(), SIGNAL( update( const QRectF& ) ), this, SLOT( update() ) );
 		disconnect( oldEditor->verticalScrollBar(), SIGNAL( valueChanged( int ) ), this, SLOT( update() ) );
 		disconnect( oldEditor, SIGNAL( blockCountChanged( int ) ), this, SLOT( update() ) );
-		disconnect( oldEditor, SIGNAL( blockCountChanged( int ) ), this, SIGNAL( countChanged( int ) ) );
+		disconnect( oldEditor, SIGNAL( blockCountChanged( int ) ), this, SIGNAL( lineCountChanged( int ) ) );
 	}
 	
 	if ( editor ) {
 		connect( editor->document()->documentLayout(), SIGNAL( update( const QRectF& ) ), this, SLOT( update() ) );
 		connect( editor->verticalScrollBar(), SIGNAL( valueChanged( int ) ), this, SLOT( update() ) );
 		connect( editor, SIGNAL( blockCountChanged( int ) ), this, SLOT( update() ) );
-		connect( editor, SIGNAL( blockCountChanged( int ) ), this, SIGNAL( countChanged( int ) ) );
+		connect( editor, SIGNAL( blockCountChanged( int ) ), this, SIGNAL( lineCountChanged( int ) ) );
 	}
 }
 
