@@ -1,4 +1,5 @@
 #include "QodeEdit.h"
+#include "QodeEditTextDocument.h"
 #include "MarginStacker.h"
 
 #include <QStyleOptionFrameV3>
@@ -92,11 +93,8 @@ QodeEdit::QodeEdit( QWidget* parent )
         d( new QodeEdit::Private( this ) )
 {
     setAutoFillBackground( true );
-    document()->setDocumentMargin( 0 ); // maybe need to create our own document heriting QTextDocument ?
-    
-    QPalette pal = palette();
-    pal.setColor( QPalette::Link, pal.color( QPalette::Link ).lighter( 200 ) );
-    setPalette( pal );
+    setCaretLineBackground( caretLineBackground().color().lighter( 200 ) );
+    setDocument( new QodeEditTextDocument( this ) );
     
     connect( this, SIGNAL( cursorPositionChanged() ), viewport(), SLOT( update() ) );
 }

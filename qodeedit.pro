@@ -30,11 +30,13 @@ HEADERS *=  \
     src/margins/MarginStacker.h \
     src/margins/AbstractMargin.h \
     src/margins/LineNumberMargin.h \
-    src/margins/SpacingMargin.h
+    src/margins/SpacingMargin.h \
+    src/QodeEditTextDocument.h
 
-SOURCES *=  src/main.cpp \
+SOURCES *= src/main.cpp \
     src/QodeEdit.cpp \
     src/margins/MarginStacker.cpp \
     src/margins/AbstractMargin.cpp \
     src/margins/LineNumberMargin.cpp \
-    src/margins/SpacingMargin.cpp
+    src/margins/SpacingMargin.cpp \
+    src/QodeEditTextDocument.cpp
