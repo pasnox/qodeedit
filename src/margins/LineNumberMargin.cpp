@@ -11,8 +11,8 @@ LineNumberMargin::LineNumberMargin( MarginStacker* marginStacker )
 {
     connect( this, SIGNAL( entered( int ) ), this, SLOT( update() ) );
     connect( this, SIGNAL( left( int ) ), this, SLOT( update() ) );
-    connect( this, SIGNAL( fontChanged() ), this, SLOT( updateWidth() ) );
-	connect( this, SIGNAL( lineCountChanged( int ) ), this, SLOT( updateWidth() ) );
+    connect( this, SIGNAL( fontChanged() ), this, SLOT( updateWidthRequested() ) );
+	connect( this, SIGNAL( lineCountChanged( int ) ), this, SLOT( updateWidthRequested() ) );
 }
 
 LineNumberMargin::~LineNumberMargin()
@@ -33,7 +33,7 @@ void LineNumberMargin::setEditor( QodeEdit* editor )
 		connect( editor, SIGNAL( cursorPositionChanged() ), this, SLOT( update() ) );
 	}
 	
-	updateWidth();
+	updateWidthRequested();
 }
 
 void LineNumberMargin::paintEvent( QPaintEvent* event )
@@ -70,7 +70,7 @@ void LineNumberMargin::paintEvent( QPaintEvent* event )
     }
 }
 
-void LineNumberMargin::updateWidth()
+void LineNumberMargin::updateWidthRequested()
 {
 	const QodeEdit* editor = this->editor();
 	const int count = editor ? editor->blockCount() : 0;

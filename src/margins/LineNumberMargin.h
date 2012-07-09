@@ -17,7 +17,7 @@ protected:
     virtual void paintEvent( QPaintEvent* event );
 
 protected slots:
-    void updateWidth();
+    virtual void updateWidthRequested();
 };
 
 #endif // LINENUMBERMARGIN_H

@@ -13,6 +13,9 @@ public:
     
 protected:
     virtual void paintEvent( QPaintEvent* event );
+
+protected slots:
+    virtual void updateWidthRequested();
 };
 
 #endif // SPACINGMARGIN_H

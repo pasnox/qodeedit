@@ -13,11 +13,11 @@ public:
     // the order is important as it defined the default presentation order of the margins
     enum Type {
         Invalid = -1,
-        LineNumber = 0,
+        LineNumber = 0, // done
         CodeFolding = 1,
         Bookmarks = 2,
-        LineChange = 3,
-        Spacing = 4,
+        LineChange = 3, // wip
+        Spacing = 4, // done
     };
     
     MarginStacker( QodeEdit* editor = 0 );

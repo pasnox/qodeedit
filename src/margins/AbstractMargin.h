@@ -34,6 +34,9 @@ protected:
     virtual void enterEvent( QEvent* event );
     virtual void leaveEvent( QEvent* event );
 
+protected slots:
+    virtual void updateWidthRequested() = 0;
+
 private:
     class Private;
     AbstractMargin::Private* d;

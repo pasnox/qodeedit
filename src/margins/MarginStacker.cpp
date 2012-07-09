@@ -2,6 +2,7 @@
 #include "QodeEdit.h"
 #include "AbstractMargin.h"
 #include "LineNumberMargin.h"
+#include "LineStateMargin.h"
 #include "SpacingMargin.h"
 
 #include <QHBoxLayout>
@@ -82,7 +83,7 @@ public:
                     //margin = new BookmarkMargin( stacker );
                     break;
                 case MarginStacker::LineChange:
-                    //margin = new LineChangeMargin( stacker );
+                    margin = new LineStateMargin( stacker );
                     break;
                 case MarginStacker::Spacing:
                     margin = new SpacingMargin( stacker );

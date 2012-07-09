@@ -23,3 +23,7 @@ void SpacingMargin::paintEvent( QPaintEvent* event )
     QPainter painter( this );
     painter.fillRect( event->rect(), color );
 }
+
+void SpacingMargin::updateWidthRequested()
+{
+}
