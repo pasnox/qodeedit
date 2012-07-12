@@ -3,11 +3,27 @@
 #include "QodeEdit.h"
 #include "MarginStacker.h"
 
+class QodeEditor : public QodeEdit {
+    Q_OBJECT
+
+public:
+    QodeEditor( QWidget* parent = 0 )
+        : QodeEdit( parent )
+    {
+        new QShortcut( QKeySequence::Save, this, SLOT( save() ) );
+    }
+
+protected slots:
+    void save() {
+        document()->setModified( false );
+    }
+};
+
 int main( int argc, char** argv )
 {
     QApplication app( argc, argv );
     
-    QodeEdit* editor = new QodeEdit;
+    QodeEditor* editor = new QodeEditor;
     MarginStacker* margins = new MarginStacker( editor );
     
     margins->setVisible( MarginStacker::LineNumber, true );
@@ -26,3 +42,5 @@ int main( int argc, char** argv )
     
     return app.exec();
 }
+
+#include "main.moc"
