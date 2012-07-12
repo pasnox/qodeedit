@@ -10,6 +10,10 @@ class QodeEditTextDocument : public QTextDocument
 public:
     QodeEditTextDocument( QObject* parent = 0 );
     virtual ~QodeEditTextDocument();
+
+protected slots:
+    void contentsChange( int position, int charsRemoved, int charsAdded );
+    void modificationChanged( bool changed );
 };
 
 #endif // QODEEDITTEXTDOCUMENT_H

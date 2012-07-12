@@ -8,12 +8,6 @@ class LineStateMargin : public AbstractMargin
     Q_OBJECT
     
 public:
-    enum State {
-        Normal = 0,
-        Modified = 1,
-        ModifiedAndSaved = 2
-    };
-    
     LineStateMargin( MarginStacker* marginStacker );
     virtual ~LineStateMargin();
 
@@ -24,10 +18,6 @@ protected:
 
 protected slots:
     virtual void updateWidthRequested();
-
-private:
-    class Private;
-    LineStateMargin::Private* d;
 };
 
 #endif // LINESTATEMARGIN_H

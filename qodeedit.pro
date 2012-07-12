@@ -26,17 +26,21 @@ DEPENDPATH *= $${INCLUDEPATH}
 FORMS *= 
 
 HEADERS *=  \
+    src/QodeEditTextDocument.h \
+    src/QodeEditUserData.h \
     src/QodeEdit.h \
     src/margins/MarginStacker.h \
     src/margins/AbstractMargin.h \
     src/margins/LineNumberMargin.h \
-    src/margins/SpacingMargin.h \
-    src/QodeEditTextDocument.h
+    src/margins/LineStateMargin.h \
+    src/margins/SpacingMargin.h
 
 SOURCES *= src/main.cpp \
+    src/QodeEditTextDocument.cpp \
+    src/QodeEditUserData.cpp \
     src/QodeEdit.cpp \
     src/margins/MarginStacker.cpp \
     src/margins/AbstractMargin.cpp \
     src/margins/LineNumberMargin.cpp \
-    src/margins/SpacingMargin.cpp \
-    src/QodeEditTextDocument.cpp
+    src/margins/LineStateMargin.cpp \
+    src/margins/SpacingMargin.cpp
