@@ -33,18 +33,18 @@ public:
         
         qSort( types );
         
-        if ( type > types.last() ) {
-            return types.count();
-        }
-        
         if ( type < types.first() ) {
             return 0;
+        }
+        
+        if ( type > types.last() ) {
+            return types.count();
         }
         
         for ( int i = 0; i < types.count(); i++ ) {
             const MarginStacker::Type current = MarginStacker::Type( types[ i ] );
             
-            if ( type > current ) {
+            if ( type < current +1 ) {
                 return i;
             }
         }
