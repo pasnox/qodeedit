@@ -12,13 +12,6 @@ LineStateMargin::LineStateMargin( MarginStacker* marginStacker )
 {
     setMinimumWidth( 2 );
     setMouseTracking( false );
-    
-    //
-    //QAbstractTextDocumentLayout::updateBlock ( const QTextBlock & block )
-    //QTextBlock QTextDocument::findBlock ( int pos ) const
-    //QTextBlock::setUserState ( int state )
-    //QTextBlock::setUserData ( QTextBlockUserData * data )
-    //QTextBlockUserData
 }
 
 LineStateMargin::~LineStateMargin()
