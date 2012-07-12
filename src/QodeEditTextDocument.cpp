@@ -13,6 +13,7 @@ QodeEditTextDocument::QodeEditTextDocument( QObject* parent )
     
     connect( this, SIGNAL( contentsChange( int, int, int ) ), this, SLOT( contentsChange( int, int, int ) ) );
     connect( this, SIGNAL( modificationChanged( bool ) ), this, SLOT( modificationChanged( bool ) ) );
+    //QAbstractTextDocumentLayout::updateBlock ( const QTextBlock & block )
 }
 
 QodeEditTextDocument::~QodeEditTextDocument()
@@ -23,17 +24,35 @@ void QodeEditTextDocument::contentsChange( int position, int charsRemoved, int c
 {
     const bool modified = charsRemoved || charsAdded;
     
-    if ( modified != isModified() ) {
-        /*qWarning() << "SKIPPING";
-        return;*/
+    qWarning() << Q_FUNC_INFO << position << charsRemoved << charsAdded;
+    
+    if ( !modified ) {
+        return;
     }
     
-    if ( modified ) {
-        QTextBlock block = findBlock( position );
-        QodeEditUserData* data = 0;
-        
-        Q_ASSERT( block.isValid() );
-        
+    QTextBlock block = findBlock( position );
+    const int pos = position -block.position();
+    const int length = -charsRemoved +charsAdded;
+    const QString changeString = block.text().mid( pos, length );
+    QodeEditUserData* data = 0;
+    
+    Q_ASSERT( block.isValid() );
+    
+    // update current block
+    data = static_cast<QodeEditUserData*>( block.userData() );
+    
+    if ( !data ) {
+        data = new QodeEditUserData;
+        block.setUserData( data );
+    }
+    
+    data->modified = true;
+    
+    qWarning() << "blockInfo1" << block.blockNumber() << block.revision() << data->savedRevision;
+    
+    // update new inserted block
+    if ( changeString.length() == 0 && length == 1 ) {
+        block = block.next();
         data = static_cast<QodeEditUserData*>( block.userData() );
         
         if ( !data ) {
@@ -41,19 +60,19 @@ void QodeEditTextDocument::contentsChange( int position, int charsRemoved, int c
             block.setUserData( data );
         }
         
-        qWarning() << isModified() << block.blockNumber() << block.revision() << data->savedRevision;
-        
         data->modified = true;
+        
+        qWarning() << "blockInfo2" << block.blockNumber() << block.revision() << data->savedRevision;
     }
 }
 
 void QodeEditTextDocument::modificationChanged( bool changed )
 {
+    qWarning() << Q_FUNC_INFO << changed;
+    
     if ( changed ) {
         return;
     }
-    
-    qWarning() << "-----------";
     
     QTextBlock block = begin();
     
