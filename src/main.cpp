@@ -11,6 +11,7 @@ int main( int argc, char** argv )
     MarginStacker* margins = new MarginStacker( editor );
     
     margins->setVisible( MarginStacker::LineNumber, true );
+    margins->setVisible( MarginStacker::LineState, true );
     margins->setVisible( MarginStacker::Spacing, true );
     
     //editor->setMarginStacker( margins );

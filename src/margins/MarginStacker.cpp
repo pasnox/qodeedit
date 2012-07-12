@@ -82,7 +82,7 @@ public:
                 case MarginStacker::Bookmarks:
                     //margin = new BookmarkMargin( stacker );
                     break;
-                case MarginStacker::LineChange:
+                case MarginStacker::LineState:
                     margin = new LineStateMargin( stacker );
                     break;
                 case MarginStacker::Spacing:

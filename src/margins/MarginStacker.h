@@ -16,7 +16,7 @@ public:
         LineNumber = 0, // done
         CodeFolding = 1,
         Bookmarks = 2,
-        LineChange = 3, // wip
+        LineState = 3, // wip
         Spacing = 4, // done
     };
     
