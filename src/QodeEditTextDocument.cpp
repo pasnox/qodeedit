@@ -13,11 +13,16 @@ QodeEditTextDocument::QodeEditTextDocument( QObject* parent )
     
     connect( this, SIGNAL( contentsChange( int, int, int ) ), this, SLOT( contentsChange( int, int, int ) ) );
     connect( this, SIGNAL( modificationChanged( bool ) ), this, SLOT( modificationChanged( bool ) ) );
-    //QAbstractTextDocumentLayout::updateBlock ( const QTextBlock & block )
 }
 
 QodeEditTextDocument::~QodeEditTextDocument()
 {
+}
+
+void QodeEditTextDocument::clearFirstBlockUserData()
+{
+    firstBlock().setUserData( 0 ); // the QTextBlock will delete the current data itself
+    emit contentsChanged();
 }
 
 void QodeEditTextDocument::contentsChange( int position, int charsRemoved, int charsAdded )

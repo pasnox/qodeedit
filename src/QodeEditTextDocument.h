@@ -10,6 +10,8 @@ class QodeEditTextDocument : public QTextDocument
 public:
     QodeEditTextDocument( QObject* parent = 0 );
     virtual ~QodeEditTextDocument();
+    
+    void clearFirstBlockUserData();
 
 protected slots:
     void contentsChange( int position, int charsRemoved, int charsAdded );
