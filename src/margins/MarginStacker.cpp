@@ -7,21 +7,31 @@
 
 #include <QHBoxLayout>
 #include <QMap>
+#include <QTimer>
 #include <QDebug>
 
 // MarginStacker::Private
 
-class MarginStacker::Private {
+class MarginStacker::Private : public QObject {
+    Q_OBJECT
+
 public:
     Private( MarginStacker* _stacker )
-            : stacker( _stacker ),
+        : QObject( _stacker ),
+            stacker( _stacker ),
             layout( new QHBoxLayout( stacker ) ),
-            editor( 0 )
+            editor( 0 ),
+            updateLayoutTimer( new QTimer( this ) )
     {
         Q_ASSERT( stacker );
         
         layout->setMargin( 0 );
         layout->setSpacing( 0 );
+        
+        updateLayoutTimer->setInterval( 20 );
+        updateLayoutTimer->setSingleShot( true );
+        
+        connect( updateLayoutTimer, SIGNAL( timeout() ), this, SLOT( updateLayoutTimeout() ) );
     }
     
     int indexOfNewMargin( MarginStacker::Type type ) const {
@@ -107,8 +117,13 @@ public:
             margin->setEditor( editor );
         }
     }
-    
+
+public slots:
     void updateLayout() {
+        updateLayoutTimer->start();
+    }
+    
+    void updateLayoutTimeout() {
         if ( !editor ) {
             return;
         }
@@ -129,6 +144,7 @@ public:
     MarginStacker* stacker;
     QHBoxLayout* layout;
     QodeEdit* editor;
+    QTimer* updateLayoutTimer;
 };
 
 // MarginStacker
@@ -200,3 +216,5 @@ bool MarginStacker::eventFilter( QObject* object, QEvent* event )
     
     return QWidget::eventFilter( object, event );
 }
+
+#include "MarginStacker.moc"
