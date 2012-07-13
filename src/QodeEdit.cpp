@@ -5,6 +5,7 @@
 #include <QStyleOptionFrameV3>
 #include <QTextBlock>
 #include <QPainter>
+#include <QDebug>
 
 // QodeEdit::Private
 
@@ -124,6 +125,31 @@ void QodeEdit::setMarginStacker( MarginStacker* marginStacker )
     if ( d->stacker ) {
         d->stacker->setEditor( this );
     }
+}
+
+void QodeEdit::setInitialText( const QString& text )
+{
+    QodeEditTextDocument* document = qobject_cast<QodeEditTextDocument*>( this->document() );
+    setPlainText( text );
+    document->clearFirstBlockUserData();
+}
+
+QString QodeEdit::text() const
+{
+    return toPlainText();
+}
+
+void QodeEdit::setText( const QString& text )
+{
+    QTextCursor cursor = textCursor();
+    
+    cursor.beginEditBlock();
+    cursor.select( QTextCursor::Document );
+    cursor.insertText( text );
+    cursor.movePosition( QTextCursor::Start, QTextCursor::MoveAnchor );
+    cursor.endEditBlock();
+    
+    setTextCursor( cursor );
 }
 
 QPoint QodeEdit::cursorPosition() const

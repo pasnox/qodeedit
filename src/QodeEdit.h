@@ -23,6 +23,8 @@ public:
     MarginStacker* marginStacker() const;
     void setMarginStacker( MarginStacker* marginStacker );
     
+    QString text() const;
+    
     QPoint cursorPosition() const;
     int currentLine() const;
     int currentColumn() const;
@@ -39,6 +41,9 @@ public:
     QRect lineRect( int line ) const;
 
 public slots:
+    void setInitialText( const QString& text );
+    void setText( const QString& text );
+    
     void setCursorPosition( const QPoint& pos );
     void setCurrentLine( int line );
     void setCurrentColumn( int column );
