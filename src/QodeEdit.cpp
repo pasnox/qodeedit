@@ -131,7 +131,7 @@ void QodeEdit::setInitialText( const QString& text )
 {
     QodeEditTextDocument* document = qobject_cast<QodeEditTextDocument*>( this->document() );
     setPlainText( text );
-    document->clearFirstBlockUserData();
+    document->synchronizeBlocksRevision();
 }
 
 QString QodeEdit::text() const
