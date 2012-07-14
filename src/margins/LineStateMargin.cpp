@@ -42,7 +42,7 @@ void LineStateMargin::paintEvent( QPaintEvent* event )
     
     QPainter painter( this );
     painter.setRenderHint( QPainter::Antialiasing, false );
-    painter.setPen( Qt::NoPen );
+    painter.setBrush( Qt::NoBrush );
 	
     const int firstLine = firstVisibleLine();
     const int lastLine = lastVisibleLine();
@@ -54,13 +54,13 @@ void LineStateMargin::paintEvent( QPaintEvent* event )
 		
 		if ( block.revision() != document->lastSavedRevision() ) {
 			if ( block.revision() < 0 ) {
-				painter.setBrush( QColor( Qt::darkGreen ) );
+				painter.setPen( QPen( QColor( Qt::darkGreen ), minimumWidth() ) );
 			}
 			else {
-				painter.setBrush( QColor( Qt::red ) );
+				painter.setPen( QPen( QColor( Qt::red ), minimumWidth() ) );
 			}
 			
-			painter.drawRect( rect );
+			painter.drawLine( rect.topRight(), rect.bottomRight() );
 		}
     }
 }
