@@ -21,6 +21,34 @@ QodeEditTextDocument::~QodeEditTextDocument()
 {
 }
 
+void QodeEditTextDocument::setInitialText( const QString& text )
+{
+    setPlainText( text );
+    
+    mLastSavedRevision = revision();
+    QTextBlock block = begin();
+    
+    while ( block.isValid() ) {
+        block.setRevision( mLastSavedRevision );
+        block = block.next();
+    }
+}
+
+QString QodeEditTextDocument::text() const
+{
+    return toPlainText();
+}
+
+void QodeEditTextDocument::setText( const QString& text )
+{
+    QTextCursor cursor( this );
+    
+    cursor.beginEditBlock();
+    cursor.select( QTextCursor::Document );
+    cursor.insertText( text );
+    cursor.endEditBlock();
+}
+
 int QodeEditTextDocument::lastSavedRevision() const
 {
     return mLastSavedRevision;
@@ -41,17 +69,6 @@ QodeEditUserData* QodeEditTextDocument::userData( QTextBlock& block ) const
     }
     
     return data;
-}
-
-void QodeEditTextDocument::synchronizeBlocksRevision()
-{
-    mLastSavedRevision = revision();
-    QTextBlock block = begin();
-    
-    while ( block.isValid() ) {
-        block.setRevision( mLastSavedRevision );
-        block = block.next();
-    }
 }
 
 void QodeEditTextDocument::contentsChange( int position, int charsRemoved, int charsAdded )

@@ -13,11 +13,16 @@ public:
     QodeEditTextDocument( QObject* parent = 0 );
     virtual ~QodeEditTextDocument();
     
+    QString text() const;
+    
     int lastSavedRevision() const;
+    
     QodeEditUserData* userData( const QTextBlock& block ) const;
     QodeEditUserData* userData( QTextBlock& block ) const;
-    
-    void synchronizeBlocksRevision();
+
+public slots:
+    void setInitialText( const QString& text );
+    void setText( const QString& text );
 
 protected:
     int mLastSavedRevision;
