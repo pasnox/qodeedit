@@ -31,8 +31,9 @@ HEADERS *=  \
     src/QodeEdit.h \
     src/margins/MarginStacker.h \
     src/margins/AbstractMargin.h \
+    src/margins/LineBookmarkMargin.h \
     src/margins/LineNumberMargin.h \
-    src/margins/LineStateMargin.h \
+    src/margins/LineRevisionMargin.h \
     src/margins/SpacingMargin.h
 
 SOURCES *= src/main.cpp \
@@ -41,6 +42,7 @@ SOURCES *= src/main.cpp \
     src/QodeEdit.cpp \
     src/margins/MarginStacker.cpp \
     src/margins/AbstractMargin.cpp \
+    src/margins/LineBookmarkMargin.cpp \
     src/margins/LineNumberMargin.cpp \
-    src/margins/LineStateMargin.cpp \
+    src/margins/LineRevisionMargin.cpp \
     src/margins/SpacingMargin.cpp

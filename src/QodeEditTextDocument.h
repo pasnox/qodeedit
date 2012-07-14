@@ -3,6 +3,8 @@
 
 #include <QTextDocument>
 
+class QodeEditUserData;
+
 class QodeEditTextDocument : public QTextDocument
 {
     Q_OBJECT
@@ -12,6 +14,9 @@ public:
     virtual ~QodeEditTextDocument();
     
     int lastSavedRevision() const;
+    QodeEditUserData* userData( const QTextBlock& block ) const;
+    QodeEditUserData* userData( QTextBlock& block ) const;
+    
     void synchronizeBlocksRevision();
 
 protected:

@@ -26,8 +26,9 @@ int main( int argc, char** argv )
     QodeEditor* editor = new QodeEditor;
     MarginStacker* margins = new MarginStacker( editor );
     
+    margins->setVisible( MarginStacker::LineBookmark, true );
     margins->setVisible( MarginStacker::LineNumber, true );
-    margins->setVisible( MarginStacker::LineState, true );
+    margins->setVisible( MarginStacker::LineRevision, true );
     margins->setVisible( MarginStacker::Spacing, true );
     
     //editor->setMarginStacker( margins );

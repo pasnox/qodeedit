@@ -1,15 +1,15 @@
-#ifndef LINESTATEMARGIN_H
-#define LINESTATEMARGIN_H
+#ifndef LINEREVISIONMARGIN_H
+#define LINEREVISIONMARGIN_H
 
 #include "AbstractMargin.h"
 
-class LineStateMargin : public AbstractMargin
+class LineRevisionMargin : public AbstractMargin
 {
     Q_OBJECT
     
 public:
-    LineStateMargin( MarginStacker* marginStacker );
-    virtual ~LineStateMargin();
+    LineRevisionMargin( MarginStacker* marginStacker );
+    virtual ~LineRevisionMargin();
 
     virtual void setEditor( QodeEdit* editor );
 
@@ -20,4 +20,4 @@ protected slots:
     virtual void updateWidthRequested();
 };
 
-#endif // LINESTATEMARGIN_H
+#endif // LINEREVISIONMARGIN_H

@@ -1,4 +1,4 @@
-#include "LineStateMargin.h"
+#include "LineRevisionMargin.h"
 #include "QodeEdit.h"
 #include "QodeEditUserData.h"
 #include "QodeEditTextDocument.h"
@@ -8,18 +8,18 @@
 #include <QTextBlock>
 #include <QDebug>
 
-LineStateMargin::LineStateMargin( MarginStacker* marginStacker )
+LineRevisionMargin::LineRevisionMargin( MarginStacker* marginStacker )
     : AbstractMargin( marginStacker )
 {
     setMinimumWidth( 2 );
     setMouseTracking( false );
 }
 
-LineStateMargin::~LineStateMargin()
+LineRevisionMargin::~LineRevisionMargin()
 {
 }
 
-void LineStateMargin::setEditor( QodeEdit* editor )
+void LineRevisionMargin::setEditor( QodeEdit* editor )
 {
 	QodeEdit* oldEditor = this->editor();
 	
@@ -36,7 +36,7 @@ void LineStateMargin::setEditor( QodeEdit* editor )
 	}
 }
 
-void LineStateMargin::paintEvent( QPaintEvent* event )
+void LineRevisionMargin::paintEvent( QPaintEvent* event )
 {
     AbstractMargin::paintEvent( event );
     
@@ -65,6 +65,6 @@ void LineStateMargin::paintEvent( QPaintEvent* event )
     }
 }
 
-void LineStateMargin::updateWidthRequested()
+void LineRevisionMargin::updateWidthRequested()
 {
 }

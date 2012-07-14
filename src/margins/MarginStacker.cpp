@@ -1,8 +1,9 @@
 #include "MarginStacker.h"
 #include "QodeEdit.h"
 #include "AbstractMargin.h"
+#include "LineBookmarkMargin.h"
 #include "LineNumberMargin.h"
-#include "LineStateMargin.h"
+#include "LineRevisionMargin.h"
 #include "SpacingMargin.h"
 
 #include <QHBoxLayout>
@@ -89,11 +90,11 @@ public:
                 case MarginStacker::CodeFolding:
                     //margin = new CodeFoldingMargin( stacker );
                     break;
-                case MarginStacker::Bookmarks:
-                    //margin = new BookmarkMargin( stacker );
+                case MarginStacker::LineBookmark:
+                    margin = new LineBookmarkMargin( stacker );
                     break;
-                case MarginStacker::LineState:
-                    margin = new LineStateMargin( stacker );
+                case MarginStacker::LineRevision:
+                    margin = new LineRevisionMargin( stacker );
                     break;
                 case MarginStacker::Spacing:
                     margin = new SpacingMargin( stacker );

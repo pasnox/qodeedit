@@ -1,6 +1,8 @@
 #include "AbstractMargin.h"
 #include "MarginStacker.h"
 #include "QodeEdit.h"
+#include "QodeEditTextDocument.h"
+#include "QodeEditUserData.h"
 
 #include <QScrollBar>
 #include <QApplication>

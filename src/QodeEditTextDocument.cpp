@@ -26,6 +26,23 @@ int QodeEditTextDocument::lastSavedRevision() const
     return mLastSavedRevision;
 }
 
+QodeEditUserData* QodeEditTextDocument::userData( const QTextBlock& block ) const
+{
+    return static_cast<QodeEditUserData*>( block.isValid() ? block.userData() : 0 );
+}
+
+QodeEditUserData* QodeEditTextDocument::userData( QTextBlock& block ) const
+{
+    QodeEditUserData* data = static_cast<QodeEditUserData*>( block.isValid() ? block.userData() : 0 );
+    
+    if ( !data && block.isValid() ) {
+        data = new QodeEditUserData;
+        block.setUserData( data );
+    }
+    
+    return data;
+}
+
 void QodeEditTextDocument::synchronizeBlocksRevision()
 {
     mLastSavedRevision = revision();

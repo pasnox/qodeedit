@@ -4,7 +4,7 @@
 #include <QPainter>
 #include <QDebug>
 
-#define LineNumberMarginMargins 4
+#define LineNumberMarginMargins 2
 
 LineNumberMargin::LineNumberMargin( MarginStacker* marginStacker )
     : AbstractMargin( marginStacker )

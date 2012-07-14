@@ -129,6 +129,7 @@ void QodeEdit::setMarginStacker( MarginStacker* marginStacker )
 
 void QodeEdit::setInitialText( const QString& text )
 {
+#warning TODO: Move to text document and create progressive loading of the content
     QodeEditTextDocument* document = qobject_cast<QodeEditTextDocument*>( this->document() );
     setPlainText( text );
     document->synchronizeBlocksRevision();
@@ -136,11 +137,13 @@ void QodeEdit::setInitialText( const QString& text )
 
 QString QodeEdit::text() const
 {
+#warning TODO: Move to text document
     return toPlainText();
 }
 
 void QodeEdit::setText( const QString& text )
 {
+#warning TODO: Move to text document and create progressive loading of the content
     QTextCursor cursor = textCursor();
     
     cursor.beginEditBlock();

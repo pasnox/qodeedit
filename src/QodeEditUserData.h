@@ -7,18 +7,11 @@
 class QodeEditUserData : public QTextBlockUserData
 {
 public:
-    enum State {
-        Default = 0, // White/transparent
-        Modified = 1, // red
-        Saved = 2 // green
-    };
-    
     QodeEditUserData();
     virtual ~QodeEditUserData();
 
 public:
-    bool modified;
-    QSet<int> savedRevision;
+    bool hasBookmark;
 };
 
 #endif // QODEEDITUSERDATA_H

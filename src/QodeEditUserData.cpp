@@ -2,7 +2,7 @@
 
 QodeEditUserData::QodeEditUserData()
 {
-    modified = false;
+    hasBookmark = false;
 }
 
 QodeEditUserData::~QodeEditUserData()
