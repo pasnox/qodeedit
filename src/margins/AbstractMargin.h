@@ -22,8 +22,11 @@ public:
     int lineAt( const QPoint& pos ) const;
     QRect lineRect( int line ) const;
     
-    int firstVisibleLine() const;
-    int lastVisibleLine() const;
+    int firstVisibleLine( const QRect& rect = QRect() ) const;
+    int lastVisibleLine( const QRect& rect = QRect() ) const;
+
+public slots:
+    void updateLineRect( int line );
 
 protected:
     virtual bool event( QEvent* event );

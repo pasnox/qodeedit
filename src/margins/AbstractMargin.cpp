@@ -99,16 +99,23 @@ QRect AbstractMargin::lineRect( int line ) const
     return d->lineRect( line );
 }
 
-int AbstractMargin::firstVisibleLine() const
+int AbstractMargin::firstVisibleLine( const QRect& rect ) const
 {
 	const QodeEdit* editor = this->editor();
-    return editor ? d->lineAt( editor->viewport()->rect().topLeft() ) : -1;
+	const QRect r = rect.isNull() ? ( editor ? editor->viewport()->rect() : rect ) : rect;
+    return d->lineAt( r.topLeft() );
 }
 
-int AbstractMargin::lastVisibleLine() const
+int AbstractMargin::lastVisibleLine( const QRect& rect ) const
 {
 	const QodeEdit* editor = this->editor();
-    return editor ? d->lineAt( editor->viewport()->rect().bottomLeft() ) : -1;
+	const QRect r = rect.isNull() ? ( editor ? editor->viewport()->rect() : rect ) : rect;
+    return d->lineAt( r.bottomLeft() );
+}
+
+void AbstractMargin::updateLineRect( int line )
+{
+	update( lineRect( line ) );
 }
 
 bool AbstractMargin::event( QEvent* event )
