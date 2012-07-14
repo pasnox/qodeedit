@@ -11,8 +11,12 @@ public:
     QodeEditTextDocument( QObject* parent = 0 );
     virtual ~QodeEditTextDocument();
     
-    void clearFirstBlockUserData();
+    int lastSavedRevision() const;
+    void synchronizeBlocksRevision();
 
+protected:
+    int mLastSavedRevision;
+    
 protected slots:
     void contentsChange( int position, int charsRemoved, int charsAdded );
     void modificationChanged( bool changed );
