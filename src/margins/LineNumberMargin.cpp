@@ -9,8 +9,8 @@
 LineNumberMargin::LineNumberMargin( MarginStacker* marginStacker )
     : AbstractMargin( marginStacker )
 {
-    connect( this, SIGNAL( entered( int ) ), this, SLOT( update() ) );
-    connect( this, SIGNAL( left( int ) ), this, SLOT( update() ) );
+    connect( this, SIGNAL( entered( int ) ), this, SLOT( updateLineRect( int ) ) );
+    connect( this, SIGNAL( left( int ) ), this, SLOT( updateLineRect( int ) ) );
     connect( this, SIGNAL( fontChanged() ), this, SLOT( updateWidthRequested() ) );
 	connect( this, SIGNAL( lineCountChanged( int ) ), this, SLOT( updateWidthRequested() ) );
 }
@@ -43,8 +43,8 @@ void LineNumberMargin::paintEvent( QPaintEvent* event )
     QPainter painter( this );
 	painter.setRenderHint( QPainter::Antialiasing, false );
     
-    const int firstLine = firstVisibleLine();
-    const int lastLine = lastVisibleLine();
+    const int firstLine = firstVisibleLine( event->rect() );
+    const int lastLine = lastVisibleLine( event->rect() );
     const int flags = Qt::AlignVCenter | Qt::AlignRight;
 	const QFont painterFont = painter.font();
 	const QColor color = palette().color( QPalette::WindowText );

@@ -44,8 +44,8 @@ void LineRevisionMargin::paintEvent( QPaintEvent* event )
     painter.setRenderHint( QPainter::Antialiasing, false );
     painter.setBrush( Qt::NoBrush );
 	
-    const int firstLine = firstVisibleLine();
-    const int lastLine = lastVisibleLine();
+    const int firstLine = firstVisibleLine( event->rect() );
+    const int lastLine = lastVisibleLine( event->rect() );
 	const QodeEditTextDocument* document = qobject_cast<QodeEditTextDocument*>( editor()->document() );
     
 	for ( int i = firstLine; i <= lastLine; i++ ) {

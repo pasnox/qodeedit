@@ -31,12 +31,12 @@ void LineBookmarkMargin::paintEvent( QPaintEvent* event )
 	painter.setRenderHint( QPainter::Antialiasing, false );
     painter.setRenderHint( QPainter::SmoothPixmapTransform, true );
     
-    #warning TODO: create version of firstVisibleLine/lastVisibleLine taking a rect so we can optimize the lines to redraw
-    const int firstLine = firstVisibleLine();
-    const int lastLine = lastVisibleLine();
+    const int firstLine = firstVisibleLine( event->rect() );
+    const int lastLine = lastVisibleLine( event->rect() );
     const QodeEditTextDocument* document = qobject_cast<QodeEditTextDocument*>( editor()->document() );
     const QString iconKey = "bookmarks";
     
+	#warning TODO: iterate blocks from firstLine until lastLine encounter to avoid recursive call to findBlockByNumber
 	for ( int i = firstLine; i <= lastLine; i++ ) {
         const QRect rect = lineRect( i ).adjusted( LineBookmarkMarginMargins, LineBookmarkMarginMargins, -LineBookmarkMarginMargins, -LineBookmarkMarginMargins );
         const QTextBlock block = document->findBlockByNumber( i );
@@ -83,5 +83,5 @@ void LineBookmarkMargin::mouseDoubleClicked( int line, Qt::MouseButton button, Q
     QTextBlock block = document->findBlockByNumber( line );
     QodeEditUserData* data = document->userData( block );
     data->hasBookmark = !data->hasBookmark;
-    update( lineRect( line ) );
+    updateLineRect( line );
 }
