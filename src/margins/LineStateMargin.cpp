@@ -1,6 +1,7 @@
 #include "LineStateMargin.h"
 #include "QodeEdit.h"
 #include "QodeEditUserData.h"
+#include "QodeEditTextDocument.h"
 
 #include <QPainter>
 #include <QTextDocument>
@@ -40,32 +41,27 @@ void LineStateMargin::paintEvent( QPaintEvent* event )
     AbstractMargin::paintEvent( event );
     
     QPainter painter( this );
-    
+    painter.setRenderHint( QPainter::Antialiasing, false );
+    painter.setPen( Qt::NoPen );
+	
     const int firstLine = firstVisibleLine();
     const int lastLine = lastVisibleLine();
-    
-    painter.setPen( Qt::NoPen );
+	const QodeEditTextDocument* document = qobject_cast<QodeEditTextDocument*>( editor()->document() );
     
 	for ( int i = firstLine; i <= lastLine; i++ ) {
         const QRect rect = lineRect( i );
-        const QTextBlock block = editor()->document()->findBlockByNumber( i );
-		QodeEditUserData* data = static_cast<QodeEditUserData*>( block.userData() );
+        const QTextBlock block = document->findBlockByNumber( i );
 		
-		if ( !data ) {
-			continue;
+		if ( block.revision() != document->lastSavedRevision() ) {
+			if ( block.revision() < 0 ) {
+				painter.setBrush( QColor( Qt::darkGreen ) );
+			}
+			else {
+				painter.setBrush( QColor( Qt::red ) );
+			}
+			
+			painter.drawRect( rect );
 		}
-		
-		if ( data->savedRevision.contains( block.revision() ) ) {
-			painter.setBrush( QColor( 0, 255, 0 ) );
-		}
-		else if ( data->modified ) {
-			painter.setBrush( QColor( 255, 0, 0 ) );
-		}
-		else {
-			continue;
-		}
-		
-        painter.drawRect( rect );
     }
 }
 

@@ -41,6 +41,7 @@ void LineNumberMargin::paintEvent( QPaintEvent* event )
     AbstractMargin::paintEvent( event );
     
     QPainter painter( this );
+	painter.setRenderHint( QPainter::Antialiasing, false );
     
     const int firstLine = firstVisibleLine();
     const int lastLine = lastVisibleLine();

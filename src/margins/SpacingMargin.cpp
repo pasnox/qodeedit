@@ -21,6 +21,7 @@ void SpacingMargin::paintEvent( QPaintEvent* event )
     const QodeEdit* editor = this->editor();
     const QColor color = editor ? editor->palette().color( editor->viewport()->backgroundRole() ) : palette().color( backgroundRole() );
     QPainter painter( this );
+    painter.setRenderHint( QPainter::Antialiasing, false );
     painter.fillRect( event->rect(), color );
 }
 
