@@ -19,7 +19,7 @@ public:
     PlainTextDocumentLayout* layout() const;
     void setLayout( PlainTextDocumentLayout* layout );
     
-    TextBlockUserData* userData( const QTextBlock& block ) const;
+    TextBlockUserData* testUserData( const QTextBlock& block ) const;
     TextBlockUserData* userData( QTextBlock& block ) const;
     
     QString text() const;

@@ -91,7 +91,7 @@ void TextDocument::setLayout( PlainTextDocumentLayout* layout )
     setDocumentLayout( layout );
 }
 
-TextBlockUserData* TextDocument::userData( const QTextBlock& block ) const
+TextBlockUserData* TextDocument::testUserData( const QTextBlock& block ) const
 {
     return static_cast<TextBlockUserData*>( block.isValid() ? block.userData() : 0 );
 }
