@@ -7,6 +7,8 @@ class AbstractMarginPrivate;
 class MarginStacker;
 class CodeEditor;
 
+class QTextBlock;
+
 class AbstractMargin : public QWidget
 {
     Q_OBJECT
@@ -22,6 +24,7 @@ public:
     MarginStacker* stacker() const;
     
     int lineAt( const QPoint& pos ) const;
+    QRect blockRect( const QTextBlock& block ) const;
     QRect lineRect( int line ) const;
     
     int firstVisibleLine( const QRect& rect = QRect() ) const;

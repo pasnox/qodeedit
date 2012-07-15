@@ -29,17 +29,23 @@ public:
 		const CodeEditor* editor = stacker->editor();
         return editor ? editor->cursorForPosition( pos ).blockNumber() : -1;
     }
-    
-    QRect lineRect( int line ) const {
+	
+	QRect blockRect( const QTextBlock& block ) const {
 		const CodeEditor* editor = stacker->editor();
         QRect rect;
 		
 		if ( editor ) {
-			rect = editor->lineRect( line );
+			rect = editor->blockRect( block );
 			rect.setWidth( margin->width() );
 		}
 		
         return rect;
+	}
+    
+    QRect lineRect( int line ) const {
+		const CodeEditor* editor = stacker->editor();
+		const TextDocument* document = editor ? editor->textDocument() : 0;
+		return document ? blockRect( document->findBlockByNumber( line ) ) : QRect();
     }
 };
 
@@ -91,6 +97,11 @@ MarginStacker* AbstractMargin::stacker() const
 int AbstractMargin::lineAt( const QPoint& pos ) const
 {
     return d->lineAt( pos );
+}
+
+QRect AbstractMargin::blockRect( const QTextBlock& block ) const
+{
+	return d->blockRect( block );
 }
 
 QRect AbstractMargin::lineRect( int line ) const
