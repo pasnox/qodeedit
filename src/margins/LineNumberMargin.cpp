@@ -23,23 +23,6 @@ LineNumberMargin::~LineNumberMargin()
 {
 }
 
-void LineNumberMargin::setEditor( CodeEditor* editor )
-{
-	CodeEditor* oldEditor = this->editor();
-	
-	if ( oldEditor ) {
-		disconnect( oldEditor, SIGNAL( cursorPositionChanged() ), this, SLOT( update() ) );
-	}
-	
-	AbstractMargin::setEditor( editor );
-	
-	if ( editor ) {
-		connect( editor, SIGNAL( cursorPositionChanged() ), this, SLOT( update() ) );
-	}
-	
-	updateWidthRequested();
-}
-
 void LineNumberMargin::paintEvent( QPaintEvent* event )
 {
     AbstractMargin::paintEvent( event );

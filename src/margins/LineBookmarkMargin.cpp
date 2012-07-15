@@ -36,12 +36,7 @@ public slots:
 			return;
 		}
 		
-		#warning TODO: Create bookmark api in CodeEditor and use it.
-		const TextDocument* document = margin->editor()->textDocument();
-		QTextBlock block = document->findBlockByNumber( line );
-		TextBlockUserData* data = document->userData( block );
-		data->hasBookmark = !data->hasBookmark;
-		margin->updateLineRect( line );
+		margin->editor()->toggleBookmark( line );
 	}
 };
 
@@ -58,23 +53,6 @@ LineBookmarkMargin::~LineBookmarkMargin()
 {
 }
 
-void LineBookmarkMargin::setEditor( CodeEditor* editor )
-{
-	CodeEditor* oldEditor = this->editor();
-	
-	if ( oldEditor ) {
-		disconnect( oldEditor, SIGNAL( cursorPositionChanged() ), this, SLOT( update() ) );
-	}
-	
-	AbstractMargin::setEditor( editor );
-	
-	if ( editor ) {
-		connect( editor, SIGNAL( cursorPositionChanged() ), this, SLOT( update() ) );
-	}
-	
-	updateWidthRequested();
-}
-
 void LineBookmarkMargin::paintEvent( QPaintEvent* event )
 {
     AbstractMargin::paintEvent( event );
@@ -89,7 +67,7 @@ void LineBookmarkMargin::paintEvent( QPaintEvent* event )
     const QString iconKey = "bookmarks";
     
 	for ( QTextBlock block = document->findBlockByNumber( firstLine ); block.isValid() && block.blockNumber() <= lastLine; block = block.next() ) {
-        const QRect rect = blockRect( block ).adjusted( LineBookmarkMarginMargins, 0, -LineBookmarkMarginMargins, 0 );
+        const QRect rect = blockRect( block ).adjusted( LineBookmarkMarginMargins, 0, -( LineBookmarkMarginMargins +1 ), 0 ); // +1 for the 1pixel border
         const TextBlockUserData* data = document->testUserData( block );
         
         if ( data && data->hasBookmark ) {
@@ -114,11 +92,18 @@ void LineBookmarkMargin::paintEvent( QPaintEvent* event )
             painter.drawPixmap( pixmapRect, pixmap );
         }
     }
+	
+	if ( event->rect().right() < rect().right() ) {
+		return;
+	}
+	
+	painter.setPen( QPen( QColor( palette().color( backgroundRole() ).darker() ), 1 ) );
+	painter.drawLine( event->rect().topRight(), event->rect().bottomRight() );
 }
 
 void LineBookmarkMargin::updateWidthRequested()
 {
-	setMinimumWidth( 10 +( LineBookmarkMarginMargins *2 ) );
+	setMinimumWidth( 10 +( LineBookmarkMarginMargins *2 ) +1 ); // +1 for the 1 pixel border
 }
 
 #include "LineBookmarkMargin.moc"

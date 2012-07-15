@@ -77,6 +77,7 @@ void AbstractMargin::setEditor( CodeEditor* editor )
 	
 	if ( oldEditor ) {
 		disconnect( oldEditor->textDocument()->layout(), SIGNAL( update( const QRectF& ) ), this, SLOT( update() ) );
+		disconnect( oldEditor, SIGNAL( cursorPositionChanged() ), this, SLOT( update() ) );
 		disconnect( oldEditor->verticalScrollBar(), SIGNAL( valueChanged( int ) ), this, SLOT( update() ) );
 		disconnect( oldEditor, SIGNAL( blockCountChanged( int ) ), this, SLOT( update() ) );
 		disconnect( oldEditor, SIGNAL( blockCountChanged( int ) ), this, SIGNAL( lineCountChanged( int ) ) );
@@ -84,10 +85,13 @@ void AbstractMargin::setEditor( CodeEditor* editor )
 	
 	if ( editor ) {
 		connect( editor->textDocument()->layout(), SIGNAL( update( const QRectF& ) ), this, SLOT( update() ) );
+		connect( editor, SIGNAL( cursorPositionChanged() ), this, SLOT( update() ) );
 		connect( editor->verticalScrollBar(), SIGNAL( valueChanged( int ) ), this, SLOT( update() ) );
 		connect( editor, SIGNAL( blockCountChanged( int ) ), this, SLOT( update() ) );
 		connect( editor, SIGNAL( blockCountChanged( int ) ), this, SIGNAL( lineCountChanged( int ) ) );
 	}
+	
+	updateWidthRequested();
 }
 
 MarginStacker* AbstractMargin::stacker() const
