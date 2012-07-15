@@ -46,10 +46,8 @@ void LineRevisionMargin::paintEvent( QPaintEvent* event )
     const int lastLine = lastVisibleLine( event->rect() );
 	const TextDocument* document = editor()->textDocument();
     
-	#warning TODO: iterate blocks from firstLine until lastLine encounter to avoid recursive call to findBlockByNumber
-	for ( int i = firstLine; i <= lastLine; i++ ) {
-        const QRect rect = lineRect( i );
-        const QTextBlock block = document->findBlockByNumber( i );
+	for ( QTextBlock block = document->findBlockByNumber( firstLine ); block.isValid() && block.blockNumber() <= lastLine; block = block.next() ) {
+        const QRect rect = blockRect( block );
 		
 		if ( block.revision() != document->lastUnmodifiedRevision() ) {
 			if ( block.revision() < 0 ) {

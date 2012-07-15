@@ -88,11 +88,9 @@ void LineBookmarkMargin::paintEvent( QPaintEvent* event )
     const TextDocument* document = editor()->textDocument();
     const QString iconKey = "bookmarks";
     
-	#warning TODO: iterate blocks from firstLine until lastLine encounter to avoid recursive call to findBlockByNumber
-	for ( int i = firstLine; i <= lastLine; i++ ) {
-        const QRect rect = lineRect( i ).adjusted( LineBookmarkMarginMargins, LineBookmarkMarginMargins, -LineBookmarkMarginMargins, -LineBookmarkMarginMargins );
-        const QTextBlock block = document->findBlockByNumber( i );
-        const TextBlockUserData* data = document->userData( block );
+	for ( QTextBlock block = document->findBlockByNumber( firstLine ); block.isValid() && block.blockNumber() <= lastLine; block = block.next() ) {
+        const QRect rect = blockRect( block ).adjusted( LineBookmarkMarginMargins, 0, -LineBookmarkMarginMargins, 0 );
+        const TextBlockUserData* data = document->testUserData( block );
         
         if ( data && data->hasBookmark ) {
             const int size = qMin( rect.width(), rect.height() );

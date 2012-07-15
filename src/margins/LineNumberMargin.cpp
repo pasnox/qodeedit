@@ -1,7 +1,9 @@
 #include "LineNumberMargin.h"
 #include "CodeEditor.h"
+#include "TextDocument.h"
 
 #include <QPainter>
+#include <QTextBlock>
 #include <QDebug>
 
 #define LineNumberMarginMargins 2
@@ -54,10 +56,11 @@ void LineNumberMargin::paintEvent( QPaintEvent* event )
 	const QPoint cursorPos = editor()->cursorPosition();
 	const QPoint mousePos = mapFromGlobal( QCursor::pos() );
 	const int mouseLine = rect().contains( mousePos ) ? lineAt( mousePos ) : -1;
+	const TextDocument* document = editor()->textDocument();
     
-	#warning TODO: iterate blocks from firstLine until lastLine encounter to avoid recursive call to findBlockByNumber
-	for ( int i = firstLine; i <= lastLine; i++ ) {
-        const QRect rect = lineRect( i ).adjusted( 0, 0, -LineNumberMarginMargins, 0 );
+	for ( QTextBlock block = document->findBlockByNumber( firstLine ); block.isValid() && block.blockNumber() <= lastLine; block = block.next() ) {
+        const QRect rect = blockRect( block ).adjusted( LineNumberMarginMargins, 0, -LineNumberMarginMargins, 0 );
+		const int i = block.blockNumber();
 		const bool isCurrentLine = cursorPos.y() == i;
 		bool isHoveredLine = mouseLine == i && !isCurrentLine;
 		QFont font = painterFont;
