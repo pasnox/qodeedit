@@ -25,11 +25,11 @@ public:
 	{
 		Q_ASSERT( margin );
 		
-		connect( margin, SIGNAL( mouseDoubleClicked( int, Qt::MouseButton, Qt::MouseButtons, Qt::KeyboardModifiers ) ), this, SLOT( mouseDoubleClicked( int, Qt::MouseButton, Qt::MouseButtons, Qt::KeyboardModifiers ) ) );
+		connect( margin, SIGNAL( mouseClicked( int, Qt::MouseButton, Qt::MouseButtons, Qt::KeyboardModifiers ) ), this, SLOT( mouseClicked( int, Qt::MouseButton, Qt::MouseButtons, Qt::KeyboardModifiers ) ) );
 	}
 
 public slots:
-	void mouseDoubleClicked( int line, Qt::MouseButton button, Qt::MouseButtons buttons, Qt::KeyboardModifiers modifiers ) {
+	void mouseClicked( int line, Qt::MouseButton button, Qt::MouseButtons buttons, Qt::KeyboardModifiers modifiers ) {
 		Q_UNUSED( buttons );
 		
 		if ( button != Qt::LeftButton || modifiers != Qt::NoModifier ) {
