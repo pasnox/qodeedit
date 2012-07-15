@@ -1,6 +1,8 @@
 #include "CodeEditor.h"
 #include "TextDocument.h"
 #include "MarginStacker.h"
+#include "TextBlockUserData.h"
+#include "AbstractMargin.h"
 
 #include <QStyleOptionFrameV3>
 #include <QTextBlock>
@@ -277,6 +279,53 @@ void CodeEditor::setCaretLineForeground( const QBrush& brush )
     QPalette pal = palette();
     pal.setBrush( QPalette::LinkVisited, brush );
     setPalette( pal );
+}
+
+bool CodeEditor::hasBookmark( const QTextBlock& block ) const
+{
+    const TextBlockUserData* data = textDocument()->testUserData( block );
+    return data ? data->hasBookmark : false;
+}
+
+void CodeEditor::setBookmark( const QTextBlock& block, bool set )
+{
+    const TextDocument* document = textDocument();
+    TextBlockUserData* data = document->testUserData( block );
+    
+    if ( !data && !set ) {
+        return;
+    }
+    
+    data = document->userData( *const_cast<QTextBlock*>( &block ) );
+    data->hasBookmark = set;
+    
+    if ( d->stacker ) {
+        AbstractMargin* margin = d->stacker->margin( MarginStacker::LineBookmark );
+        
+        if ( margin ) {
+            margin->updateLineRect( block.blockNumber() );
+        }
+    }
+}
+
+void CodeEditor::toggleBookmark( const QTextBlock& block )
+{
+    setBookmark( block, !hasBookmark( block ) );
+}
+
+bool CodeEditor::hasBookmark( int line ) const
+{
+    return hasBookmark( textDocument()->findBlockByNumber( line ) );
+}
+
+void CodeEditor::setBookmark( int line, bool set )
+{
+    setBookmark( textDocument()->findBlockByNumber( line ), set );
+}
+
+void CodeEditor::toggleBookmark( int line )
+{
+    toggleBookmark( textDocument()->findBlockByNumber( line ) );
 }
 
 QRect CodeEditor::blockRect( const QTextBlock& block ) const

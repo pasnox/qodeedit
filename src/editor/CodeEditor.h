@@ -45,6 +45,9 @@ public:
     QBrush caretLineBackground() const;
     QBrush caretLineForeground() const;
     
+    bool hasBookmark( const QTextBlock& block ) const;
+    bool hasBookmark( int line ) const;
+    
     QRect blockRect( const QTextBlock& block ) const;
     QRect lineRect( int line ) const;
 
@@ -64,6 +67,11 @@ public slots:
     void setSelectionForeground( const QBrush& brush );
     void setCaretLineBackground( const QBrush& brush );
     void setCaretLineForeground( const QBrush& brush );
+    
+    void setBookmark( const QTextBlock& block, bool set );
+    void setBookmark( int line, bool set );
+    void toggleBookmark( const QTextBlock& block );
+    void toggleBookmark( int line );
 
 protected:
     virtual bool event( QEvent* event );
