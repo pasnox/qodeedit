@@ -1,23 +1,29 @@
 #include "MarginStacker.h"
-#include "QodeEdit.h"
+#include "CodeEditor.h"
 #include "AbstractMargin.h"
 #include "LineBookmarkMargin.h"
 #include "LineNumberMargin.h"
 #include "LineRevisionMargin.h"
-#include "SpacingMargin.h"
+#include "LineSpacingMargin.h"
 
 #include <QHBoxLayout>
 #include <QMap>
 #include <QTimer>
 #include <QDebug>
 
-// MarginStacker::Private
+// MarginStackerPrivate
 
-class MarginStacker::Private : public QObject {
+class MarginStackerPrivate : public QObject {
     Q_OBJECT
 
 public:
-    Private( MarginStacker* _stacker )
+    QMap<MarginStacker::Type, AbstractMargin*> margins;
+    MarginStacker* stacker;
+    QHBoxLayout* layout;
+    CodeEditor* editor;
+    QTimer* updateLayoutTimer;
+    
+    MarginStackerPrivate( MarginStacker* _stacker )
         : QObject( _stacker ),
             stacker( _stacker ),
             layout( new QHBoxLayout( stacker ) ),
@@ -36,24 +42,22 @@ public:
     }
     
     int indexOfNewMargin( MarginStacker::Type type ) const {
-        QList<MarginStacker::Type> types = margins.keys();
+        QSet<MarginStacker::Type> types = margins.keys().toSet();
         
         if ( types.isEmpty() ) {
             return 0;
         }
         
-        qSort( types );
-        
-        if ( type < types.first() ) {
+        if ( type < *types.begin() ) {
             return 0;
         }
         
-        if ( type > types.last() ) {
+        if ( type > *( types.end() -1 ) ) {
             return types.count();
         }
         
         for ( int i = 0; i < types.count(); i++ ) {
-            const MarginStacker::Type current = MarginStacker::Type( types[ i ] );
+            const MarginStacker::Type current = *( types.begin() +i );
             
             if ( type < current +1 ) {
                 return i;
@@ -87,8 +91,8 @@ public:
                 case MarginStacker::LineNumber:
                     margin = new LineNumberMargin( stacker );
                     break;
-                case MarginStacker::CodeFolding:
-                    //margin = new CodeFoldingMargin( stacker );
+                case MarginStacker::LineFold:
+                    //margin = new LineFoldMargin( stacker );
                     break;
                 case MarginStacker::LineBookmark:
                     margin = new LineBookmarkMargin( stacker );
@@ -96,8 +100,8 @@ public:
                 case MarginStacker::LineRevision:
                     margin = new LineRevisionMargin( stacker );
                     break;
-                case MarginStacker::Spacing:
-                    margin = new SpacingMargin( stacker );
+                case MarginStacker::LineSpacing:
+                    margin = new LineSpacingMargin( stacker );
                     break;
                 default:
                     Q_ASSERT( 0 );
@@ -139,20 +143,13 @@ public slots:
         editor->setViewportMargins( width, 0, 0, 0 );
         stacker->setGeometry( QRect( QPoint( margin, margin ), QSize( width, editor->viewport()->height() ) ) );
     }
-
-public:
-    QMap<MarginStacker::Type, AbstractMargin*> margins;
-    MarginStacker* stacker;
-    QHBoxLayout* layout;
-    QodeEdit* editor;
-    QTimer* updateLayoutTimer;
 };
 
 // MarginStacker
 
-MarginStacker::MarginStacker( QodeEdit* editor )
+MarginStacker::MarginStacker( CodeEditor* editor )
     : QWidget( editor ),
-        d( new MarginStacker::Private( this ) )
+        d( new MarginStackerPrivate( this ) )
 {
     setSizePolicy( QSizePolicy::Maximum, QSizePolicy::Expanding );
     
@@ -163,15 +160,14 @@ MarginStacker::MarginStacker( QodeEdit* editor )
 
 MarginStacker::~MarginStacker()
 {
-    delete d;
 }
 
-QodeEdit* MarginStacker::editor() const
+CodeEditor* MarginStacker::editor() const
 {
     return d->editor;
 }
 
-void MarginStacker::setEditor( QodeEdit* editor )
+void MarginStacker::setEditor( CodeEditor* editor )
 {
     if ( d->editor ) {
         d->editor->removeEventFilter( this );

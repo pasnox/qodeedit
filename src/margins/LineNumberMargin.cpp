@@ -1,5 +1,5 @@
 #include "LineNumberMargin.h"
-#include "QodeEdit.h"
+#include "CodeEditor.h"
 
 #include <QPainter>
 #include <QDebug>
@@ -9,8 +9,10 @@
 LineNumberMargin::LineNumberMargin( MarginStacker* marginStacker )
     : AbstractMargin( marginStacker )
 {
-    connect( this, SIGNAL( entered( int ) ), this, SLOT( updateLineRect( int ) ) );
-    connect( this, SIGNAL( left( int ) ), this, SLOT( updateLineRect( int ) ) );
+	updateWidthRequested();
+	
+    connect( this, SIGNAL( mouseEntered( int ) ), this, SLOT( updateLineRect( int ) ) );
+    connect( this, SIGNAL( mouseLeft( int ) ), this, SLOT( updateLineRect( int ) ) );
     connect( this, SIGNAL( fontChanged() ), this, SLOT( updateWidthRequested() ) );
 	connect( this, SIGNAL( lineCountChanged( int ) ), this, SLOT( updateWidthRequested() ) );
 }
@@ -19,9 +21,9 @@ LineNumberMargin::~LineNumberMargin()
 {
 }
 
-void LineNumberMargin::setEditor( QodeEdit* editor )
+void LineNumberMargin::setEditor( CodeEditor* editor )
 {
-	QodeEdit* oldEditor = this->editor();
+	CodeEditor* oldEditor = this->editor();
 	
 	if ( oldEditor ) {
 		disconnect( oldEditor, SIGNAL( cursorPositionChanged() ), this, SLOT( update() ) );
@@ -53,16 +55,17 @@ void LineNumberMargin::paintEvent( QPaintEvent* event )
 	const QPoint mousePos = mapFromGlobal( QCursor::pos() );
 	const int mouseLine = rect().contains( mousePos ) ? lineAt( mousePos ) : -1;
     
+	#warning TODO: iterate blocks from firstLine until lastLine encounter to avoid recursive call to findBlockByNumber
 	for ( int i = firstLine; i <= lastLine; i++ ) {
         const QRect rect = lineRect( i ).adjusted( 0, 0, -LineNumberMarginMargins, 0 );
 		const bool isCurrentLine = cursorPos.y() == i;
 		bool isHoveredLine = mouseLine == i && !isCurrentLine;
+		QFont font = painterFont;
 		
 		if ( !isHoveredLine && ( ( i +1 ) %10 ) == 0 ) {
 			isHoveredLine = true;
 		}
 		
-		QFont font = painterFont;
 		font.setBold( isCurrentLine || isHoveredLine );
 		
 		painter.setFont( font );
@@ -73,7 +76,7 @@ void LineNumberMargin::paintEvent( QPaintEvent* event )
 
 void LineNumberMargin::updateWidthRequested()
 {
-	const QodeEdit* editor = this->editor();
+	const CodeEditor* editor = this->editor();
 	const int count = editor ? editor->blockCount() : 0;
     setMinimumWidth( fontMetrics().width( QString::number( count ) ) +( LineNumberMarginMargins *2 ) );
 }

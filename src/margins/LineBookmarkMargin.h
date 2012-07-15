@@ -3,9 +3,12 @@
 
 #include "AbstractMargin.h"
 
+class LineBookmarkMarginPrivate;
+
 class LineBookmarkMargin : public AbstractMargin
 {
     Q_OBJECT
+    friend class LineBookmarkMarginPrivate;
     
 public:
     LineBookmarkMargin( MarginStacker* marginStacker );
@@ -16,7 +19,9 @@ protected:
 
 protected slots:
     virtual void updateWidthRequested();
-    void mouseDoubleClicked( int line, Qt::MouseButton button, Qt::MouseButtons buttons, Qt::KeyboardModifiers modifiers );
+
+private:
+    LineBookmarkMarginPrivate* d;
 };
 
 #endif // LINEBOOKMARKMARGIN_H

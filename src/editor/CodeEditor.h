@@ -1,14 +1,18 @@
-#ifndef QODEEDIT_H
-#define QODEEDIT_H
+#ifndef CODEEDITOR_H
+#define CODEEDITOR_H
 
 #include <QPlainTextEdit>
 
+class CodeEditorPrivate;
+class TextDocument;
 class MarginStacker;
 
-class QodeEdit : public QPlainTextEdit
+class CodeEditor : public QPlainTextEdit
 {
     Q_OBJECT
+    friend class CodeEditorPrivate;
     friend class MarginStacker;
+    friend class MarginStackerPrivate;
 
 public:
     enum Ruler {
@@ -17,8 +21,11 @@ public:
         BackgroundRuler = 0x2
     };
     
-    QodeEdit( QWidget* parent = 0 );
-    virtual ~QodeEdit();
+    CodeEditor( QWidget* parent = 0 );
+    virtual ~CodeEditor();
+    
+    TextDocument* textDocument() const;
+    void setTextDocument( TextDocument* document );
     
     MarginStacker* marginStacker() const;
     void setMarginStacker( MarginStacker* marginStacker );
@@ -28,7 +35,7 @@ public:
     QPoint cursorPosition() const;
     int currentLine() const;
     int currentColumn() const;
-    QodeEdit::Ruler rulerMode() const;
+    CodeEditor::Ruler rulerMode() const;
     int rulerWidth() const;
     
     QBrush paper() const;
@@ -41,13 +48,13 @@ public:
     QRect lineRect( int line ) const;
 
 public slots:
-    void setInitialText( const QString& text );
     void setText( const QString& text );
+    void setInitialText( const QString& text );
     
     void setCursorPosition( const QPoint& pos );
     void setCurrentLine( int line );
     void setCurrentColumn( int column );
-    void setRulerMode( QodeEdit::Ruler mode );
+    void setRulerMode( CodeEditor::Ruler mode );
     void setRulerWidth( int width );
     
     void setPaper( const QBrush& brush );
@@ -58,11 +65,11 @@ public slots:
     void setCaretLineForeground( const QBrush& brush );
 
 protected:
-    class Private;
-    QodeEdit::Private* d;
-    
     virtual bool event( QEvent* event );
     virtual void paintEvent( QPaintEvent* event );
+
+private:
+    CodeEditorPrivate* d;
 };
 
-#endif // QODEEDIT_H
+#endif // CODEEDITOR_H

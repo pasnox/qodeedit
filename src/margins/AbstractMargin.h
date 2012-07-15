@@ -3,20 +3,22 @@
 
 #include <QWidget>
 
+class AbstractMarginPrivate;
 class MarginStacker;
-class QodeEdit;
+class CodeEditor;
 
 class AbstractMargin : public QWidget
 {
     Q_OBJECT
+    friend class AbstractMarginPrivate;
+    friend class MarginStacker;
+    friend class MarginStackerPrivate;
     
 public:
     AbstractMargin( MarginStacker* marginStacker );
     virtual ~AbstractMargin();
     
-    QodeEdit* editor() const;
-    virtual void setEditor( QodeEdit* editor );
-    
+    CodeEditor* editor() const;
     MarginStacker* stacker() const;
     
     int lineAt( const QPoint& pos ) const;
@@ -36,19 +38,20 @@ protected:
     virtual void mouseMoveEvent( QMouseEvent* event );
     virtual void enterEvent( QEvent* event );
     virtual void leaveEvent( QEvent* event );
+    
+    void setEditor( CodeEditor* editor );
 
 protected slots:
     virtual void updateWidthRequested() = 0;
 
 private:
-    class Private;
-    AbstractMargin::Private* d;
+    AbstractMarginPrivate* d;
 
 signals:
-    void clicked( int line, Qt::MouseButton button, Qt::MouseButtons buttons, Qt::KeyboardModifiers modifiers );
-    void doubleClicked( int line, Qt::MouseButton button, Qt::MouseButtons buttons, Qt::KeyboardModifiers modifiers );
-    void entered( int line );
-    void left( int line );
+    void mouseClicked( int line, Qt::MouseButton button, Qt::MouseButtons buttons, Qt::KeyboardModifiers modifiers );
+    void mouseDoubleClicked( int line, Qt::MouseButton button, Qt::MouseButtons buttons, Qt::KeyboardModifiers modifiers );
+    void mouseEntered( int line );
+    void mouseLeft( int line );
     void lineCountChanged( int count );
     void fontChanged();
     void resized();

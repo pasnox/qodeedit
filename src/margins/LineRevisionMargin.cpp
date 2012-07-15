@@ -1,17 +1,15 @@
 #include "LineRevisionMargin.h"
-#include "QodeEdit.h"
-#include "QodeEditUserData.h"
-#include "QodeEditTextDocument.h"
+#include "CodeEditor.h"
+#include "TextDocument.h"
 
 #include <QPainter>
-#include <QTextDocument>
 #include <QTextBlock>
 #include <QDebug>
 
 LineRevisionMargin::LineRevisionMargin( MarginStacker* marginStacker )
     : AbstractMargin( marginStacker )
 {
-    setMinimumWidth( 2 );
+    updateWidthRequested();
     setMouseTracking( false );
 }
 
@@ -19,20 +17,20 @@ LineRevisionMargin::~LineRevisionMargin()
 {
 }
 
-void LineRevisionMargin::setEditor( QodeEdit* editor )
+void LineRevisionMargin::setEditor( CodeEditor* editor )
 {
-	QodeEdit* oldEditor = this->editor();
+	CodeEditor* oldEditor = this->editor();
 	
 	if ( oldEditor ) {
-        disconnect( oldEditor->document(), SIGNAL( contentsChanged() ), this, SLOT( update() ) );
-		disconnect( oldEditor->document(), SIGNAL( modificationChanged( bool ) ), this, SLOT( update() ) );
+        disconnect( oldEditor->textDocument(), SIGNAL( contentsChanged() ), this, SLOT( update() ) );
+		disconnect( oldEditor->textDocument(), SIGNAL( modificationChanged( bool ) ), this, SLOT( update() ) );
 	}
 	
 	AbstractMargin::setEditor( editor );
 	
 	if ( editor ) {
-		connect( oldEditor->document(), SIGNAL( contentsChanged() ), this, SLOT( update() ) );
-		connect( oldEditor->document(), SIGNAL( modificationChanged( bool ) ), this, SLOT( update() ) );
+		connect( editor->textDocument(), SIGNAL( contentsChanged() ), this, SLOT( update() ) );
+		connect( editor->textDocument(), SIGNAL( modificationChanged( bool ) ), this, SLOT( update() ) );
 	}
 }
 
@@ -46,13 +44,14 @@ void LineRevisionMargin::paintEvent( QPaintEvent* event )
 	
     const int firstLine = firstVisibleLine( event->rect() );
     const int lastLine = lastVisibleLine( event->rect() );
-	const QodeEditTextDocument* document = qobject_cast<QodeEditTextDocument*>( editor()->document() );
+	const TextDocument* document = editor()->textDocument();
     
+	#warning TODO: iterate blocks from firstLine until lastLine encounter to avoid recursive call to findBlockByNumber
 	for ( int i = firstLine; i <= lastLine; i++ ) {
         const QRect rect = lineRect( i );
         const QTextBlock block = document->findBlockByNumber( i );
 		
-		if ( block.revision() != document->lastSavedRevision() ) {
+		if ( block.revision() != document->lastUnmodifiedRevision() ) {
 			if ( block.revision() < 0 ) {
 				painter.setPen( QPen( QColor( Qt::darkGreen ), minimumWidth() ) );
 			}
@@ -67,4 +66,5 @@ void LineRevisionMargin::paintEvent( QPaintEvent* event )
 
 void LineRevisionMargin::updateWidthRequested()
 {
+	setMinimumWidth( 2 );
 }

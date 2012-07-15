@@ -1,30 +1,31 @@
-#include "SpacingMargin.h"
-#include "QodeEdit.h"
+#include "LineSpacingMargin.h"
+#include "CodeEditor.h"
 
 #include <QPainter>
 
-SpacingMargin::SpacingMargin( MarginStacker* marginStacker )
+LineSpacingMargin::LineSpacingMargin( MarginStacker* marginStacker )
     : AbstractMargin( marginStacker )
 {
-    setMinimumWidth( 2 );
+    updateWidthRequested();
     setMouseTracking( false );
 }
 
-SpacingMargin::~SpacingMargin()
+LineSpacingMargin::~LineSpacingMargin()
 {
 }
 
-void SpacingMargin::paintEvent( QPaintEvent* event )
+void LineSpacingMargin::paintEvent( QPaintEvent* event )
 {
     QWidget::paintEvent( event );
     
-    const QodeEdit* editor = this->editor();
+    const CodeEditor* editor = this->editor();
     const QColor color = editor ? editor->palette().color( editor->viewport()->backgroundRole() ) : palette().color( backgroundRole() );
     QPainter painter( this );
     painter.setRenderHint( QPainter::Antialiasing, false );
     painter.fillRect( event->rect(), color );
 }
 
-void SpacingMargin::updateWidthRequested()
+void LineSpacingMargin::updateWidthRequested()
 {
+    setMinimumWidth( 2 );
 }

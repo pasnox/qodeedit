@@ -1,7 +1,7 @@
 #include "LineBookmarkMargin.h"
-#include "QodeEdit.h"
-#include "QodeEditTextDocument.h"
-#include "QodeEditUserData.h"
+#include "CodeEditor.h"
+#include "TextDocument.h"
+#include "TextBlockUserData.h"
 
 #include <QPainter>
 #include <QTextBlock>
@@ -11,16 +11,51 @@
 
 #define LineBookmarkMarginMargins 1
 
+// LineBookmarkMarginPrivate
+
+class LineBookmarkMarginPrivate : public QObject {
+	Q_OBJECT
+
+public:
+	LineBookmarkMargin* margin;
+	
+	LineBookmarkMarginPrivate( LineBookmarkMargin* _margin )
+		: QObject( _margin ),
+			margin( _margin )
+	{
+		Q_ASSERT( margin );
+		
+		connect( margin, SIGNAL( mouseDoubleClicked( int, Qt::MouseButton, Qt::MouseButtons, Qt::KeyboardModifiers ) ), this, SLOT( mouseDoubleClicked( int, Qt::MouseButton, Qt::MouseButtons, Qt::KeyboardModifiers ) ) );
+	}
+
+public slots:
+	void mouseDoubleClicked( int line, Qt::MouseButton button, Qt::MouseButtons buttons, Qt::KeyboardModifiers modifiers ) {
+		Q_UNUSED( buttons );
+		
+		if ( button != Qt::LeftButton || modifiers != Qt::NoModifier ) {
+			return;
+		}
+		
+		#warning TODO: Create bookmark api in CodeEditor and use it.
+		const TextDocument* document = margin->editor()->textDocument();
+		QTextBlock block = document->findBlockByNumber( line );
+		TextBlockUserData* data = document->userData( block );
+		data->hasBookmark = !data->hasBookmark;
+		margin->updateLineRect( line );
+	}
+};
+
+// LineBookmarkMargin
+
 LineBookmarkMargin::LineBookmarkMargin( MarginStacker* marginStacker )
     : AbstractMargin( marginStacker )
 {
-    setMinimumWidth( 10 +( LineBookmarkMarginMargins *2 ) );
-    
-    connect( this, SIGNAL( doubleClicked( int, Qt::MouseButton, Qt::MouseButtons, Qt::KeyboardModifiers ) ), this, SLOT( mouseDoubleClicked( int, Qt::MouseButton, Qt::MouseButtons, Qt::KeyboardModifiers ) ) );
+	updateWidthRequested();
 }
 
 LineBookmarkMargin::~LineBookmarkMargin()
 {
+	delete d;
 }
 
 void LineBookmarkMargin::paintEvent( QPaintEvent* event )
@@ -33,14 +68,14 @@ void LineBookmarkMargin::paintEvent( QPaintEvent* event )
     
     const int firstLine = firstVisibleLine( event->rect() );
     const int lastLine = lastVisibleLine( event->rect() );
-    const QodeEditTextDocument* document = qobject_cast<QodeEditTextDocument*>( editor()->document() );
+    const TextDocument* document = editor()->textDocument();
     const QString iconKey = "bookmarks";
     
 	#warning TODO: iterate blocks from firstLine until lastLine encounter to avoid recursive call to findBlockByNumber
 	for ( int i = firstLine; i <= lastLine; i++ ) {
         const QRect rect = lineRect( i ).adjusted( LineBookmarkMarginMargins, LineBookmarkMarginMargins, -LineBookmarkMarginMargins, -LineBookmarkMarginMargins );
         const QTextBlock block = document->findBlockByNumber( i );
-        const QodeEditUserData* data = document->userData( block );
+        const TextBlockUserData* data = document->userData( block );
         
         if ( data && data->hasBookmark ) {
             const int size = qMin( rect.width(), rect.height() );
@@ -68,20 +103,5 @@ void LineBookmarkMargin::paintEvent( QPaintEvent* event )
 
 void LineBookmarkMargin::updateWidthRequested()
 {
-}
-
-void LineBookmarkMargin::mouseDoubleClicked( int line, Qt::MouseButton button, Qt::MouseButtons buttons, Qt::KeyboardModifiers modifiers )
-{
-    Q_UNUSED( buttons );
-    
-    if ( button != Qt::LeftButton || modifiers != Qt::NoModifier ) {
-        return;
-    }
-    
-    #warning TODO: Create bookmark api in QodeEdit and use it.
-    const QodeEditTextDocument* document = qobject_cast<QodeEditTextDocument*>( editor()->document() );
-    QTextBlock block = document->findBlockByNumber( line );
-    QodeEditUserData* data = document->userData( block );
-    data->hasBookmark = !data->hasBookmark;
-    updateLineRect( line );
+	setMinimumWidth( 10 +( LineBookmarkMarginMargins *2 ) );
 }

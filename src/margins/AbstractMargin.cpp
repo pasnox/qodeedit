@@ -1,18 +1,23 @@
 #include "AbstractMargin.h"
 #include "MarginStacker.h"
-#include "QodeEdit.h"
-#include "QodeEditTextDocument.h"
-#include "QodeEditUserData.h"
+#include "CodeEditor.h"
+#include "TextDocument.h"
+#include "TextBlockUserData.h"
 
 #include <QScrollBar>
 #include <QApplication>
 #include <QDebug>
 
-// AbstractMargin::Private
+// AbstractMarginPrivate
 
-class AbstractMargin::Private {
+class AbstractMarginPrivate {
 public:
-    Private( AbstractMargin* _margin, MarginStacker* marginStacker )
+	AbstractMargin* margin;
+	MarginStacker* stacker;
+    int line;
+    int linePressed;
+	
+    AbstractMarginPrivate( AbstractMargin* _margin, MarginStacker* marginStacker )
         : margin( _margin ), stacker( marginStacker ),
 			line( -1 ), linePressed( -1 )
     {
@@ -21,12 +26,12 @@ public:
     }
     
     int lineAt( const QPoint& pos ) const {
-		const QodeEdit* editor = stacker->editor();
+		const CodeEditor* editor = stacker->editor();
         return editor ? editor->cursorForPosition( pos ).blockNumber() : -1;
     }
     
     QRect lineRect( int line ) const {
-		const QodeEdit* editor = stacker->editor();
+		const CodeEditor* editor = stacker->editor();
         QRect rect;
 		
 		if ( editor ) {
@@ -36,19 +41,13 @@ public:
 		
         return rect;
     }
-
-public:
-    AbstractMargin* margin;
-	MarginStacker* stacker;
-    int line;
-    int linePressed;
 };
 
 // AbstractMargin
 
 AbstractMargin::AbstractMargin( MarginStacker* marginStacker )
     : QWidget( 0 ),
-        d( new AbstractMargin::Private( this, marginStacker ) )
+        d( new AbstractMarginPrivate( this, marginStacker ) )
 {
 	Q_ASSERT( marginStacker );
 	
@@ -60,14 +59,14 @@ AbstractMargin::~AbstractMargin()
 	delete d;
 }
 
-QodeEdit* AbstractMargin::editor() const
+CodeEditor* AbstractMargin::editor() const
 {
 	return d->stacker->editor();
 }
 
-void AbstractMargin::setEditor( QodeEdit* editor )
+void AbstractMargin::setEditor( CodeEditor* editor )
 {
-	QodeEdit* oldEditor = this->editor();
+	CodeEditor* oldEditor = this->editor();
 	
 	if ( oldEditor ) {
 		disconnect( oldEditor->document()->documentLayout(), SIGNAL( update( const QRectF& ) ), this, SLOT( update() ) );
@@ -101,14 +100,14 @@ QRect AbstractMargin::lineRect( int line ) const
 
 int AbstractMargin::firstVisibleLine( const QRect& rect ) const
 {
-	const QodeEdit* editor = this->editor();
+	const CodeEditor* editor = this->editor();
 	const QRect r = rect.isNull() ? ( editor ? editor->viewport()->rect() : rect ) : rect;
     return d->lineAt( r.topLeft() );
 }
 
 int AbstractMargin::lastVisibleLine( const QRect& rect ) const
 {
-	const QodeEdit* editor = this->editor();
+	const CodeEditor* editor = this->editor();
 	const QRect r = rect.isNull() ? ( editor ? editor->viewport()->rect() : rect ) : rect;
     return d->lineAt( r.bottomLeft() );
 }
@@ -147,7 +146,7 @@ void AbstractMargin::mouseDoubleClickEvent( QMouseEvent* event )
     QWidget::mouseDoubleClickEvent( event );
     
     if ( d->line != -1 ) {
-        emit doubleClicked( d->line, event->button(), event->buttons(), event->modifiers() );
+        emit mouseDoubleClicked( d->line, event->button(), event->buttons(), event->modifiers() );
     }
 }
 
@@ -156,7 +155,7 @@ void AbstractMargin::mouseReleaseEvent( QMouseEvent* event )
     QWidget::mouseReleaseEvent( event );
     
     if ( d->linePressed != -1 && d->linePressed == d->lineAt( event->pos() ) ) {
-        emit clicked( d->line, event->button(), event->buttons(), event->modifiers() );
+        emit mouseClicked( d->line, event->button(), event->buttons(), event->modifiers() );
     }
     
     d->linePressed = -1;
@@ -173,13 +172,13 @@ void AbstractMargin::mouseMoveEvent( QMouseEvent* event )
     }
     
     if ( d->line != -1 ) {
-        emit left( d->line );
+        emit mouseLeft( d->line );
     }
     
     d->line = line;
     
     if ( d->line != -1 ) {
-        emit entered( d->line );
+        emit mouseEntered( d->line );
     }
 }
 
@@ -205,7 +204,7 @@ void AbstractMargin::leaveEvent( QEvent* event )
     }
     
     if ( d->line != -1 ) {
-        emit left( d->line );
+        emit mouseLeft( d->line );
     }
     
     d->line = line;

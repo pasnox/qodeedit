@@ -1,5 +1,5 @@
-#include "QodeEdit.h"
-#include "QodeEditTextDocument.h"
+#include "CodeEditor.h"
+#include "TextDocument.h"
 #include "MarginStacker.h"
 
 #include <QStyleOptionFrameV3>
@@ -7,51 +7,47 @@
 #include <QPainter>
 #include <QDebug>
 
-// QodeEdit::Private
+// CodeEditorPrivate
 
-class QodeEdit::Private
-{
+class CodeEditorPrivate {
 public:
-    Private( QodeEdit* _editor )
+    CodeEditor* editor;
+    MarginStacker* stacker;
+    QPalette originalPalette;
+    CodeEditor::Ruler rulerMode;
+    int rulerWidth;
+    
+    CodeEditorPrivate( CodeEditor* _editor )
             : editor( _editor ),
             stacker( 0 ),
             originalPalette( _editor->palette() ),
-            rulerMode( QodeEdit::NoRuler ),
+            rulerMode( CodeEditor::NoRuler ),
             rulerWidth( 80 )
     {
+        Q_ASSERT( editor );
     }
-    
-    QodeEdit* editor;
-    MarginStacker* stacker;
-    QPalette originalPalette;
-    QodeEdit::Ruler rulerMode;
-    int rulerWidth;
 
-    QLine rulerLine() const
-    {
+    QLine rulerLine() const {
         const QPoint offset = editor->contentOffset().toPoint();
         const int x = rulerWidth *QFontMetrics( editor->font() ).averageCharWidth();
         return QLine( QPoint( x +offset.x(), 0 ), QPoint( x +offset.x(), editor->viewport()->height() ) );
     }
     
-    QRect rulerRect() const
-    {
+    QRect rulerRect() const {
         const QPoint offset = editor->contentOffset().toPoint();
         const int x = rulerWidth *QFontMetrics( editor->font() ).averageCharWidth();
         QRect rect( QPoint( x +offset.x(), 0 ), QSize( editor->viewport()->size() -QSize( x +offset.x(), 0 ) ) );
         return rect;
     }
     
-    QRect caretLineRect() const
-    {
+    QRect caretLineRect() const {
         QRect rect = editor->cursorRect().adjusted( 0, -1, 0, 1 );
         rect.setX( 0 );
         rect.setWidth( editor->viewport()->width() );
         return rect;
     }
     
-    void paintFrame()
-    {
+    void paintFrame() {
         QPainter painter( editor );
         QStyleOptionFrameV3 option;
         
@@ -87,30 +83,40 @@ public:
     }
 };
 
-// QodeEdit
+// CodeEditor
 
-QodeEdit::QodeEdit( QWidget* parent )
+CodeEditor::CodeEditor( QWidget* parent )
     : QPlainTextEdit( parent ),
-        d( new QodeEdit::Private( this ) )
+        d( new CodeEditorPrivate( this ) )
 {
+    setTextDocument( new TextDocument( this ) );
     setAutoFillBackground( true );
     setCaretLineBackground( caretLineBackground().color().lighter( 200 ) );
-    setDocument( new QodeEditTextDocument( this ) );
     
     connect( this, SIGNAL( cursorPositionChanged() ), viewport(), SLOT( update() ) );
 }
 
-QodeEdit::~QodeEdit()
+CodeEditor::~CodeEditor()
 {
     delete d;
 }
 
-MarginStacker* QodeEdit::marginStacker() const
+TextDocument* CodeEditor::textDocument() const
+{
+    return qobject_cast<TextDocument*>( document() );
+}
+
+void CodeEditor::setTextDocument( TextDocument* document )
+{
+    setDocument( document );
+}
+
+MarginStacker* CodeEditor::marginStacker() const
 {
     return d->stacker;
 }
 
-void QodeEdit::setMarginStacker( MarginStacker* marginStacker )
+void CodeEditor::setMarginStacker( MarginStacker* marginStacker )
 {
     if ( d->stacker == marginStacker ) {
         return;
@@ -127,156 +133,153 @@ void QodeEdit::setMarginStacker( MarginStacker* marginStacker )
     }
 }
 
-void QodeEdit::setInitialText( const QString& text )
+QString CodeEditor::text() const
 {
-    QodeEditTextDocument* document = qobject_cast<QodeEditTextDocument*>( this->document() );
-    document->setInitialText( text );
+    return textDocument()->text();
+}
+
+void CodeEditor::setText( const QString& text )
+{
+    textDocument()->setText( text );
     moveCursor( QTextCursor::Start, QTextCursor::MoveAnchor );
 }
 
-QString QodeEdit::text() const
+void CodeEditor::setInitialText( const QString& text )
 {
-    QodeEditTextDocument* document = qobject_cast<QodeEditTextDocument*>( this->document() );
-    return document->text();
-}
-
-void QodeEdit::setText( const QString& text )
-{
-    QodeEditTextDocument* document = qobject_cast<QodeEditTextDocument*>( this->document() );
-    document->setText( text );
+    textDocument()->setInitialText( text );
     moveCursor( QTextCursor::Start, QTextCursor::MoveAnchor );
 }
 
-QPoint QodeEdit::cursorPosition() const
+QPoint CodeEditor::cursorPosition() const
 {
     const QTextCursor cursor = textCursor();
     return cursor.isNull() ? QPoint() : QPoint( cursor.positionInBlock(), cursor.blockNumber() );
 }
 
-void QodeEdit::setCursorPosition( const QPoint& pos )
+void CodeEditor::setCursorPosition( const QPoint& pos )
 {
-    const QTextBlock block = document()->findBlockByLineNumber( pos.y() );
+    const QTextBlock block = textDocument()->findBlockByLineNumber( pos.y() );
     const int position = block.position() +( pos.x() < block.length() ? pos.x() : 0 );
     QTextCursor cursor = textCursor();
     cursor.setPosition( position, QTextCursor::MoveAnchor );
     setTextCursor( cursor );
 }
 
-int QodeEdit::currentLine() const
+int CodeEditor::currentLine() const
 {
     return cursorPosition().y();
 }
 
-void QodeEdit::setCurrentLine( int line )
+void CodeEditor::setCurrentLine( int line )
 {
     setCursorPosition( QPoint( currentColumn(), line ) );
 }
 
-int QodeEdit::currentColumn() const
+int CodeEditor::currentColumn() const
 {
     return cursorPosition().x();
 }
 
-void QodeEdit::setCurrentColumn( int column )
+void CodeEditor::setCurrentColumn( int column )
 {
     setCursorPosition( QPoint( column, currentLine() ) );
 }
 
-QodeEdit::Ruler QodeEdit::rulerMode() const
+CodeEditor::Ruler CodeEditor::rulerMode() const
 {
     return d->rulerMode;
 }
 
-void QodeEdit::setRulerMode( QodeEdit::Ruler mode )
+void CodeEditor::setRulerMode( CodeEditor::Ruler mode )
 {
     d->rulerMode = mode;
     viewport()->update();
 }
 
-int QodeEdit::rulerWidth() const
+int CodeEditor::rulerWidth() const
 {
     return d->rulerWidth;
 }
 
-void QodeEdit::setRulerWidth( int width )
+void CodeEditor::setRulerWidth( int width )
 {
     d->rulerWidth = width;
     viewport()->update();
 }
 
-QBrush QodeEdit::paper() const
+QBrush CodeEditor::paper() const
 {
     return palette().brush( viewport()->backgroundRole() );
 }
 
-void QodeEdit::setPaper( const QBrush& brush )
+void CodeEditor::setPaper( const QBrush& brush )
 {
     QPalette pal = palette();
     pal.setBrush( viewport()->backgroundRole(), brush );
     setPalette( pal );
 }
 
-QBrush QodeEdit::pen() const
+QBrush CodeEditor::pen() const
 {
     return palette().brush( viewport()->foregroundRole() );
 }
 
-void QodeEdit::setPen( const QBrush& brush )
+void CodeEditor::setPen( const QBrush& brush )
 {
     QPalette pal = palette();
     pal.setBrush( viewport()->foregroundRole(), brush );
     setPalette( pal );
 }
 
-QBrush QodeEdit::selectionBackground() const
+QBrush CodeEditor::selectionBackground() const
 {
     return palette().brush( QPalette::Highlight );
 }
 
-void QodeEdit::setSelectionBackground( const QBrush& brush )
+void CodeEditor::setSelectionBackground( const QBrush& brush )
 {
     QPalette pal = palette();
     pal.setBrush( QPalette::Highlight, brush );
     setPalette( pal );
 }
 
-QBrush QodeEdit::selectionForeground() const
+QBrush CodeEditor::selectionForeground() const
 {
     return palette().brush( QPalette::HighlightedText );
 }
 
-void QodeEdit::setSelectionForeground( const QBrush& brush )
+void CodeEditor::setSelectionForeground( const QBrush& brush )
 {
     QPalette pal = palette();
     pal.setBrush( QPalette::HighlightedText, brush );
     setPalette( pal );
 }
 
-QBrush QodeEdit::caretLineBackground() const
+QBrush CodeEditor::caretLineBackground() const
 {
     return palette().brush( QPalette::Link );
 }
 
-void QodeEdit::setCaretLineBackground( const QBrush& brush )
+void CodeEditor::setCaretLineBackground( const QBrush& brush )
 {
     QPalette pal = palette();
     pal.setBrush( QPalette::Link, brush );
     setPalette( pal );
 }
 
-QBrush QodeEdit::caretLineForeground() const
+QBrush CodeEditor::caretLineForeground() const
 {
     return palette().brush( QPalette::LinkVisited );
 }
 
-void QodeEdit::setCaretLineForeground( const QBrush& brush )
+void CodeEditor::setCaretLineForeground( const QBrush& brush )
 {
     QPalette pal = palette();
     pal.setBrush( QPalette::LinkVisited, brush );
     setPalette( pal );
 }
 
-QRect QodeEdit::lineRect( int line ) const
+QRect CodeEditor::lineRect( int line ) const
 {
     const QTextBlock block = document()->findBlockByNumber( line );
     QRectF rect = blockBoundingGeometry( block );
@@ -284,7 +287,7 @@ QRect QodeEdit::lineRect( int line ) const
     return rect.toRect();
 }
 
-bool QodeEdit::event( QEvent* event )
+bool CodeEditor::event( QEvent* event )
 {
     switch ( event->type() ) {
         case QEvent::QEvent::Paint:
@@ -297,19 +300,20 @@ bool QodeEdit::event( QEvent* event )
     return QPlainTextEdit::event( event );
 }
 
-void QodeEdit::paintEvent( QPaintEvent* event )
+void CodeEditor::paintEvent( QPaintEvent* event )
 {
     QPainter painter( viewport() );
+    painter.setRenderHint( QPainter::Antialiasing, false );
     
     // draw ruler
     switch ( d->rulerMode ) {
-        case QodeEdit::NoRuler:
+        case CodeEditor::NoRuler:
             break;
-        case QodeEdit::LineRuler:
+        case CodeEditor::LineRuler:
             painter.setPen( QPen( caretLineForeground(), painter.pen().widthF() ) );
             painter.drawLine( d->rulerLine() );
             break;
-        case QodeEdit::BackgroundRuler:
+        case CodeEditor::BackgroundRuler:
             painter.setPen( Qt::NoPen );
             painter.setBrush( caretLineForeground() );
             painter.drawRect( d->rulerRect() );
@@ -318,8 +322,6 @@ void QodeEdit::paintEvent( QPaintEvent* event )
     
     // draw caret line
     painter.fillRect( d->caretLineRect(), caretLineBackground() );
-    
-    // finished
     painter.end();
     
     // normal editor painting
