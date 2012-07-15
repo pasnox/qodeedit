@@ -2,6 +2,7 @@
 #include "MarginStacker.h"
 #include "CodeEditor.h"
 #include "TextDocument.h"
+#include "PlainTextDocumentLayout.h"
 #include "TextBlockUserData.h"
 
 #include <QScrollBar>
@@ -75,14 +76,14 @@ void AbstractMargin::setEditor( CodeEditor* editor )
 	CodeEditor* oldEditor = this->editor();
 	
 	if ( oldEditor ) {
-		disconnect( oldEditor->document()->documentLayout(), SIGNAL( update( const QRectF& ) ), this, SLOT( update() ) );
+		disconnect( oldEditor->textDocument()->layout(), SIGNAL( update( const QRectF& ) ), this, SLOT( update() ) );
 		disconnect( oldEditor->verticalScrollBar(), SIGNAL( valueChanged( int ) ), this, SLOT( update() ) );
 		disconnect( oldEditor, SIGNAL( blockCountChanged( int ) ), this, SLOT( update() ) );
 		disconnect( oldEditor, SIGNAL( blockCountChanged( int ) ), this, SIGNAL( lineCountChanged( int ) ) );
 	}
 	
 	if ( editor ) {
-		connect( editor->document()->documentLayout(), SIGNAL( update( const QRectF& ) ), this, SLOT( update() ) );
+		connect( editor->textDocument()->layout(), SIGNAL( update( const QRectF& ) ), this, SLOT( update() ) );
 		connect( editor->verticalScrollBar(), SIGNAL( valueChanged( int ) ), this, SLOT( update() ) );
 		connect( editor, SIGNAL( blockCountChanged( int ) ), this, SLOT( update() ) );
 		connect( editor, SIGNAL( blockCountChanged( int ) ), this, SIGNAL( lineCountChanged( int ) ) );

@@ -42,7 +42,7 @@ protected:
     virtual void enterEvent( QEvent* event );
     virtual void leaveEvent( QEvent* event );
     
-    void setEditor( CodeEditor* editor );
+    virtual void setEditor( CodeEditor* editor );
 
 protected slots:
     virtual void updateWidthRequested() = 0;
