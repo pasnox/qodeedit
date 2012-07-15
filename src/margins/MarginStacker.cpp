@@ -162,6 +162,11 @@ MarginStacker::~MarginStacker()
 {
 }
 
+AbstractMargin* MarginStacker::margin( MarginStacker::Type type ) const
+{
+    return d->margins.value( type );
+}
+
 CodeEditor* MarginStacker::editor() const
 {
     return d->editor;

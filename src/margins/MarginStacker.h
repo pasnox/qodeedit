@@ -4,6 +4,7 @@
 #include <QWidget>
 
 class MarginStackerPrivate;
+class AbstractMargin;
 class CodeEditor;
 
 class MarginStacker : public QWidget
@@ -24,6 +25,8 @@ public:
     
     MarginStacker( CodeEditor* editor = 0 );
     virtual ~MarginStacker();
+    
+    AbstractMargin* margin( MarginStacker::Type type ) const;
     
     CodeEditor* editor() const;
     void setEditor( CodeEditor* editor );
