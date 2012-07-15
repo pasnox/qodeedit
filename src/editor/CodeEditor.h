@@ -45,6 +45,7 @@ public:
     QBrush caretLineBackground() const;
     QBrush caretLineForeground() const;
     
+    QRect blockRect( const QTextBlock& block ) const;
     QRect lineRect( int line ) const;
 
 public slots:

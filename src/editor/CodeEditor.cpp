@@ -279,12 +279,16 @@ void CodeEditor::setCaretLineForeground( const QBrush& brush )
     setPalette( pal );
 }
 
-QRect CodeEditor::lineRect( int line ) const
+QRect CodeEditor::blockRect( const QTextBlock& block ) const
 {
-    const QTextBlock block = document()->findBlockByNumber( line );
     QRectF rect = blockBoundingGeometry( block );
     rect.moveTopLeft( rect.topLeft() +QPointF( 0, contentOffset().y() ) );
     return rect.toRect();
+}
+
+QRect CodeEditor::lineRect( int line ) const
+{
+    return blockRect( textDocument()->findBlockByNumber( line ) );
 }
 
 bool CodeEditor::event( QEvent* event )
