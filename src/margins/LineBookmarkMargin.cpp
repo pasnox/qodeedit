@@ -48,14 +48,31 @@ public slots:
 // LineBookmarkMargin
 
 LineBookmarkMargin::LineBookmarkMargin( MarginStacker* marginStacker )
-    : AbstractMargin( marginStacker )
+    : AbstractMargin( marginStacker ),
+		d( new LineBookmarkMarginPrivate( this ) )
 {
 	updateWidthRequested();
 }
 
 LineBookmarkMargin::~LineBookmarkMargin()
 {
-	delete d;
+}
+
+void LineBookmarkMargin::setEditor( CodeEditor* editor )
+{
+	CodeEditor* oldEditor = this->editor();
+	
+	if ( oldEditor ) {
+		disconnect( oldEditor, SIGNAL( cursorPositionChanged() ), this, SLOT( update() ) );
+	}
+	
+	AbstractMargin::setEditor( editor );
+	
+	if ( editor ) {
+		connect( editor, SIGNAL( cursorPositionChanged() ), this, SLOT( update() ) );
+	}
+	
+	updateWidthRequested();
 }
 
 void LineBookmarkMargin::paintEvent( QPaintEvent* event )
@@ -105,3 +122,5 @@ void LineBookmarkMargin::updateWidthRequested()
 {
 	setMinimumWidth( 10 +( LineBookmarkMarginMargins *2 ) );
 }
+
+#include "LineBookmarkMargin.moc"

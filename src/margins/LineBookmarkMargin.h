@@ -16,6 +16,7 @@ public:
 
 protected:
     virtual void paintEvent( QPaintEvent* event );
+    virtual void setEditor( CodeEditor* editor );
 
 protected slots:
     virtual void updateWidthRequested();
