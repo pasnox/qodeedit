@@ -198,7 +198,6 @@ void AbstractMargin::mouseMoveEvent( QMouseEvent* event )
     }
 }
 
-
 void AbstractMargin::enterEvent( QEvent* event )
 {
     QWidget::enterEvent( event );
