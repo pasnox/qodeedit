@@ -13,40 +13,40 @@
 
 class AbstractMarginPrivate {
 public:
-	AbstractMargin* margin;
-	MarginStacker* stacker;
+    AbstractMargin* margin;
+    MarginStacker* stacker;
     int line;
     int linePressed;
-	
+    
     AbstractMarginPrivate( AbstractMargin* _margin, MarginStacker* marginStacker )
         : margin( _margin ), stacker( marginStacker ),
-			line( -1 ), linePressed( -1 )
+            line( -1 ), linePressed( -1 )
     {
         Q_ASSERT( margin );
-		Q_ASSERT( marginStacker );
+        Q_ASSERT( marginStacker );
     }
     
     int lineAt( const QPoint& pos ) const {
-		const CodeEditor* editor = stacker->editor();
+        const CodeEditor* editor = stacker->editor();
         return editor ? editor->cursorForPosition( pos ).blockNumber() : -1;
     }
-	
-	QRect blockRect( const QTextBlock& block ) const {
-		const CodeEditor* editor = stacker->editor();
+    
+    QRect blockRect( const QTextBlock& block ) const {
+        const CodeEditor* editor = stacker->editor();
         QRect rect;
-		
-		if ( editor ) {
-			rect = editor->blockRect( block );
-			rect.setWidth( margin->width() );
-		}
-		
+        
+        if ( editor ) {
+            rect = editor->blockRect( block );
+            rect.setWidth( margin->width() );
+        }
+        
         return rect;
-	}
+    }
     
     QRect lineRect( int line ) const {
-		const CodeEditor* editor = stacker->editor();
-		const TextDocument* document = editor ? editor->textDocument() : 0;
-		return document ? blockRect( document->findBlockByNumber( line ) ) : QRect();
+        const CodeEditor* editor = stacker->editor();
+        const TextDocument* document = editor ? editor->textDocument() : 0;
+        return document ? blockRect( document->findBlockByNumber( line ) ) : QRect();
     }
 };
 
@@ -56,47 +56,47 @@ AbstractMargin::AbstractMargin( MarginStacker* marginStacker )
     : QWidget( 0 ),
         d( new AbstractMarginPrivate( this, marginStacker ) )
 {
-	Q_ASSERT( marginStacker );
-	
+    Q_ASSERT( marginStacker );
+    
     setMouseTracking( true );
 }
 
 AbstractMargin::~AbstractMargin()
 {
-	delete d;
+    delete d;
 }
 
 CodeEditor* AbstractMargin::editor() const
 {
-	return d->stacker->editor();
+    return d->stacker->editor();
 }
 
 void AbstractMargin::setEditor( CodeEditor* editor )
 {
-	CodeEditor* oldEditor = this->editor();
-	
-	if ( oldEditor ) {
-		disconnect( oldEditor->textDocument()->layout(), SIGNAL( update( const QRectF& ) ), this, SLOT( update() ) );
-		disconnect( oldEditor, SIGNAL( cursorPositionChanged() ), this, SLOT( update() ) );
-		disconnect( oldEditor->verticalScrollBar(), SIGNAL( valueChanged( int ) ), this, SLOT( update() ) );
-		disconnect( oldEditor, SIGNAL( blockCountChanged( int ) ), this, SLOT( update() ) );
-		disconnect( oldEditor, SIGNAL( blockCountChanged( int ) ), this, SIGNAL( lineCountChanged( int ) ) );
-	}
-	
-	if ( editor ) {
-		connect( editor->textDocument()->layout(), SIGNAL( update( const QRectF& ) ), this, SLOT( update() ) );
-		connect( editor, SIGNAL( cursorPositionChanged() ), this, SLOT( update() ) );
-		connect( editor->verticalScrollBar(), SIGNAL( valueChanged( int ) ), this, SLOT( update() ) );
-		connect( editor, SIGNAL( blockCountChanged( int ) ), this, SLOT( update() ) );
-		connect( editor, SIGNAL( blockCountChanged( int ) ), this, SIGNAL( lineCountChanged( int ) ) );
-	}
-	
-	updateWidthRequested();
+    CodeEditor* oldEditor = this->editor();
+    
+    if ( oldEditor ) {
+        disconnect( oldEditor->textDocument()->layout(), SIGNAL( update( const QRectF& ) ), this, SLOT( update() ) );
+        disconnect( oldEditor, SIGNAL( cursorPositionChanged() ), this, SLOT( update() ) );
+        disconnect( oldEditor->verticalScrollBar(), SIGNAL( valueChanged( int ) ), this, SLOT( update() ) );
+        disconnect( oldEditor, SIGNAL( blockCountChanged( int ) ), this, SLOT( update() ) );
+        disconnect( oldEditor, SIGNAL( blockCountChanged( int ) ), this, SIGNAL( lineCountChanged( int ) ) );
+    }
+    
+    if ( editor ) {
+        connect( editor->textDocument()->layout(), SIGNAL( update( const QRectF& ) ), this, SLOT( update() ) );
+        connect( editor, SIGNAL( cursorPositionChanged() ), this, SLOT( update() ) );
+        connect( editor->verticalScrollBar(), SIGNAL( valueChanged( int ) ), this, SLOT( update() ) );
+        connect( editor, SIGNAL( blockCountChanged( int ) ), this, SLOT( update() ) );
+        connect( editor, SIGNAL( blockCountChanged( int ) ), this, SIGNAL( lineCountChanged( int ) ) );
+    }
+    
+    updateWidthRequested();
 }
 
 MarginStacker* AbstractMargin::stacker() const
 {
-	return d->stacker;
+    return d->stacker;
 }
 
 int AbstractMargin::lineAt( const QPoint& pos ) const
@@ -106,7 +106,7 @@ int AbstractMargin::lineAt( const QPoint& pos ) const
 
 QRect AbstractMargin::blockRect( const QTextBlock& block ) const
 {
-	return d->blockRect( block );
+    return d->blockRect( block );
 }
 
 QRect AbstractMargin::lineRect( int line ) const
@@ -116,39 +116,39 @@ QRect AbstractMargin::lineRect( int line ) const
 
 int AbstractMargin::firstVisibleLine( const QRect& rect ) const
 {
-	const CodeEditor* editor = this->editor();
-	const QRect r = rect.isNull() ? ( editor ? editor->viewport()->rect() : rect ) : rect;
+    const CodeEditor* editor = this->editor();
+    const QRect r = rect.isNull() ? ( editor ? editor->viewport()->rect() : rect ) : rect;
     return d->lineAt( r.topLeft() );
 }
 
 int AbstractMargin::lastVisibleLine( const QRect& rect ) const
 {
-	const CodeEditor* editor = this->editor();
-	const QRect r = rect.isNull() ? ( editor ? editor->viewport()->rect() : rect ) : rect;
+    const CodeEditor* editor = this->editor();
+    const QRect r = rect.isNull() ? ( editor ? editor->viewport()->rect() : rect ) : rect;
     return d->lineAt( r.bottomLeft() );
 }
 
 void AbstractMargin::updateLineRect( int line )
 {
-	update( lineRect( line ) );
+    update( lineRect( line ) );
 }
 
 bool AbstractMargin::event( QEvent* event )
 {
-	const bool result = QWidget::event( event );
-	
-	switch ( event->type() ) {
-		case QEvent::FontChange:
-			emit fontChanged();
-			break;
-		case QEvent::Resize:
-			emit resized();
-			break;
-		default:
-			break;
-	}
-	
-	return result;
+    const bool result = QWidget::event( event );
+    
+    switch ( event->type() ) {
+        case QEvent::FontChange:
+            emit fontChanged();
+            break;
+        case QEvent::Resize:
+            emit resized();
+            break;
+        default:
+            break;
+    }
+    
+    return result;
 }
 
 void AbstractMargin::mousePressEvent( QMouseEvent* event )

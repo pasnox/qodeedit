@@ -14,39 +14,39 @@
 // LineBookmarkMarginPrivate
 
 class LineBookmarkMarginPrivate : public QObject {
-	Q_OBJECT
+    Q_OBJECT
 
 public:
-	LineBookmarkMargin* margin;
-	
-	LineBookmarkMarginPrivate( LineBookmarkMargin* _margin )
-		: QObject( _margin ),
-			margin( _margin )
-	{
-		Q_ASSERT( margin );
-		
-		connect( margin, SIGNAL( mouseClicked( int, Qt::MouseButton, Qt::MouseButtons, Qt::KeyboardModifiers ) ), this, SLOT( mouseClicked( int, Qt::MouseButton, Qt::MouseButtons, Qt::KeyboardModifiers ) ) );
-	}
+    LineBookmarkMargin* margin;
+    
+    LineBookmarkMarginPrivate( LineBookmarkMargin* _margin )
+        : QObject( _margin ),
+            margin( _margin )
+    {
+        Q_ASSERT( margin );
+        
+        connect( margin, SIGNAL( mouseClicked( int, Qt::MouseButton, Qt::MouseButtons, Qt::KeyboardModifiers ) ), this, SLOT( mouseClicked( int, Qt::MouseButton, Qt::MouseButtons, Qt::KeyboardModifiers ) ) );
+    }
 
 public slots:
-	void mouseClicked( int line, Qt::MouseButton button, Qt::MouseButtons buttons, Qt::KeyboardModifiers modifiers ) {
-		Q_UNUSED( buttons );
-		
-		if ( button != Qt::LeftButton || modifiers != Qt::NoModifier ) {
-			return;
-		}
-		
-		margin->editor()->toggleBookmark( line );
-	}
+    void mouseClicked( int line, Qt::MouseButton button, Qt::MouseButtons buttons, Qt::KeyboardModifiers modifiers ) {
+        Q_UNUSED( buttons );
+        
+        if ( button != Qt::LeftButton || modifiers != Qt::NoModifier ) {
+            return;
+        }
+        
+        margin->editor()->toggleBookmark( line );
+    }
 };
 
 // LineBookmarkMargin
 
 LineBookmarkMargin::LineBookmarkMargin( MarginStacker* marginStacker )
     : AbstractMargin( marginStacker ),
-		d( new LineBookmarkMarginPrivate( this ) )
+        d( new LineBookmarkMarginPrivate( this ) )
 {
-	updateWidthRequested();
+    updateWidthRequested();
 }
 
 LineBookmarkMargin::~LineBookmarkMargin()
@@ -58,7 +58,7 @@ void LineBookmarkMargin::paintEvent( QPaintEvent* event )
     AbstractMargin::paintEvent( event );
     
     QPainter painter( this );
-	painter.setRenderHint( QPainter::Antialiasing, false );
+    painter.setRenderHint( QPainter::Antialiasing, false );
     painter.setRenderHint( QPainter::SmoothPixmapTransform, true );
     
     const int firstLine = firstVisibleLine( event->rect() );
@@ -66,7 +66,7 @@ void LineBookmarkMargin::paintEvent( QPaintEvent* event )
     const TextDocument* document = editor()->textDocument();
     const QString iconKey = "bookmarks";
     
-	for ( QTextBlock block = document->findBlockByNumber( firstLine ); block.isValid() && block.blockNumber() <= lastLine; block = block.next() ) {
+    for ( QTextBlock block = document->findBlockByNumber( firstLine ); block.isValid() && block.blockNumber() <= lastLine; block = block.next() ) {
         const QRect rect = blockRect( block ).adjusted( LineBookmarkMarginMargins, 0, -( LineBookmarkMarginMargins +1 ), 0 ); // +1 for the 1pixel border
         const TextBlockUserData* data = document->testUserData( block );
         
@@ -92,18 +92,18 @@ void LineBookmarkMargin::paintEvent( QPaintEvent* event )
             painter.drawPixmap( pixmapRect, pixmap );
         }
     }
-	
-	if ( event->rect().right() < rect().right() ) {
-		return;
-	}
-	
-	painter.setPen( QPen( QColor( palette().color( backgroundRole() ).darker() ), 1 ) );
-	painter.drawLine( event->rect().topRight(), event->rect().bottomRight() );
+    
+    if ( event->rect().right() < rect().right() ) {
+        return;
+    }
+    
+    painter.setPen( QPen( QColor( palette().color( backgroundRole() ).darker() ), 1 ) );
+    painter.drawLine( event->rect().topRight(), event->rect().bottomRight() );
 }
 
 void LineBookmarkMargin::updateWidthRequested()
 {
-	setMinimumWidth( 10 +( LineBookmarkMarginMargins *2 ) +1 ); // +1 for the 1 pixel border
+    setMinimumWidth( 10 +( LineBookmarkMarginMargins *2 ) +1 ); // +1 for the 1 pixel border
 }
 
 #include "LineBookmarkMargin.moc"
