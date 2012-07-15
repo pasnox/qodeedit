@@ -4,9 +4,34 @@
 
 #include <QPainter>
 #include <QTextBlock>
+#include <QApplication>
 #include <QDebug>
 
 #define LineNumberMarginMargins 2
+
+static QMouseEvent transformedMouseEvent( QMouseEvent* event, QWidget* to )
+{
+	return QMouseEvent(
+		event->type(),
+		event->type() == QEvent::MouseMove ? QPoint( to->width(), event->pos().y() ) : QPoint( 0, event->pos().y() ),
+		to->mapToGlobal( event->pos() ),
+		event->button(),
+		event->buttons(),
+		event->modifiers()
+	);
+}
+
+static QWheelEvent transformedWheelEvent( QWheelEvent* event, QWidget* to )
+{
+	return QWheelEvent(
+		event->pos(),
+		to->mapToGlobal( event->pos() ),
+		event->delta(),
+		event->buttons(),
+		event->modifiers(),
+		event->orientation()
+	);
+}
 
 LineNumberMargin::LineNumberMargin( MarginStacker* marginStacker )
     : AbstractMargin( marginStacker )
@@ -21,6 +46,49 @@ LineNumberMargin::LineNumberMargin( MarginStacker* marginStacker )
 
 LineNumberMargin::~LineNumberMargin()
 {
+}
+
+void LineNumberMargin::mousePressEvent( QMouseEvent* event )
+{
+	QWidget* viewport = editor()->viewport();
+	QMouseEvent me = transformedMouseEvent( event, viewport );
+	QApplication::sendEvent( viewport, &me );
+    AbstractMargin::mousePressEvent( event );
+}
+
+void LineNumberMargin::mouseDoubleClickEvent( QMouseEvent* event )
+{
+	QWidget* viewport = editor()->viewport();
+	QMouseEvent me = transformedMouseEvent( event, viewport );
+	QApplication::sendEvent( viewport, &me );
+    AbstractMargin::mouseDoubleClickEvent( event );
+}
+
+void LineNumberMargin::mouseReleaseEvent( QMouseEvent* event )
+{
+    QWidget* viewport = editor()->viewport();
+	QMouseEvent me = transformedMouseEvent( event, viewport );
+	QApplication::sendEvent( viewport, &me );
+    AbstractMargin::mouseReleaseEvent( event );
+}
+
+void LineNumberMargin::mouseMoveEvent( QMouseEvent* event )
+{
+	if ( !editor()->textCursor().hasSelection() ) {
+		QWidget* viewport = editor()->viewport();
+		QMouseEvent me = transformedMouseEvent( event, viewport );
+		QApplication::sendEvent( viewport, &me );
+	}
+	
+    AbstractMargin::mouseMoveEvent( event );
+}
+
+void LineNumberMargin::wheelEvent( QWheelEvent* event )
+{
+	QWidget* viewport = editor()->viewport();
+	QWheelEvent we = transformedWheelEvent( event, viewport );
+	QApplication::sendEvent( viewport, &we );
+	AbstractMargin::wheelEvent( event );
 }
 
 void LineNumberMargin::paintEvent( QPaintEvent* event )
