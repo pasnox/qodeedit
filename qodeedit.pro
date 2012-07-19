@@ -20,6 +20,8 @@ XUP.OTHERS_PLATFORM_TARGET_DEFAULT = bin/Linux/qodeedit_debug
 include( config.pri )
 initializeProject( app, $${BUILD_TARGET}, $${BUILD_MODE}, $${BUILD_PATH}/$${TARGET_NAME}, $${BUILD_TARGET_PATH}, "", "0.1.0" )
 
+QT *= xml
+
 INCLUDEPATH *= $$getFolders( . )
 DEPENDPATH *= $${INCLUDEPATH}
 
@@ -35,7 +37,16 @@ HEADERS *=  \
     src/margins/LineBookmarkMargin.h \
     src/margins/LineNumberMargin.h \
     src/margins/LineRevisionMargin.h \
-    src/margins/LineSpacingMargin.h
+    src/margins/LineSpacingMargin.h \
+    src/syntax/SyntaxDocumentReader.h \
+    src/syntax/SyntaxItemData.h \
+    src/syntax/SyntaxRule.h \
+    src/syntax/SyntaxComment.h \
+    src/syntax/SyntaxKeywords.h \
+    src/syntax/SyntaxHighlighting.h \
+    src/syntax/SyntaxContext.h \
+    src/syntax/SyntaxGeneral.h \
+    src/syntax/SyntaxDocument.h
 
 SOURCES *= src/main.cpp \
     src/editor/CodeEditor.cpp \
@@ -47,4 +58,13 @@ SOURCES *= src/main.cpp \
     src/margins/LineBookmarkMargin.cpp \
     src/margins/LineNumberMargin.cpp \
     src/margins/LineRevisionMargin.cpp \
-    src/margins/LineSpacingMargin.cpp
+    src/margins/LineSpacingMargin.cpp \
+    src/syntax/SyntaxRule.cpp \
+    src/syntax/SyntaxContext.cpp \
+    src/syntax/SyntaxComment.cpp \
+    src/syntax/SyntaxDocument.cpp \
+    src/syntax/SyntaxGeneral.cpp \
+    src/syntax/SyntaxKeywords.cpp \
+    src/syntax/SyntaxHighlighting.cpp \
+    src/syntax/SyntaxItemData.cpp \
+    src/syntax/SyntaxDocumentReader.cpp

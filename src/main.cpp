@@ -3,6 +3,8 @@
 #include "CodeEditor.h"
 #include "MarginStacker.h"
 
+#include "SyntaxDocument.h"
+
 class QodeEditor : public CodeEditor {
     Q_OBJECT
 
@@ -38,6 +40,9 @@ int main( int argc, char** argv )
     editor->setMarginStacker( margins );
     editor->setGeometry( rect );
     editor->show();
+    
+    Syntax::Document document( "/home/pasnox/Developpement/C++/Qt5/mks-ng/3rdparty/qodeedit.git/share/syntax/cpp.xml" );
+    qWarning() << document.parse();
     
     return app.exec();
 }
