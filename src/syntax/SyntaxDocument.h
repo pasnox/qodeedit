@@ -1,26 +1,39 @@
 #ifndef SYNTAXDOCUMENT_H
 #define SYNTAXDOCUMENT_H
 
-#include <QSet>
-#include <QString>
+#include "SyntaxList.h"
+#include "SyntaxHighlighting.h"
+#include "SyntaxGeneral.h"
 
 namespace Syntax {
-
-class Language;
-class DocumentPrivate;
-
-typedef QSet<QString> List;
 
 class Document
 {
 public:
-    Document( const QString& filePath );
+    // Required
+    QString name; ///< Name of the syntax document (ie: Asm6502)
+    QString localizedName; ///< Translated display name
+    QString section; ///< Submenu section (ie: Assembly)
+    Syntax::List extensions; ///< List of file extensions
+    // Optional
+    QString version; ///< The version of the syntax file
+    QString kateVersion;
+    QString indenter; ///< Indenter to use for this syntax
+    Syntax::List mimeTypes; ///< Mimetypes this syntax applie to
+    int priority; ///< Priority for conflict-resolution when the same file suffix has multiple highlighting definitions
+    bool hidden; ///< Hides the syntax from the application's menus
+    QString style; ///< Default style provided by the syntax
+    QString author; ///< Author's name
+    QString license; ///< License; for example: "LGPL"
+    //QString identifier; // ?
+    
+    Syntax::Highlighting highlighting;
+    Syntax::General general;
+    
+    Document();
     virtual ~Document();
     
-    bool parse() { return false; }
-
-private:
-    DocumentPrivate* d;
+    bool open( const QString& filePath );
 };
 
 }; // Syntax

@@ -1,7 +1,7 @@
 #ifndef SYNTAXHIGHLIGHTING_H
 #define SYNTAXHIGHLIGHTING_H
 
-#include "SyntaxDocument.h"
+#include "SyntaxList.h"
 #include "SyntaxContext.h"
 #include "SyntaxItemData.h"
 

@@ -9,7 +9,7 @@ namespace Syntax {
 class ItemData
 {
 public:
-    typedef QHash<QString, ItemData> Hash;
+    typedef QHash<QString, Syntax::ItemData> Hash;
     
     QString name; ///< Name of the item data
     QHash<QString, QString> attributes; ///< Attributes of the item data

@@ -10,7 +10,7 @@ namespace Syntax {
 class Rule
 {
 public:
-    typedef QList<Rule> List;
+    typedef QList<Syntax::Rule> List;
     
     QString name; ///< Name of the rule
     QHash<QString, QString> attributes; ///< Attributes of the rule

@@ -41,8 +41,8 @@ int main( int argc, char** argv )
     editor->setGeometry( rect );
     editor->show();
     
-    Syntax::Document document( "/home/pasnox/Developpement/C++/Qt5/mks-ng/3rdparty/qodeedit.git/share/syntax/cpp.xml" );
-    qWarning() << document.parse();
+    Syntax::Document document;
+    qWarning() << document.open( "/home/pasnox/Developpement/C++/Qt5/mks-ng/3rdparty/qodeedit.git/share/syntax/cpp.xml" );
     
     return app.exec();
 }
