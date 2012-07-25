@@ -42,7 +42,7 @@ int main( int argc, char** argv )
     editor->show();
     
     Syntax::Document document;
-    qWarning() << document.open( "/home/pasnox/Developpement/C++/Qt5/mks-ng/3rdparty/qodeedit.git/share/syntax/cpp.xml" );
+    Q_ASSERT( document.open( "/home/pasnox/Developpement/C++/Qt5/mks-ng/3rdparty/qodeedit.git/share/syntax/cpp.xml" ) );
     
     return app.exec();
 }

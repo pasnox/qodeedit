@@ -3,17 +3,50 @@
 
 #include <QDebug>
 
+bool caseInsensitiveComparison( const QString& left, const QString& right ) {
+    return QString::compare( left, right, Qt::CaseInsensitive ) == 0;
+}
+
 // ParserPrivate
 
 class Syntax::ParserPrivate {
 public:
+    const Syntax::List ruleNames;
     Syntax::Document* document;
     QString error;
     QString listName;
+    QString contextName;
     QString text;
     
     ParserPrivate( Syntax::Parser* _parser, Syntax::Document* _document )
-        : document( _document ),
+        : ruleNames( Syntax::List()
+            << "anychar" // AnyChar
+            
+            << "detect2chars" // Detect2Chars
+            << "detectchar" // DetectChar
+            << "detectidentifier" // DetectIdentifier
+            << "detectspaces" // DetectSpaces
+            
+            << "float" // Float
+            
+            << "hlcchar" // HlCChar
+            << "hlchex" // HlCHex
+            << "hlcoct" // HlCOct
+            << "hlcstringchar" // HlCStringChar
+            
+            << "includerules" // IncludeRules
+            << "int" // Int
+            
+            << "keyword" // Keyword
+            
+            << "linecontinue" // LineContinue
+            
+            << "rangedetect" // RangeDetect
+            << "regexpr" // RegExpr
+            
+            << "stringdetect" // StringDetect
+            ),
+            document( _document ),
             parser( _parser )
     {
         Q_ASSERT( document );
@@ -77,32 +110,32 @@ bool Syntax::Parser::startElement( const QString& namespaceURI, const QString& l
 {
     //qWarning() << namespaceURI << localName << qName;
     
-    if ( qName == "language" ) {
+    if ( caseInsensitiveComparison( qName, "language" )) {
         for ( int i = 0; i < atts.count(); i++ ) {
             const QString name = atts.qName( i );
             
-            if ( name == "name" ) {
+            if ( caseInsensitiveComparison( name, "name" ) ) {
                 d->document->name = atts.value( i );
             }
-            else if ( name == "section" ) {
+            else if ( caseInsensitiveComparison( name, "section" ) ) {
                 d->document->section = atts.value( i );
             }
-            else if ( name == "version" ) {
+            else if ( caseInsensitiveComparison( name, "version" ) ) {
                 d->document->version = atts.value( i );
             }
-            else if ( name == "kateversion" ) {
+            else if ( caseInsensitiveComparison( name, "kateVersion" ) ) {
                 d->document->kateVersion = atts.value( i );
             }
-            else if ( name == "indenter" ) {
+            else if ( caseInsensitiveComparison( name, "indenter" ) ) {
                 d->document->indenter = atts.value( i );
             }
-            else if ( name == "mimetype" ) {
+            else if ( caseInsensitiveComparison( name, "mimeType" ) ) {
                 d->document->mimeTypes = atts.value( i ).split( ";", QString::SkipEmptyParts ).toSet();
             }
-            else if ( name == "extensions" ) {
+            else if ( caseInsensitiveComparison( name, "extensions" ) ) {
                 d->document->extensions = atts.value( i ).split( ";", QString::SkipEmptyParts ).toSet();
             }
-            else if ( name == "priority" ) {
+            else if ( caseInsensitiveComparison( name, "priority" ) ) {
                 d->document->priority = atts.value( i ).toInt();
             }
             else {
@@ -111,7 +144,7 @@ bool Syntax::Parser::startElement( const QString& namespaceURI, const QString& l
             }
         }
     }
-    else if ( qName == "highlighting" ) {
+    else if ( caseInsensitiveComparison( qName, "highlighting" ) ) {
         for ( int i = 0; i < atts.count(); i++ ) {
             const QString name = atts.qName( i );
             
@@ -119,11 +152,11 @@ bool Syntax::Parser::startElement( const QString& namespaceURI, const QString& l
             return false;
         }
     }
-    else if ( qName == "list" ) {
+    else if ( caseInsensitiveComparison( qName, "list" ) ) {
         for ( int i = 0; i < atts.count(); i++ ) {
             const QString name = atts.qName( i );
             
-            if ( name == "name" ) {
+            if ( caseInsensitiveComparison( name, "name" ) ) {
                 d->listName = atts.value( i );
             }
             else {
@@ -132,7 +165,7 @@ bool Syntax::Parser::startElement( const QString& namespaceURI, const QString& l
             }
         }
     }
-    else if ( qName == "item" ) {
+    else if ( caseInsensitiveComparison( qName, "item" ) ) {
         for ( int i = 0; i < atts.count(); i++ ) {
             const QString name = atts.qName( i );
             
@@ -140,7 +173,7 @@ bool Syntax::Parser::startElement( const QString& namespaceURI, const QString& l
             return false;
         }
     }
-    else if ( qName == "contexts" ) {
+    else if ( caseInsensitiveComparison( qName, "contexts" ) ) {
         for ( int i = 0; i < atts.count(); i++ ) {
             const QString name = atts.qName( i );
             
@@ -148,19 +181,20 @@ bool Syntax::Parser::startElement( const QString& namespaceURI, const QString& l
             return false;
         }
     }
-    else if ( qName == "context" ) {
+    else if ( caseInsensitiveComparison( qName, "context" ) ) {
         Syntax::Context context;
         
         for ( int i = 0; i < atts.count(); i++ ) {
             const QString name = atts.qName( i );
             
-            if ( name == "name" ) {
-                context.name = atts.value( i );
+            if ( caseInsensitiveComparison( name, "name" ) ) {
+                d->contextName = atts.value( i );
+                context.name = d->contextName;
             }
-            else if ( name == "lineEndContext" ) {
+            else if ( caseInsensitiveComparison( name, "lineEndContext" ) ) {
                 context.lineEndContext = atts.value( i );
             }
-            else if ( name == "attribute" ) {
+            else if ( caseInsensitiveComparison( name, "attribute" ) ) {
                 context.attribute = atts.value( i );
             }
             else {
@@ -171,28 +205,53 @@ bool Syntax::Parser::startElement( const QString& namespaceURI, const QString& l
         
         d->document->highlighting.contexts[ context.name ] = context;
     }
-    else if ( qName == "DetectSpaces" ) {
-        /*Syntax::Rule rule;
+    else if ( d->ruleNames.contains( qName.toLower() ) ) {
+        Q_ASSERT( !d->contextName.isEmpty() );
+        Syntax::Context& context = d->document->highlighting.contexts[ d->contextName ];
+        Syntax::Rule rule;
+        
+        rule.type = qName;
         
         for ( int i = 0; i < atts.count(); i++ ) {
             const QString name = atts.qName( i );
             
-            if ( name == "name" ) {
-                context.name = atts.value( i );
+            if ( caseInsensitiveComparison( name, "attribute" ) ) {
+                rule.attribute = atts.value( i );
             }
-            else if ( name == "lineEndContext" ) {
-                context.lineEndContext = atts.value( i );
+            else if ( caseInsensitiveComparison( name, "context" ) ) {
+                rule.context = atts.value( i );
             }
-            else if ( name == "attribute" ) {
-                context.attribute = atts.value( i );
+            else if ( caseInsensitiveComparison( name, "string" ) ) {
+                rule.string = atts.value( i );
+            }
+            else if ( caseInsensitiveComparison( name, "beginRegion" ) ) {
+                rule.beginRegion = atts.value( i );
+            }
+            else if ( caseInsensitiveComparison( name, "firstNonSpace" ) ) {
+                rule.firstNonSpace = atts.value( i );
+            }
+            else if ( caseInsensitiveComparison( name, "char" ) ) {
+                rule.char_ = atts.value( i );
+            }
+            else if ( caseInsensitiveComparison( name, "lookAhead" ) ) {
+                rule.lookAhead = atts.value( i );
+            }
+            else if ( caseInsensitiveComparison( name, "endRegion" ) ) {
+                rule.endRegion = atts.value( i );
+            }
+            else if ( caseInsensitiveComparison( name, "insensitive" ) ) {
+                rule.insensitive = atts.value( i );
+            }
+            else if ( caseInsensitiveComparison( name, "char1" ) ) {
+                rule.char1 = atts.value( i );
             }
             else {
-                d->error = QString( "%1: Unhandled context attribute: %2" ).arg( Q_FUNC_INFO ).arg( name );
+                d->error = QString( "%1: Unhandled rule attribute: %2" ).arg( Q_FUNC_INFO ).arg( name );
                 return false;
             }
         }
         
-        d->document->highlighting.contexts[ context.name ] = context;*/
+        context.rules << rule;
     }
     else {
         d->error = QString( "%1: Unhandled starting qName element: %2" ).arg( Q_FUNC_INFO ).arg( qName );
@@ -204,20 +263,24 @@ bool Syntax::Parser::startElement( const QString& namespaceURI, const QString& l
 
 bool Syntax::Parser::endElement( const QString& namespaceURI, const QString& localName, const QString& qName )
 {
-    if ( qName == "language" ) {
+    if ( caseInsensitiveComparison( qName, "language" ) ) {
     }
-    else if ( qName == "highlighting" ) {
+    else if ( caseInsensitiveComparison( qName, "highlighting" ) ) {
     }
-    else if ( qName == "list" ) {
+    else if ( caseInsensitiveComparison( qName, "list" ) ) {
+        d->listName.clear();
     }
-    else if ( qName == "item" ) {
+    else if ( caseInsensitiveComparison( qName, "item" ) ) {
         Q_ASSERT( !d->listName.isEmpty() );
-        d->document->highlighting.lists[ d->listName ] << d->text;
+        d->document->highlighting.lists[ d->listName ] << QString( " %1 " ).arg( d->text.trimmed() );
         d->text.clear();
     }
-    else if ( qName == "contexts" ) {
+    else if ( caseInsensitiveComparison( qName, "contexts" ) ) {
     }
-    else if ( qName == "context" ) {
+    else if ( caseInsensitiveComparison( qName, "context" ) ) {
+        d->contextName.clear();
+    }
+    else if ( d->ruleNames.contains( qName.toLower() ) ) {
     }
     else {
         d->error = QString( "%1: Unhandled ending qName element: %2" ).arg( Q_FUNC_INFO ).arg( qName );

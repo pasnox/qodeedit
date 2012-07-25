@@ -12,8 +12,17 @@ class Rule
 public:
     typedef QList<Syntax::Rule> List;
     
-    QString name; ///< Name of the rule
-    QHash<QString, QString> attributes; ///< Attributes of the rule
+    QString type; ///< Type of the rule
+    QString attribute;
+    QString context;
+    QString string;
+    QString beginRegion;
+    QString firstNonSpace;
+    QString char_;
+    QString lookAhead;
+    QString endRegion;
+    QString insensitive;
+    QString char1;
     Syntax::Rule::List rules;
     
     Rule();
