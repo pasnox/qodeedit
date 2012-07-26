@@ -18,6 +18,8 @@ public:
     QString lineEndContext;
     QString fallThrough;
     QString fallThroughContext;
+    QString dynamic;
+    QString noIndentationBasedFolding;
     Syntax::Rule::List rules; ///< Rules of the context
     
     Context();

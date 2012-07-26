@@ -48,7 +48,8 @@ HEADERS *=  \
     src/syntax/SyntaxGeneral.h \
     src/syntax/SyntaxDocument.h \
     src/syntax/SyntaxParser.h \
-    src/syntax/SyntaxList.h
+    src/syntax/SyntaxList.h \
+    src/syntax/SyntaxFolding.h
 
 SOURCES *= src/main.cpp \
     src/editor/CodeEditor.cpp \
@@ -70,4 +71,5 @@ SOURCES *= src/main.cpp \
     src/syntax/SyntaxHighlighting.cpp \
     src/syntax/SyntaxItemData.cpp \
     src/syntax/SyntaxDocumentReader.cpp \
-    src/syntax/SyntaxParser.cpp
+    src/syntax/SyntaxParser.cpp \
+    src/syntax/SyntaxFolding.cpp

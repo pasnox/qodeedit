@@ -15,6 +15,7 @@ public:
     QString start; ///< Comment start string
     QString end; ///< Comment end string
     QString region; ///< ?
+    QString weakDeliminator;
     
     Comment();
     virtual ~Comment();

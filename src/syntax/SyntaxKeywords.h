@@ -9,6 +9,9 @@ class Keywords
 {
 public:
     QString caseSensitive;
+    QString weakDeliminator;
+    QString additionalDeliminator;
+    QString wordWrapDeliminator;
     
     Keywords();
     virtual ~Keywords();

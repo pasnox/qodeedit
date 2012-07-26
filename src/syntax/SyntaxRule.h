@@ -24,6 +24,7 @@ public:
     QString insensitive;
     QString char1;
     QString column;
+    QString dynamic;
     Syntax::Rule::List rules;
     
     Rule();

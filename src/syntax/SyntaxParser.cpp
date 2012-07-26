@@ -220,6 +220,12 @@ bool Syntax::Parser::startElement( const QString& namespaceURI, const QString& l
             else if ( caseInsensitiveComparison( name, "fallThroughContext" ) ) {
                 context.fallThroughContext = atts.value( i );
             }
+            else if ( caseInsensitiveComparison( name, "dynamic" ) ) {
+                context.dynamic = atts.value( i );
+            }
+            else if ( caseInsensitiveComparison( name, "noIndentationBasedFolding" ) ) {
+                context.noIndentationBasedFolding = atts.value( i );
+            }
             else {
                 d->error = QString( "%1: Unhandled context attribute: %2" ).arg( Q_FUNC_INFO ).arg( name );
                 return false;
@@ -270,6 +276,9 @@ bool Syntax::Parser::startElement( const QString& namespaceURI, const QString& l
             }
             else if ( caseInsensitiveComparison( name, "column" ) ) {
                 rule.column = atts.value( i );
+            }
+            else if ( caseInsensitiveComparison( name, "dynamic" ) ) {
+                rule.dynamic = atts.value( i );
             }
             else {
                 d->error = QString( "%1: Unhandled rule attribute: %2" ).arg( Q_FUNC_INFO ).arg( name );
@@ -356,6 +365,9 @@ bool Syntax::Parser::startElement( const QString& namespaceURI, const QString& l
             else if ( caseInsensitiveComparison( name, "region" ) ) {
                 comment.region = atts.value( i );
             }
+            else if ( caseInsensitiveComparison( name, "weakDeliminator" ) ) {
+                comment.weakDeliminator = atts.value( i );
+            }
             else {
                 d->error = QString( "%1: Unhandled comment attribute: %2" ).arg( Q_FUNC_INFO ).arg( name );
                 return false;
@@ -371,8 +383,30 @@ bool Syntax::Parser::startElement( const QString& namespaceURI, const QString& l
             if ( caseInsensitiveComparison( name, "caseSensitive" ) ) {
                 d->document->general.keywords.caseSensitive = atts.value( i );
             }
+            else if ( caseInsensitiveComparison( name, "weakDeliminator" ) ) {
+                d->document->general.keywords.weakDeliminator = atts.value( i );
+            }
+            else if ( caseInsensitiveComparison( name, "additionalDeliminator" ) ) {
+                d->document->general.keywords.additionalDeliminator = atts.value( i );
+            }
+            else if ( caseInsensitiveComparison( name, "wordWrapDeliminator" ) ) {
+                d->document->general.keywords.wordWrapDeliminator = atts.value( i );
+            }
             else {
-                d->error = QString( "%1: Unhandled comment attribute: %2" ).arg( Q_FUNC_INFO ).arg( name );
+                d->error = QString( "%1: Unhandled keywords attribute: %2" ).arg( Q_FUNC_INFO ).arg( name );
+                return false;
+            }
+        }
+    }
+    else if ( caseInsensitiveComparison( qName, "folding" ) ) {
+        for ( int i = 0; i < atts.count(); i++ ) {
+            const QString name = atts.qName( i );
+            
+            if ( caseInsensitiveComparison( name, "indentationSensitive" ) ) {
+                d->document->general.folding.indentationSensitive = atts.value( i );
+            }
+            else {
+                d->error = QString( "%1: Unhandled folding attribute: %2" ).arg( Q_FUNC_INFO ).arg( name );
                 return false;
             }
         }
@@ -413,6 +447,8 @@ bool Syntax::Parser::endElement( const QString& namespaceURI, const QString& loc
     else if ( caseInsensitiveComparison( qName, "comments" ) ) {
     }
     else if ( caseInsensitiveComparison( qName, "keywords" ) ) {
+    }
+    else if ( caseInsensitiveComparison( qName, "folding" ) ) {
     }
     else if ( caseInsensitiveComparison( qName, "general" ) ) {
     }
