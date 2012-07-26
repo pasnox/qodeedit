@@ -12,7 +12,12 @@ public:
     typedef QHash<QString, Syntax::ItemData> Hash;
     
     QString name; ///< Name of the item data
-    QHash<QString, QString> attributes; ///< Attributes of the item data
+    QString defStyleNum;
+    QString spellChecking;
+    QString color;
+    QString selColor;
+    QString bold;
+    QString italic;
     
     ItemData();
     virtual ~ItemData();

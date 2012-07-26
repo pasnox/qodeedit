@@ -23,6 +23,7 @@ public:
     QString endRegion;
     QString insensitive;
     QString char1;
+    QString column;
     Syntax::Rule::List rules;
     
     Rule();

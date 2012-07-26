@@ -16,6 +16,8 @@ public:
     QString name; ///< Name of the context
     QString attribute;
     QString lineEndContext;
+    QString fallThrough;
+    QString fallThroughContext;
     Syntax::Rule::List rules; ///< Rules of the context
     
     Context();

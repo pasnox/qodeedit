@@ -21,10 +21,11 @@ public:
     QString indenter; ///< Indenter to use for this syntax
     Syntax::List mimeTypes; ///< Mimetypes this syntax applie to
     int priority; ///< Priority for conflict-resolution when the same file suffix has multiple highlighting definitions
-    bool hidden; ///< Hides the syntax from the application's menus
+    QString hidden; ///< Hides the syntax from the application's menus
     QString style; ///< Default style provided by the syntax
     QString author; ///< Author's name
     QString license; ///< License; for example: "LGPL"
+    QString caseSensitive;
     //QString identifier; // ?
     
     Syntax::Highlighting highlighting;

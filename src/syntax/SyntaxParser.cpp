@@ -97,12 +97,17 @@ bool Syntax::Parser::startDocument()
 {
     d->error.clear();
     d->listName.clear();
+    d->contextName.clear();
     d->text.clear();
     return true;
 }
 
 bool Syntax::Parser::endDocument()
 {
+    d->error.clear();
+    d->listName.clear();
+    d->contextName.clear();
+    d->text.clear();
     return true;
 }
 
@@ -137,6 +142,18 @@ bool Syntax::Parser::startElement( const QString& namespaceURI, const QString& l
             }
             else if ( caseInsensitiveComparison( name, "priority" ) ) {
                 d->document->priority = atts.value( i ).toInt();
+            }
+            else if ( caseInsensitiveComparison( name, "author" ) ) {
+                d->document->author = atts.value( i );
+            }
+            else if ( caseInsensitiveComparison( name, "license" ) ) {
+                d->document->license = atts.value( i );
+            }
+            else if ( caseInsensitiveComparison( name, "caseSensitive" ) ) {
+                d->document->caseSensitive = atts.value( i );
+            }
+            else if ( caseInsensitiveComparison( name, "hidden" ) ) {
+                d->document->hidden = atts.value( i );
             }
             else {
                 d->error = QString( "%1: Unhandled language attribute: %2" ).arg( Q_FUNC_INFO ).arg( name );
@@ -197,6 +214,12 @@ bool Syntax::Parser::startElement( const QString& namespaceURI, const QString& l
             else if ( caseInsensitiveComparison( name, "attribute" ) ) {
                 context.attribute = atts.value( i );
             }
+            else if ( caseInsensitiveComparison( name, "fallThrough" ) ) {
+                context.fallThrough = atts.value( i );
+            }
+            else if ( caseInsensitiveComparison( name, "fallThroughContext" ) ) {
+                context.fallThroughContext = atts.value( i );
+            }
             else {
                 d->error = QString( "%1: Unhandled context attribute: %2" ).arg( Q_FUNC_INFO ).arg( name );
                 return false;
@@ -245,6 +268,9 @@ bool Syntax::Parser::startElement( const QString& namespaceURI, const QString& l
             else if ( caseInsensitiveComparison( name, "char1" ) ) {
                 rule.char1 = atts.value( i );
             }
+            else if ( caseInsensitiveComparison( name, "column" ) ) {
+                rule.column = atts.value( i );
+            }
             else {
                 d->error = QString( "%1: Unhandled rule attribute: %2" ).arg( Q_FUNC_INFO ).arg( name );
                 return false;
@@ -252,6 +278,104 @@ bool Syntax::Parser::startElement( const QString& namespaceURI, const QString& l
         }
         
         context.rules << rule;
+    }
+    else if ( caseInsensitiveComparison( qName, "itemDatas" ) ) {
+        for ( int i = 0; i < atts.count(); i++ ) {
+            const QString name = atts.qName( i );
+            
+            d->error = QString( "%1: Unhandled itemDatas attribute: %2" ).arg( Q_FUNC_INFO ).arg( name );
+            return false;
+        }
+    }
+    else if ( caseInsensitiveComparison( qName, "itemData" ) ) {
+        Syntax::ItemData itemData;
+        
+        for ( int i = 0; i < atts.count(); i++ ) {
+            const QString name = atts.qName( i );
+            
+            if ( caseInsensitiveComparison( name, "name" ) ) {
+                itemData.name = atts.value( i );
+            }
+            else if ( caseInsensitiveComparison( name, "defStyleNum" ) ) {
+                itemData.defStyleNum = atts.value( i );
+            }
+            else if ( caseInsensitiveComparison( name, "spellChecking" ) ) {
+                itemData.spellChecking = atts.value( i );
+            }
+            else if ( caseInsensitiveComparison( name, "color" ) ) {
+                itemData.color = atts.value( i );
+            }
+            else if ( caseInsensitiveComparison( name, "selColor" ) ) {
+                itemData.selColor = atts.value( i );
+            }
+            else if ( caseInsensitiveComparison( name, "bold" ) ) {
+                itemData.bold = atts.value( i );
+            }
+            else if ( caseInsensitiveComparison( name, "italic" ) ) {
+                itemData.italic = atts.value( i );
+            }
+            else {
+                d->error = QString( "%1: Unhandled itemData attribute: %2" ).arg( Q_FUNC_INFO ).arg( name );
+                return false;
+            }
+        }
+        
+        d->document->highlighting.itemDatas[ itemData.name ] = itemData;
+    }
+    else if ( caseInsensitiveComparison( qName, "general" ) ) {
+        for ( int i = 0; i < atts.count(); i++ ) {
+            const QString name = atts.qName( i );
+            
+            d->error = QString( "%1: Unhandled general attribute: %2" ).arg( Q_FUNC_INFO ).arg( name );
+            return false;
+        }
+    }
+    else if ( caseInsensitiveComparison( qName, "comments" ) ) {
+        for ( int i = 0; i < atts.count(); i++ ) {
+            const QString name = atts.qName( i );
+            
+            d->error = QString( "%1: Unhandled comments attribute: %2" ).arg( Q_FUNC_INFO ).arg( name );
+            return false;
+        }
+    }
+    else if ( caseInsensitiveComparison( qName, "comment" ) ) {
+        Syntax::Comment comment;
+        
+        for ( int i = 0; i < atts.count(); i++ ) {
+            const QString name = atts.qName( i );
+            
+            if ( caseInsensitiveComparison( name, "name" ) ) {
+                comment.name = atts.value( i );
+            }
+            else if ( caseInsensitiveComparison( name, "start" ) ) {
+                comment.start = atts.value( i );
+            }
+            else if ( caseInsensitiveComparison( name, "end" ) ) {
+                comment.end = atts.value( i );
+            }
+            else if ( caseInsensitiveComparison( name, "region" ) ) {
+                comment.region = atts.value( i );
+            }
+            else {
+                d->error = QString( "%1: Unhandled comment attribute: %2" ).arg( Q_FUNC_INFO ).arg( name );
+                return false;
+            }
+        }
+        
+        d->document->general.comments[ comment.name ] = comment;
+    }
+    else if ( caseInsensitiveComparison( qName, "keywords" ) ) {
+        for ( int i = 0; i < atts.count(); i++ ) {
+            const QString name = atts.qName( i );
+            
+            if ( caseInsensitiveComparison( name, "caseSensitive" ) ) {
+                d->document->general.keywords.caseSensitive = atts.value( i );
+            }
+            else {
+                d->error = QString( "%1: Unhandled comment attribute: %2" ).arg( Q_FUNC_INFO ).arg( name );
+                return false;
+            }
+        }
     }
     else {
         d->error = QString( "%1: Unhandled starting qName element: %2" ).arg( Q_FUNC_INFO ).arg( qName );
@@ -263,24 +387,36 @@ bool Syntax::Parser::startElement( const QString& namespaceURI, const QString& l
 
 bool Syntax::Parser::endElement( const QString& namespaceURI, const QString& localName, const QString& qName )
 {
-    if ( caseInsensitiveComparison( qName, "language" ) ) {
-    }
-    else if ( caseInsensitiveComparison( qName, "highlighting" ) ) {
-    }
-    else if ( caseInsensitiveComparison( qName, "list" ) ) {
-        d->listName.clear();
-    }
-    else if ( caseInsensitiveComparison( qName, "item" ) ) {
+    if ( caseInsensitiveComparison( qName, "item" ) ) {
         Q_ASSERT( !d->listName.isEmpty() );
         d->document->highlighting.lists[ d->listName ] << QString( " %1 " ).arg( d->text.trimmed() );
         d->text.clear();
     }
-    else if ( caseInsensitiveComparison( qName, "contexts" ) ) {
+    else if ( caseInsensitiveComparison( qName, "list" ) ) {
+        d->listName.clear();
+    }
+    else if ( d->ruleNames.contains( qName.toLower() ) ) {
     }
     else if ( caseInsensitiveComparison( qName, "context" ) ) {
         d->contextName.clear();
     }
-    else if ( d->ruleNames.contains( qName.toLower() ) ) {
+    else if ( caseInsensitiveComparison( qName, "contexts" ) ) {
+    }
+    else if ( caseInsensitiveComparison( qName, "itemData" ) ) {
+    }
+    else if ( caseInsensitiveComparison( qName, "itemDatas" ) ) {
+    }
+    else if ( caseInsensitiveComparison( qName, "highlighting" ) ) {
+    }
+    else if ( caseInsensitiveComparison( qName, "comment" ) ) {
+    }
+    else if ( caseInsensitiveComparison( qName, "comments" ) ) {
+    }
+    else if ( caseInsensitiveComparison( qName, "keywords" ) ) {
+    }
+    else if ( caseInsensitiveComparison( qName, "general" ) ) {
+    }
+    else if ( caseInsensitiveComparison( qName, "language" ) ) {
     }
     else {
         d->error = QString( "%1: Unhandled ending qName element: %2" ).arg( Q_FUNC_INFO ).arg( qName );
