@@ -18,6 +18,8 @@ public:
     QString selColor;
     QString bold;
     QString italic;
+    QString strikeOut;
+    QString underline;
     
     ItemData();
     virtual ~ItemData();

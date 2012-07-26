@@ -226,6 +226,9 @@ bool Syntax::Parser::startElement( const QString& namespaceURI, const QString& l
             else if ( caseInsensitiveComparison( name, "noIndentationBasedFolding" ) ) {
                 context.noIndentationBasedFolding = atts.value( i );
             }
+            else if ( caseInsensitiveComparison( name, "caseSensitive" ) ) {
+                context.caseSensitive = atts.value( i );
+            }
             else {
                 d->error = QString( "%1: Unhandled context attribute: %2" ).arg( Q_FUNC_INFO ).arg( name );
                 return false;
@@ -286,6 +289,15 @@ bool Syntax::Parser::startElement( const QString& namespaceURI, const QString& l
             else if ( caseInsensitiveComparison( name, "includeAttrib" ) ) {
                 rule.includeAttrib = atts.value( i );
             }
+            else if ( caseInsensitiveComparison( name, "region" ) ) {
+                rule.region = atts.value( i );
+            }
+            else if ( caseInsensitiveComparison( name, "lineEndContext" ) ) {
+                rule.lineEndContext = atts.value( i );
+            }
+            else if ( caseInsensitiveComparison( name, "weakDelimiter" ) ) {
+                rule.weakDelimiter = atts.value( i );
+            }
             else {
                 d->error = QString( "%1: Unhandled rule attribute: %2" ).arg( Q_FUNC_INFO ).arg( name );
                 return false;
@@ -328,6 +340,12 @@ bool Syntax::Parser::startElement( const QString& namespaceURI, const QString& l
             }
             else if ( caseInsensitiveComparison( name, "italic" ) ) {
                 itemData.italic = atts.value( i );
+            }
+            else if ( caseInsensitiveComparison( name, "strikeOut" ) ) {
+                itemData.strikeOut = atts.value( i );
+            }
+            else if ( caseInsensitiveComparison( name, "underline" ) ) {
+                itemData.underline = atts.value( i );
             }
             else {
                 d->error = QString( "%1: Unhandled itemData attribute: %2" ).arg( Q_FUNC_INFO ).arg( name );
@@ -420,6 +438,28 @@ bool Syntax::Parser::startElement( const QString& namespaceURI, const QString& l
             }
         }
     }
+    else if ( caseInsensitiveComparison( qName, "indentation" ) ) {
+        for ( int i = 0; i < atts.count(); i++ ) {
+            const QString name = atts.qName( i );
+            
+            if ( caseInsensitiveComparison( name, "mode" ) ) {
+                d->document->general.indentation.mode = atts.value( i );
+            }
+            /*else if ( caseInsensitiveComparison( name, "weakDeliminator" ) ) {
+                d->document->general.indentation.weakDeliminator = atts.value( i );
+            }
+            else if ( caseInsensitiveComparison( name, "additionalDeliminator" ) ) {
+                d->document->general.indentation.additionalDeliminator = atts.value( i );
+            }
+            else if ( caseInsensitiveComparison( name, "wordWrapDeliminator" ) ) {
+                d->document->general.indentation.wordWrapDeliminator = atts.value( i );
+            }*/
+            else {
+                d->error = QString( "%1: Unhandled indentation attribute: %2" ).arg( Q_FUNC_INFO ).arg( name );
+                return false;
+            }
+        }
+    }
     else if ( caseInsensitiveComparison( qName, "emptyLines" ) ) {
         for ( int i = 0; i < atts.count(); i++ ) {
             const QString name = atts.qName( i );
@@ -489,6 +529,8 @@ bool Syntax::Parser::endElement( const QString& namespaceURI, const QString& loc
     else if ( caseInsensitiveComparison( qName, "keywords" ) ) {
     }
     else if ( caseInsensitiveComparison( qName, "folding" ) ) {
+    }
+    else if ( caseInsensitiveComparison( qName, "indentation" ) ) {
     }
     else if ( caseInsensitiveComparison( qName, "emptyLine" ) ) {
     }

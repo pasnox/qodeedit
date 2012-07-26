@@ -20,6 +20,7 @@ public:
     QString fallThroughContext;
     QString dynamic;
     QString noIndentationBasedFolding;
+    QString caseSensitive;
     Syntax::Rule::List rules; ///< Rules of the context
     
     Context();

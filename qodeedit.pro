@@ -50,7 +50,8 @@ HEADERS *=  \
     src/syntax/SyntaxParser.h \
     src/syntax/SyntaxList.h \
     src/syntax/SyntaxFolding.h \
-    src/syntax/SyntaxEmptyLine.h
+    src/syntax/SyntaxEmptyLine.h \
+    src/syntax/SyntaxIndentation.h
 
 SOURCES *= src/main.cpp \
     src/editor/CodeEditor.cpp \
@@ -74,4 +75,5 @@ SOURCES *= src/main.cpp \
     src/syntax/SyntaxDocumentReader.cpp \
     src/syntax/SyntaxParser.cpp \
     src/syntax/SyntaxFolding.cpp \
-    src/syntax/SyntaxEmptyLine.cpp
+    src/syntax/SyntaxEmptyLine.cpp \
+    src/syntax/SyntaxIndentation.cpp

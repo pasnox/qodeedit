@@ -5,6 +5,7 @@
 #include "SyntaxKeywords.h"
 #include "SyntaxFolding.h"
 #include "SyntaxEmptyLine.h"
+#include "SyntaxIndentation.h"
 
 namespace Syntax {
 
@@ -14,6 +15,7 @@ public:
     Syntax::Comment::Hash comments;
     Syntax::Keywords keywords;
     Syntax::Folding folding;
+    Syntax::Indentation indentation;
     Syntax::EmptyLine::List emptyLines;
     
     General();

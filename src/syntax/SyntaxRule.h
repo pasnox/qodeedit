@@ -27,6 +27,9 @@ public:
     QString dynamic;
     QString minimal;
     QString includeAttrib;
+    QString region;
+    QString lineEndContext;
+    QString weakDelimiter;
     Syntax::Rule::List rules;
     
     Rule();
