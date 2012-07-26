@@ -41,8 +41,14 @@ int main( int argc, char** argv )
     editor->setGeometry( rect );
     editor->show();
     
-    Syntax::Document document;
-    Q_ASSERT( document.open( "/home/pasnox/Developpement/C++/Qt5/mks-ng/3rdparty/qodeedit.git/share/syntax/cpp.xml" ) );
+    const QString path = "/home/pasnox/Developpement/C++/Qt5/mks-ng/3rdparty/qodeedit.git/share/syntax";
+    const QFileInfoList files = QDir( path ).entryInfoList( QStringList( "*.xml" ) );
+    
+    foreach ( const QFileInfo& file, files ) {
+    qWarning() << "--- Parsing" << file.fileName();
+        Syntax::Document document;
+        Q_ASSERT( document.open( file.absoluteFilePath() ) );
+    }
     
     return app.exec();
 }
