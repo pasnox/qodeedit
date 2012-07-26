@@ -280,6 +280,12 @@ bool Syntax::Parser::startElement( const QString& namespaceURI, const QString& l
             else if ( caseInsensitiveComparison( name, "dynamic" ) ) {
                 rule.dynamic = atts.value( i );
             }
+            else if ( caseInsensitiveComparison( name, "minimal" ) ) {
+                rule.minimal = atts.value( i );
+            }
+            else if ( caseInsensitiveComparison( name, "includeAttrib" ) ) {
+                rule.includeAttrib = atts.value( i );
+            }
             else {
                 d->error = QString( "%1: Unhandled rule attribute: %2" ).arg( Q_FUNC_INFO ).arg( name );
                 return false;
@@ -368,6 +374,9 @@ bool Syntax::Parser::startElement( const QString& namespaceURI, const QString& l
             else if ( caseInsensitiveComparison( name, "weakDeliminator" ) ) {
                 comment.weakDeliminator = atts.value( i );
             }
+            else if ( caseInsensitiveComparison( name, "position" ) ) {
+                comment.position = atts.value( i );
+            }
             else {
                 d->error = QString( "%1: Unhandled comment attribute: %2" ).arg( Q_FUNC_INFO ).arg( name );
                 return false;
@@ -411,6 +420,37 @@ bool Syntax::Parser::startElement( const QString& namespaceURI, const QString& l
             }
         }
     }
+    else if ( caseInsensitiveComparison( qName, "emptyLines" ) ) {
+        for ( int i = 0; i < atts.count(); i++ ) {
+            const QString name = atts.qName( i );
+            
+            d->error = QString( "%1: Unhandled emptyLines attribute: %2" ).arg( Q_FUNC_INFO ).arg( name );
+            return false;
+        }
+    }
+    else if ( caseInsensitiveComparison( qName, "emptyLine" ) ) {
+        Syntax::EmptyLine emptyLine;
+        
+        for ( int i = 0; i < atts.count(); i++ ) {
+            const QString name = atts.qName( i );
+            
+            if ( caseInsensitiveComparison( name, "regExpr" ) ) {
+                emptyLine.regExpr = atts.value( i );
+            }
+            else if ( caseInsensitiveComparison( name, "caseSensitive" ) ) {
+                emptyLine.caseSensitive = atts.value( i );
+            }
+            /*else if ( caseInsensitiveComparison( name, "attribute" ) ) {
+                context.attribute = atts.value( i );
+            }*/
+            else {
+                d->error = QString( "%1: Unhandled emptyLine attribute: %2" ).arg( Q_FUNC_INFO ).arg( name );
+                return false;
+            }
+        }
+        
+        d->document->general.emptyLines << emptyLine;
+    }
     else {
         d->error = QString( "%1: Unhandled starting qName element: %2" ).arg( Q_FUNC_INFO ).arg( qName );
         return false;
@@ -449,6 +489,10 @@ bool Syntax::Parser::endElement( const QString& namespaceURI, const QString& loc
     else if ( caseInsensitiveComparison( qName, "keywords" ) ) {
     }
     else if ( caseInsensitiveComparison( qName, "folding" ) ) {
+    }
+    else if ( caseInsensitiveComparison( qName, "emptyLine" ) ) {
+    }
+    else if ( caseInsensitiveComparison( qName, "emptyLines" ) ) {
     }
     else if ( caseInsensitiveComparison( qName, "general" ) ) {
     }

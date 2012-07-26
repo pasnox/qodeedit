@@ -25,6 +25,8 @@ public:
     QString char1;
     QString column;
     QString dynamic;
+    QString minimal;
+    QString includeAttrib;
     Syntax::Rule::List rules;
     
     Rule();
