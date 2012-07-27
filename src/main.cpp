@@ -44,11 +44,16 @@ int main( int argc, char** argv )
     const QString path = "/home/pasnox/Developpement/C++/Qt5/mks-ng/3rdparty/qodeedit.git/share/syntax";
     const QFileInfoList files = QDir( path ).entryInfoList( QStringList( "*.xml" ) );
     
+    QTime time;
+    time.start();
+    
     foreach ( const QFileInfo& file, files ) {
     qWarning() << "--- Parsing" << file.fileName();
         Syntax::Document document;
         Q_ASSERT( document.open( file.absoluteFilePath() ) );
     }
+    
+    qWarning() << "All languages parsed in " << time.elapsed() /1000.0 << "seconds";
     
     return app.exec();
 }

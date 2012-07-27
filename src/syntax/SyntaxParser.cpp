@@ -1,6 +1,7 @@
 #include "SyntaxParser.h"
 #include "SyntaxDocument.h"
 
+#include <QStack>
 #include <QDebug>
 
 bool caseInsensitiveComparison( const QString& left, const QString& right ) {
@@ -17,6 +18,7 @@ public:
     QString listName;
     QString contextName;
     QString text;
+    QStack<QString> nodesName;
     QMap<QString, int> counts;
     
     ParserPrivate( Syntax::Parser* _parser, Syntax::Document* _document )
@@ -102,6 +104,8 @@ bool Syntax::Parser::startDocument()
     d->listName.clear();
     d->contextName.clear();
     d->text.clear();
+    d->nodesName.clear();
+    d->nodesName.reserve( 1000 );
     d->counts.clear();
     return true;
 }
@@ -120,6 +124,7 @@ bool Syntax::Parser::endDocument()
     d->listName.clear();
     d->contextName.clear();
     d->text.clear();
+    d->nodesName.clear();
     d->counts.clear();
     return true;
 }
@@ -320,7 +325,14 @@ bool Syntax::Parser::startElement( const QString& namespaceURI, const QString& l
             }
         }
         
-        context.rules << rule;
+        // add to context rules
+        if ( d->nodesName.top().toLower() == "context" ) {
+            context.rules << rule;
+        }
+        // add to last context rule' rule
+        else {
+            context.rules.last().rules << rule;
+        }
     }
     else if ( caseInsensitiveComparison( qName, "itemDatas" ) ) {
         for ( int i = 0; i < atts.count(); i++ ) {
@@ -420,7 +432,7 @@ bool Syntax::Parser::startElement( const QString& namespaceURI, const QString& l
             }
         }
         
-        d->document->general.comments[ comment.name ] = comment;
+        d->document->general.comments << comment;
     }
     else if ( caseInsensitiveComparison( qName, "keywords" ) ) {
         for ( int i = 0; i < atts.count(); i++ ) {
@@ -555,6 +567,8 @@ bool Syntax::Parser::startElement( const QString& namespaceURI, const QString& l
         return false;
     }
     
+    d->nodesName.push( qName );
+    
     return QXmlDefaultHandler::startElement( namespaceURI, localName, qName, atts );
 }
 
@@ -611,6 +625,8 @@ bool Syntax::Parser::endElement( const QString& namespaceURI, const QString& loc
         d->error = QString( "%1: Unhandled ending qName element: %2" ).arg( Q_FUNC_INFO ).arg( qName );
         return false;
     }
+    
+    d->nodesName.pop();
     
     return QXmlDefaultHandler::endElement( namespaceURI, localName, qName );
 }

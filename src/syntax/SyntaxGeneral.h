@@ -12,7 +12,7 @@ namespace Syntax {
 class General
 {
 public:
-    Syntax::Comment::Hash comments;
+    Syntax::Comment::List comments;
     Syntax::Keywords keywords;
     Syntax::Folding folding;
     Syntax::Indentation indentation;

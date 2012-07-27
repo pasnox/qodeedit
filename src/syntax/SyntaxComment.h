@@ -1,7 +1,7 @@
 #ifndef SYNTAXCOMMENT_H
 #define SYNTAXCOMMENT_H
 
-#include <QHash>
+#include <QList>
 #include <QString>
 
 namespace Syntax {
@@ -9,7 +9,7 @@ namespace Syntax {
 class Comment
 {
 public:
-    typedef QHash<QString, Syntax::Comment> Hash;
+    typedef QList<Syntax::Comment> List;
     
     QString name; ///< Name of the item data
     QString start; ///< Comment start string
