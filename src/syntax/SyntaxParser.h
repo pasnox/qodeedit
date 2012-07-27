@@ -1,6 +1,7 @@
 #ifndef SYNTAXPARSER_H
 #define SYNTAXPARSER_H
 
+#include <QXmlSimpleReader>
 #include <QXmlDefaultHandler>
 
 namespace Syntax {
@@ -8,10 +9,22 @@ namespace Syntax {
 class Document;
 class ParserPrivate;
 
-class Parser : public QXmlDefaultHandler
+class Reader : public QXmlSimpleReader
 {
 public:
-    Parser( Syntax::Document* document );
+    bool parse( Syntax::Document* document, const QXmlInputSource& input );
+};
+
+class Parser : public QXmlDefaultHandler
+{
+    friend class Syntax::Reader;
+    
+public:
+#if !defined( QT_NO_DEBUG )
+    typedef QHash<QString, QHash<QString, QSet<QString> > > Debug;
+#endif
+
+    Parser();
     virtual ~Parser();
     
     virtual bool attributeDecl( const QString& eName, const QString& aName, const QString& type, const QString& valueDefault, const QString& value );
@@ -42,6 +55,10 @@ public:
     virtual bool startPrefixMapping( const QString& prefix, const QString& uri );
     virtual bool unparsedEntityDecl( const QString& name, const QString& publicId, const QString& systemId, const QString& notationName );
     virtual bool warning( const QXmlParseException& exception );
+    
+#if !defined( QT_NO_DEBUG )
+    void debug() const;
+#endif
 
 private:
     ParserPrivate* d;

@@ -13,7 +13,7 @@ public:
     
     QString char_;
     QString string;
-    QString ignored;
+    bool ignored;
     
     Encoding();
     virtual ~Encoding();

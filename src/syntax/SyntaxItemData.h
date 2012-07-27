@@ -3,6 +3,7 @@
 
 #include <QHash>
 #include <QString>
+#include <QColor>
 
 namespace Syntax {
 
@@ -13,14 +14,14 @@ public:
     
     QString name; ///< Name of the item data
     QString defStyleNum;
-    QString spellChecking;
-    QString color;
-    QString selColor;
-    QString bold;
-    QString italic;
-    QString strikeOut;
-    QString underline;
-    QString backgroundColor;
+    bool spellChecking;
+    QColor color;
+    QColor selColor;
+    bool bold;
+    bool italic;
+    bool strikeOut;
+    bool underline;
+    QColor backgroundColor;
     
     ItemData();
     virtual ~ItemData();

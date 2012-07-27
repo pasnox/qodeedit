@@ -21,7 +21,11 @@ public:
     QStack<QString> nodesName;
     QMap<QString, int> counts;
     
-    ParserPrivate( Syntax::Parser* _parser, Syntax::Document* _document )
+#if !defined( QT_NO_DEBUG )
+    Syntax::Parser::Debug debug;
+#endif
+    
+    ParserPrivate( Syntax::Parser* _parser )
         : ruleNames( Syntax::List()
             << "anychar" // AnyChar
             
@@ -51,21 +55,32 @@ public:
             
             << "worddetect" // WordDetect
             ),
-            document( _document ),
+            document( 0 ),
             parser( _parser )
     {
-        Q_ASSERT( document );
     }
     
 private:
     Syntax::Parser* parser;
 };
 
+// Reader
+
+bool Syntax::Reader::parse( Syntax::Document* document, const QXmlInputSource& input )
+{
+    Syntax::Parser* parser = static_cast<Syntax::Parser*>( contentHandler() );
+    
+    Q_ASSERT( parser );
+    
+    parser->d->document = document;
+    return QXmlSimpleReader::parse( input );
+}
+
 // Parser
 
-Syntax::Parser::Parser( Syntax::Document* document )
+Syntax::Parser::Parser()
     : QXmlDefaultHandler(),
-        d( new Syntax::ParserPrivate( this, document ) )
+        d( new Syntax::ParserPrivate( this ) )
 {
 }
 
@@ -138,6 +153,16 @@ bool Syntax::Parser::startElement( const QString& namespaceURI, const QString& l
 {
     d->counts[ qName.toLower() ]++;
     
+#if !defined( QT_NO_DEBUG )
+    const QString name = qName.trimmed().toLower();
+    
+    for ( int i = 0; i < atts.count(); i++ ) {
+        d->debug[ name ][ atts.qName( i ).trimmed().toLower() ] << atts.value( i ).trimmed().toLower();
+        const QString name = atts.qName( i );
+        
+    }
+#endif
+    
     if ( caseInsensitiveComparison( qName, "language" )) {
         for ( int i = 0; i < atts.count(); i++ ) {
             const QString name = atts.qName( i );
@@ -173,10 +198,10 @@ bool Syntax::Parser::startElement( const QString& namespaceURI, const QString& l
                 d->document->license = atts.value( i );
             }
             else if ( caseInsensitiveComparison( name, "caseSensitive" ) ) {
-                d->document->caseSensitive = atts.value( i );
+                d->document->caseSensitive = QVariant( atts.value( i ) ).toBool();
             }
             else if ( caseInsensitiveComparison( name, "hidden" ) ) {
-                d->document->hidden = atts.value( i );
+                d->document->hidden = QVariant( atts.value( i ) ).toBool();
             }
             else if ( caseInsensitiveComparison( name, "style" ) ) {
                 d->document->style = atts.value( i );
@@ -241,19 +266,19 @@ bool Syntax::Parser::startElement( const QString& namespaceURI, const QString& l
                 context.attribute = atts.value( i );
             }
             else if ( caseInsensitiveComparison( name, "fallThrough" ) ) {
-                context.fallThrough = atts.value( i );
+                context.fallThrough = QVariant( atts.value( i ) ).toBool();
             }
             else if ( caseInsensitiveComparison( name, "fallThroughContext" ) ) {
                 context.fallThroughContext = atts.value( i );
             }
             else if ( caseInsensitiveComparison( name, "dynamic" ) ) {
-                context.dynamic = atts.value( i );
+                context.dynamic = QVariant( atts.value( i ) ).toBool();
             }
             else if ( caseInsensitiveComparison( name, "noIndentationBasedFolding" ) ) {
-                context.noIndentationBasedFolding = atts.value( i );
+                context.noIndentationBasedFolding = QVariant( atts.value( i ) ).toBool();
             }
             else if ( caseInsensitiveComparison( name, "caseSensitive" ) ) {
-                context.caseSensitive = atts.value( i );
+                context.caseSensitive = QVariant( atts.value( i ) ).toBool();
             }
             else {
                 d->error = QString( "%1: Unhandled context attribute: %2" ).arg( Q_FUNC_INFO ).arg( name );
@@ -286,34 +311,34 @@ bool Syntax::Parser::startElement( const QString& namespaceURI, const QString& l
                 rule.beginRegion = atts.value( i );
             }
             else if ( caseInsensitiveComparison( name, "firstNonSpace" ) ) {
-                rule.firstNonSpace = atts.value( i );
+                rule.firstNonSpace = QVariant( atts.value( i ) ).toBool();
             }
             else if ( caseInsensitiveComparison( name, "char" ) ) {
                 rule.char_ = atts.value( i );
             }
             else if ( caseInsensitiveComparison( name, "lookAhead" ) ) {
-                rule.lookAhead = atts.value( i );
+                rule.lookAhead = QVariant( atts.value( i ) ).toBool();
             }
             else if ( caseInsensitiveComparison( name, "endRegion" ) ) {
                 rule.endRegion = atts.value( i );
             }
             else if ( caseInsensitiveComparison( name, "insensitive" ) ) {
-                rule.insensitive = atts.value( i );
+                rule.insensitive = QVariant( atts.value( i ) ).toBool();
             }
             else if ( caseInsensitiveComparison( name, "char1" ) ) {
                 rule.char1 = atts.value( i );
             }
             else if ( caseInsensitiveComparison( name, "column" ) ) {
-                rule.column = atts.value( i );
+                rule.column = atts.value( i ).toInt();
             }
             else if ( caseInsensitiveComparison( name, "dynamic" ) ) {
-                rule.dynamic = atts.value( i );
+                rule.dynamic = QVariant( atts.value( i ) ).toBool();
             }
             else if ( caseInsensitiveComparison( name, "minimal" ) ) {
-                rule.minimal = atts.value( i );
+                rule.minimal = QVariant( atts.value( i ) ).toBool();
             }
             else if ( caseInsensitiveComparison( name, "includeAttrib" ) ) {
-                rule.includeAttrib = atts.value( i );
+                rule.includeAttrib = QVariant( atts.value( i ) ).toBool();
             }
             else if ( caseInsensitiveComparison( name, "region" ) ) {
                 rule.region = atts.value( i );
@@ -360,7 +385,7 @@ bool Syntax::Parser::startElement( const QString& namespaceURI, const QString& l
                 itemData.defStyleNum = atts.value( i );
             }
             else if ( caseInsensitiveComparison( name, "spellChecking" ) ) {
-                itemData.spellChecking = atts.value( i );
+                itemData.spellChecking = QVariant( atts.value( i ) ).toBool();
             }
             else if ( caseInsensitiveComparison( name, "color" ) ) {
                 itemData.color = atts.value( i );
@@ -369,16 +394,16 @@ bool Syntax::Parser::startElement( const QString& namespaceURI, const QString& l
                 itemData.selColor = atts.value( i );
             }
             else if ( caseInsensitiveComparison( name, "bold" ) ) {
-                itemData.bold = atts.value( i );
+                itemData.bold = QVariant( atts.value( i ) ).toBool();
             }
             else if ( caseInsensitiveComparison( name, "italic" ) ) {
-                itemData.italic = atts.value( i );
+                itemData.italic = QVariant( atts.value( i ) ).toBool();
             }
             else if ( caseInsensitiveComparison( name, "strikeOut" ) ) {
-                itemData.strikeOut = atts.value( i );
+                itemData.strikeOut = QVariant( atts.value( i ) ).toBool();
             }
             else if ( caseInsensitiveComparison( name, "underline" ) ) {
-                itemData.underline = atts.value( i );
+                itemData.underline = QVariant( atts.value( i ) ).toBool();
             }
             else if ( caseInsensitiveComparison( name, "backgroundColor" ) ) {
                 itemData.backgroundColor = atts.value( i );
@@ -444,7 +469,7 @@ bool Syntax::Parser::startElement( const QString& namespaceURI, const QString& l
             const QString name = atts.qName( i );
             
             if ( caseInsensitiveComparison( name, "caseSensitive" ) ) {
-                d->document->general.keywords.caseSensitive = atts.value( i );
+                d->document->general.keywords.caseSensitive = QVariant( atts.value( i ) ).toBool();
             }
             else if ( caseInsensitiveComparison( name, "weakDeliminator" ) ) {
                 d->document->general.keywords.weakDeliminator = atts.value( i );
@@ -466,7 +491,7 @@ bool Syntax::Parser::startElement( const QString& namespaceURI, const QString& l
             const QString name = atts.qName( i );
             
             if ( caseInsensitiveComparison( name, "indentationSensitive" ) ) {
-                d->document->general.folding.indentationSensitive = atts.value( i );
+                d->document->general.folding.indentationSensitive = QVariant( atts.value( i ) ).toBool();
             }
             else {
                 d->error = QString( "%1: Unhandled folding attribute: %2" ).arg( Q_FUNC_INFO ).arg( name );
@@ -505,7 +530,7 @@ bool Syntax::Parser::startElement( const QString& namespaceURI, const QString& l
                 emptyLine.regExpr = atts.value( i );
             }
             else if ( caseInsensitiveComparison( name, "caseSensitive" ) ) {
-                emptyLine.caseSensitive = atts.value( i );
+                emptyLine.caseSensitive = QVariant( atts.value( i ) ).toBool();
             }
             else {
                 d->error = QString( "%1: Unhandled emptyLine attribute: %2" ).arg( Q_FUNC_INFO ).arg( name );
@@ -557,7 +582,7 @@ bool Syntax::Parser::startElement( const QString& namespaceURI, const QString& l
                 encoding.string = atts.value( i );
             }
             else if ( caseInsensitiveComparison( name, "ignored" ) ) {
-                encoding.ignored = atts.value( i );
+                encoding.ignored = QVariant( atts.value( i ) ).toBool();
             }
             else {
                 d->error = QString( "%1: Unhandled encoding attribute: %2" ).arg( Q_FUNC_INFO ).arg( name );
@@ -756,3 +781,40 @@ bool Syntax::Parser::warning( const QXmlParseException& exception )
     
     return QXmlDefaultHandler::warning( exception );
 }
+
+#if !defined( QT_NO_DEBUG )
+void Syntax::Parser::debug() const
+{
+    int weight = 0;
+    
+    foreach ( const QString& element, d->debug.keys() ) {
+        const QHash<QString, QSet<QString> >& attributes = d->debug[ element ];
+        
+        qWarning() << QString( "%1%2" ).arg( QString( weight, '\t' ) ).arg( element ).toLocal8Bit().constData();
+        
+        weight++;
+        
+        foreach ( const QString& attribute, attributes.keys() ) {
+            const QSet<QString> values = attributes[ attribute ];
+            int count = 0;
+            
+            qWarning() << QString( "%1%2" ).arg( QString( weight, '\t' ) ).arg( attribute ).toLocal8Bit().constData();
+            
+            weight++;
+            
+            foreach ( const QString& value, values ) {
+                qWarning() << QString( "%1%2" ).arg( QString( weight, '\t' ) ).arg( value ).toLocal8Bit().constData();
+                count++;
+                
+                if ( count == 5 ) {
+                    break;
+                }
+            }
+            
+            weight--;
+        }
+        
+        weight--;
+    }
+}
+#endif

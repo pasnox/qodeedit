@@ -22,11 +22,11 @@ public:
     QString indenter; ///< Indenter to use for this syntax
     Syntax::List mimeTypes; ///< Mimetypes this syntax applie to
     int priority; ///< Priority for conflict-resolution when the same file suffix has multiple highlighting definitions
-    QString hidden; ///< Hides the syntax from the application's menus
+    bool hidden; ///< Hides the syntax from the application's menus
     QString style; ///< Default style provided by the syntax
     QString author; ///< Author's name
     QString license; ///< License; for example: "LGPL"
-    QString caseSensitive;
+    bool caseSensitive;
     //QString identifier; // ?
     
     Syntax::Highlighting highlighting;
@@ -36,7 +36,9 @@ public:
     Document();
     virtual ~Document();
     
-    bool open( const QString& filePath );
+    bool open( const QString& filePath, QString* error = 0 );
+    
+    static QHash<QString, Syntax::Document> open( const QStringList& filePaths, QString* error = 0 );
 };
 
 }; // Syntax

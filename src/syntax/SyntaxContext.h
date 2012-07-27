@@ -16,11 +16,11 @@ public:
     QString name; ///< Name of the context
     QString attribute;
     QString lineEndContext;
-    QString fallThrough;
+    bool fallThrough;
     QString fallThroughContext;
-    QString dynamic;
-    QString noIndentationBasedFolding;
-    QString caseSensitive;
+    bool dynamic;
+    bool noIndentationBasedFolding;
+    bool caseSensitive;
     Syntax::Rule::List rules; ///< Rules of the context
     
     Context();

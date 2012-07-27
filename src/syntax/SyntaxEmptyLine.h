@@ -11,7 +11,7 @@ public:
     typedef QList<Syntax::EmptyLine> List;
     
     QString regExpr;
-    QString caseSensitive;
+    bool caseSensitive;
     
     EmptyLine();
     virtual ~EmptyLine();

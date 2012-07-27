@@ -8,7 +8,7 @@ namespace Syntax {
 class Folding
 {
 public:
-    QString indentationSensitive;
+    bool indentationSensitive;
     
     Folding();
     virtual ~Folding();

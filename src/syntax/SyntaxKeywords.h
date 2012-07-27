@@ -8,7 +8,7 @@ namespace Syntax {
 class Keywords
 {
 public:
-    QString caseSensitive;
+    bool caseSensitive;
     QString weakDeliminator;
     QString additionalDeliminator;
     QString wordWrapDeliminator;
