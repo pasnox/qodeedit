@@ -388,10 +388,10 @@ bool Syntax::Parser::startElement( const QString& namespaceURI, const QString& l
                 itemData.spellChecking = QVariant( atts.value( i ) ).toBool();
             }
             else if ( caseInsensitiveComparison( name, "color" ) ) {
-                itemData.color = atts.value( i );
+                itemData.color = QColor( atts.value( i ) );
             }
             else if ( caseInsensitiveComparison( name, "selColor" ) ) {
-                itemData.selColor = atts.value( i );
+                itemData.selColor = QColor( atts.value( i ) );
             }
             else if ( caseInsensitiveComparison( name, "bold" ) ) {
                 itemData.bold = QVariant( atts.value( i ) ).toBool();
@@ -406,7 +406,7 @@ bool Syntax::Parser::startElement( const QString& namespaceURI, const QString& l
                 itemData.underline = QVariant( atts.value( i ) ).toBool();
             }
             else if ( caseInsensitiveComparison( name, "backgroundColor" ) ) {
-                itemData.backgroundColor = atts.value( i );
+                itemData.backgroundColor = QColor( atts.value( i ) );
             }
             else {
                 d->error = QString( "%1: Unhandled itemData attribute: %2" ).arg( Q_FUNC_INFO ).arg( name );
