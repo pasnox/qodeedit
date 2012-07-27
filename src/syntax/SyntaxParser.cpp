@@ -113,12 +113,17 @@ bool Syntax::Parser::startDocument()
 bool Syntax::Parser::endDocument()
 {
     Q_ASSERT( d->counts.value( "highlighting" ) <= 1 );
+    Q_ASSERT( d->counts.value( "contexts" ) <= 1 );
+    Q_ASSERT( d->counts.value( "itemdatas" ) <= 1 );
     Q_ASSERT( d->counts.value( "general" ) <= 1 );
-    Q_ASSERT( d->counts.value( "spellchecking" ) <= 1 );
+    Q_ASSERT( d->counts.value( "comments" ) <= 1 );
     Q_ASSERT( d->counts.value( "keywords" ) <= 1 );
     Q_ASSERT( d->counts.value( "folding" ) <= 1 );
     Q_ASSERT( d->counts.value( "indentation" ) <= 1 );
     Q_ASSERT( d->counts.value( "configuration" ) <= 1 );
+    Q_ASSERT( d->counts.value( "spellchecking" ) <= 1 );
+    Q_ASSERT( d->counts.value( "emptylines" ) <= 1 );
+    Q_ASSERT( d->counts.value( "encodings" ) <= 1 );
     
     d->error.clear();
     d->listName.clear();
