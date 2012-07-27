@@ -17,6 +17,7 @@ public:
     QString listName;
     QString contextName;
     QString text;
+    QMap<QString, int> counts;
     
     ParserPrivate( Syntax::Parser* _parser, Syntax::Document* _document )
         : ruleNames( Syntax::List()
@@ -45,6 +46,8 @@ public:
             << "regexpr" // RegExpr
             
             << "stringdetect" // StringDetect
+            
+            << "worddetect" // WordDetect
             ),
             document( _document ),
             parser( _parser )
@@ -99,21 +102,31 @@ bool Syntax::Parser::startDocument()
     d->listName.clear();
     d->contextName.clear();
     d->text.clear();
+    d->counts.clear();
     return true;
 }
 
 bool Syntax::Parser::endDocument()
 {
+    Q_ASSERT( d->counts.value( "highlighting" ) <= 1 );
+    Q_ASSERT( d->counts.value( "general" ) <= 1 );
+    Q_ASSERT( d->counts.value( "spellchecking" ) <= 1 );
+    Q_ASSERT( d->counts.value( "keywords" ) <= 1 );
+    Q_ASSERT( d->counts.value( "folding" ) <= 1 );
+    Q_ASSERT( d->counts.value( "indentation" ) <= 1 );
+    Q_ASSERT( d->counts.value( "configuration" ) <= 1 );
+    
     d->error.clear();
     d->listName.clear();
     d->contextName.clear();
     d->text.clear();
+    d->counts.clear();
     return true;
 }
 
 bool Syntax::Parser::startElement( const QString& namespaceURI, const QString& localName, const QString& qName, const QXmlAttributes& atts )
 {
-    //qWarning() << namespaceURI << localName << qName;
+    d->counts[ qName.toLower() ]++;
     
     if ( caseInsensitiveComparison( qName, "language" )) {
         for ( int i = 0; i < atts.count(); i++ ) {
@@ -154,6 +167,9 @@ bool Syntax::Parser::startElement( const QString& namespaceURI, const QString& l
             }
             else if ( caseInsensitiveComparison( name, "hidden" ) ) {
                 d->document->hidden = atts.value( i );
+            }
+            else if ( caseInsensitiveComparison( name, "style" ) ) {
+                d->document->style = atts.value( i );
             }
             else {
                 d->error = QString( "%1: Unhandled language attribute: %2" ).arg( Q_FUNC_INFO ).arg( name );
@@ -250,7 +266,7 @@ bool Syntax::Parser::startElement( const QString& namespaceURI, const QString& l
             if ( caseInsensitiveComparison( name, "attribute" ) ) {
                 rule.attribute = atts.value( i );
             }
-            else if ( caseInsensitiveComparison( name, "context" ) ) {
+            else if ( caseInsensitiveComparison( name, "context" ) || caseInsensitiveComparison( name, "contex" ) ) { // fucking bad ruby xml file
                 rule.context = atts.value( i );
             }
             else if ( caseInsensitiveComparison( name, "string" ) ) {
@@ -346,6 +362,9 @@ bool Syntax::Parser::startElement( const QString& namespaceURI, const QString& l
             }
             else if ( caseInsensitiveComparison( name, "underline" ) ) {
                 itemData.underline = atts.value( i );
+            }
+            else if ( caseInsensitiveComparison( name, "backgroundColor" ) ) {
+                itemData.backgroundColor = atts.value( i );
             }
             else {
                 d->error = QString( "%1: Unhandled itemData attribute: %2" ).arg( Q_FUNC_INFO ).arg( name );
@@ -445,15 +464,6 @@ bool Syntax::Parser::startElement( const QString& namespaceURI, const QString& l
             if ( caseInsensitiveComparison( name, "mode" ) ) {
                 d->document->general.indentation.mode = atts.value( i );
             }
-            /*else if ( caseInsensitiveComparison( name, "weakDeliminator" ) ) {
-                d->document->general.indentation.weakDeliminator = atts.value( i );
-            }
-            else if ( caseInsensitiveComparison( name, "additionalDeliminator" ) ) {
-                d->document->general.indentation.additionalDeliminator = atts.value( i );
-            }
-            else if ( caseInsensitiveComparison( name, "wordWrapDeliminator" ) ) {
-                d->document->general.indentation.wordWrapDeliminator = atts.value( i );
-            }*/
             else {
                 d->error = QString( "%1: Unhandled indentation attribute: %2" ).arg( Q_FUNC_INFO ).arg( name );
                 return false;
@@ -480,9 +490,6 @@ bool Syntax::Parser::startElement( const QString& namespaceURI, const QString& l
             else if ( caseInsensitiveComparison( name, "caseSensitive" ) ) {
                 emptyLine.caseSensitive = atts.value( i );
             }
-            /*else if ( caseInsensitiveComparison( name, "attribute" ) ) {
-                context.attribute = atts.value( i );
-            }*/
             else {
                 d->error = QString( "%1: Unhandled emptyLine attribute: %2" ).arg( Q_FUNC_INFO ).arg( name );
                 return false;
@@ -490,6 +497,58 @@ bool Syntax::Parser::startElement( const QString& namespaceURI, const QString& l
         }
         
         d->document->general.emptyLines << emptyLine;
+    }
+    else if ( caseInsensitiveComparison( qName, "spellChecking" ) ) {
+        for ( int i = 0; i < atts.count(); i++ ) {
+            const QString name = atts.qName( i );
+            
+            d->error = QString( "%1: Unhandled spellChecking attribute: %2" ).arg( Q_FUNC_INFO ).arg( name );
+            return false;
+        }
+    }
+    else if ( caseInsensitiveComparison( qName, "configuration" ) ) {
+        for ( int i = 0; i < atts.count(); i++ ) {
+            const QString name = atts.qName( i );
+            
+            if ( caseInsensitiveComparison( name, "encodingReplacementPolicy" ) ) {
+                d->document->spellChecking.configuration.encodingReplacementPolicy = atts.value( i );
+            }
+            else {
+                d->error = QString( "%1: Unhandled configuration attribute: %2" ).arg( Q_FUNC_INFO ).arg( name );
+                return false;
+            }
+        }
+    }
+    else if ( caseInsensitiveComparison( qName, "encodings" ) ) {
+        for ( int i = 0; i < atts.count(); i++ ) {
+            const QString name = atts.qName( i );
+            
+            d->error = QString( "%1: Unhandled encodings attribute: %2" ).arg( Q_FUNC_INFO ).arg( name );
+            return false;
+        }
+    }
+    else if ( caseInsensitiveComparison( qName, "encoding" ) ) {
+        Syntax::Encoding encoding;
+        
+        for ( int i = 0; i < atts.count(); i++ ) {
+            const QString name = atts.qName( i );
+            
+            if ( caseInsensitiveComparison( name, "char" ) ) {
+                encoding.char_ = atts.value( i );
+            }
+            else if ( caseInsensitiveComparison( name, "string" ) ) {
+                encoding.string = atts.value( i );
+            }
+            else if ( caseInsensitiveComparison( name, "ignored" ) ) {
+                encoding.ignored = atts.value( i );
+            }
+            else {
+                d->error = QString( "%1: Unhandled encoding attribute: %2" ).arg( Q_FUNC_INFO ).arg( name );
+                return false;
+            }
+        }
+        
+        d->document->spellChecking.encodings << encoding;
     }
     else {
         d->error = QString( "%1: Unhandled starting qName element: %2" ).arg( Q_FUNC_INFO ).arg( qName );
@@ -537,6 +596,14 @@ bool Syntax::Parser::endElement( const QString& namespaceURI, const QString& loc
     else if ( caseInsensitiveComparison( qName, "emptyLines" ) ) {
     }
     else if ( caseInsensitiveComparison( qName, "general" ) ) {
+    }
+    else if ( caseInsensitiveComparison( qName, "configuration" ) ) {
+    }
+    else if ( caseInsensitiveComparison( qName, "encoding" ) ) {
+    }
+    else if ( caseInsensitiveComparison( qName, "encodings" ) ) {
+    }
+    else if ( caseInsensitiveComparison( qName, "spellChecking" ) ) {
     }
     else if ( caseInsensitiveComparison( qName, "language" ) ) {
     }

@@ -4,6 +4,7 @@
 #include "SyntaxList.h"
 #include "SyntaxHighlighting.h"
 #include "SyntaxGeneral.h"
+#include "SyntaxSpellChecking.h"
 
 namespace Syntax {
 
@@ -30,6 +31,7 @@ public:
     
     Syntax::Highlighting highlighting;
     Syntax::General general;
+    Syntax::SpellChecking spellChecking;
     
     Document();
     virtual ~Document();

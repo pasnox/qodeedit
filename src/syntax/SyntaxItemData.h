@@ -20,6 +20,7 @@ public:
     QString italic;
     QString strikeOut;
     QString underline;
+    QString backgroundColor;
     
     ItemData();
     virtual ~ItemData();
