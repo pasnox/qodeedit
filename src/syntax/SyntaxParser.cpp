@@ -581,7 +581,7 @@ bool Syntax::Parser::endElement( const QString& namespaceURI, const QString& loc
 {
     if ( caseInsensitiveComparison( qName, "item" ) ) {
         Q_ASSERT( !d->listName.isEmpty() );
-        d->document->highlighting.lists[ d->listName ] << QString( " %1 " ).arg( d->text.trimmed() );
+        d->document->highlighting.lists[ d->listName ] << d->text.trimmed();
         d->text.clear();
     }
     else if ( caseInsensitiveComparison( qName, "list" ) ) {
