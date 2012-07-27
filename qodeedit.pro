@@ -38,7 +38,6 @@ HEADERS *=  \
     src/margins/LineNumberMargin.h \
     src/margins/LineRevisionMargin.h \
     src/margins/LineSpacingMargin.h \
-    src/syntax/SyntaxDocumentReader.h \
     src/syntax/SyntaxItemData.h \
     src/syntax/SyntaxRule.h \
     src/syntax/SyntaxComment.h \
@@ -75,7 +74,6 @@ SOURCES *= src/main.cpp \
     src/syntax/SyntaxKeywords.cpp \
     src/syntax/SyntaxHighlighting.cpp \
     src/syntax/SyntaxItemData.cpp \
-    src/syntax/SyntaxDocumentReader.cpp \
     src/syntax/SyntaxParser.cpp \
     src/syntax/SyntaxFolding.cpp \
     src/syntax/SyntaxEmptyLine.cpp \
