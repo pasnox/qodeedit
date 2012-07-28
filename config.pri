@@ -19,6 +19,7 @@ BUILD_TYPE = shared
 # $$4 = build path
 # $$5 = build target path
 # $$6 = build type
+# $$7 = target version
 defineTest( initializeProject ) {
     # template
     q_template = $${1}

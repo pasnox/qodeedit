@@ -17,8 +17,11 @@
 XUP.QT_VERSION = Qt System (4.8.1)
 XUP.OTHERS_PLATFORM_TARGET_DEFAULT = bin/Linux/qodeedit_debug
 
+ABSOLUTE_DATA_DIR = $$PWD/share
+
 include( config.pri )
 initializeProject( app, $${BUILD_TARGET}, $${BUILD_MODE}, $${BUILD_PATH}/$${TARGET_NAME}, $${BUILD_TARGET_PATH}, "", "0.1.0" )
+autoGenerateFile( "main.h.in", "src/main.h" )
 
 QT *= xml
 
