@@ -28,7 +28,8 @@ QT *= xml
 INCLUDEPATH *= $$getFolders( . )
 DEPENDPATH *= $${INCLUDEPATH}
 
-FORMS *= 
+FORMS *=  \
+    src/example/UIMain.ui
 
 HEADERS *=  \
     src/editor/CodeEditor.h \
@@ -57,7 +58,11 @@ HEADERS *=  \
     src/syntax/SyntaxSpellChecking.h \
     src/syntax/SyntaxConfiguration.h \
     src/syntax/SyntaxEncoding.h \
-    src/QodeEdit.h
+    src/QodeEdit.h \
+    src/syntax/SyntaxFactory.h \
+    src/syntax/SyntaxModel.h \
+    src/syntax/SyntaxHighlighter.h \
+    src/example/UIMain.h
 
 SOURCES *= src/main.cpp \
     src/editor/CodeEditor.cpp \
@@ -85,4 +90,8 @@ SOURCES *= src/main.cpp \
     src/syntax/SyntaxSpellChecking.cpp \
     src/syntax/SyntaxConfiguration.cpp \
     src/syntax/SyntaxEncoding.cpp \
-    src/QodeEdit.cpp
+    src/QodeEdit.cpp \
+    src/syntax/SyntaxFactory.cpp \
+    src/syntax/SyntaxModel.cpp \
+    src/syntax/SyntaxHighlighter.cpp \
+    src/example/UIMain.cpp
