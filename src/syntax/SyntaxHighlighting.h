@@ -10,14 +10,17 @@ namespace Syntax {
 class Highlighting
 {
 public:
-    typedef QHash<QString, Syntax::List> ListHash;
+    typedef QHash<QString, Syntax::List> Hash;
     
-    Syntax::Highlighting::ListHash lists;
+    Syntax::Highlighting::Hash lists;
     Syntax::Context::Hash contexts;
     Syntax::ItemData::Hash itemDatas;
     
     Highlighting();
     virtual ~Highlighting();
+    
+    virtual bool operator==( const Syntax::Highlighting& other ) const;
+    virtual bool operator!=( const Syntax::Highlighting& other ) const;
     
     Syntax::List list( const QString& name ) const;
 };

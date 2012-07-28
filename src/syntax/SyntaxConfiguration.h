@@ -12,6 +12,9 @@ public:
     
     Configuration();
     virtual ~Configuration();
+    
+    virtual bool operator==( const Syntax::Configuration& other ) const;
+    virtual bool operator!=( const Syntax::Configuration& other ) const;
 };
 
 }; // Syntax

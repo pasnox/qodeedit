@@ -36,6 +36,9 @@ public:
     
     Rule();
     virtual ~Rule();
+    
+    virtual bool operator==( const Syntax::Rule& other ) const;
+    virtual bool operator!=( const Syntax::Rule& other ) const;
 };
 
 }; // Syntax

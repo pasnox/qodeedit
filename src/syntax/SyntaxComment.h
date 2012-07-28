@@ -20,6 +20,9 @@ public:
     
     Comment();
     virtual ~Comment();
+    
+    virtual bool operator==( const Syntax::Comment& other ) const;
+    virtual bool operator!=( const Syntax::Comment& other ) const;
 };
 
 }; // Syntax

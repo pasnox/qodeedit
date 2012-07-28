@@ -12,6 +12,9 @@ public:
     
     Indentation();
     virtual ~Indentation();
+    
+    virtual bool operator==( const Syntax::Indentation& other ) const;
+    virtual bool operator!=( const Syntax::Indentation& other ) const;
 };
 
 }; // Syntax

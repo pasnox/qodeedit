@@ -15,6 +15,9 @@ public:
     
     Keywords();
     virtual ~Keywords();
+    
+    virtual bool operator==( const Syntax::Keywords& other ) const;
+    virtual bool operator!=( const Syntax::Keywords& other ) const;
 };
 
 }; // Syntax

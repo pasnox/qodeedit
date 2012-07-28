@@ -20,6 +20,9 @@ public:
     
     General();
     virtual ~General();
+    
+    virtual bool operator==( const Syntax::General& other ) const;
+    virtual bool operator!=( const Syntax::General& other ) const;
 };
 
 }; // Syntax

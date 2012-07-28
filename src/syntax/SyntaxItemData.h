@@ -25,6 +25,9 @@ public:
     
     ItemData();
     virtual ~ItemData();
+    
+    virtual bool operator==( const Syntax::ItemData& other ) const;
+    virtual bool operator!=( const Syntax::ItemData& other ) const;
 };
 
 }; // Syntax

@@ -17,6 +17,9 @@ public:
     
     Encoding();
     virtual ~Encoding();
+    
+    virtual bool operator==( const Syntax::Encoding& other ) const;
+    virtual bool operator!=( const Syntax::Encoding& other ) const;
 };
 
 }; // Syntax

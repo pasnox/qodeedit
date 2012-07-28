@@ -12,6 +12,9 @@ public:
     
     Folding();
     virtual ~Folding();
+    
+    virtual bool operator==( const Syntax::Folding& other ) const;
+    virtual bool operator!=( const Syntax::Folding& other ) const;
 };
 
 }; // Syntax

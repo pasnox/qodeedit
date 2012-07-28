@@ -11,6 +11,8 @@ namespace Syntax {
 class Document
 {
 public:
+    typedef QList<Syntax::Document> List;
+    
     // Required
     QString name; ///< Name of the syntax document (ie: Asm6502)
     QString localizedName; ///< Translated display name
@@ -35,6 +37,10 @@ public:
     
     Document();
     virtual ~Document();
+    
+    virtual bool operator==( const Syntax::Document& other ) const;
+    virtual bool operator!=( const Syntax::Document& other ) const;
+    virtual bool operator<( const Syntax::Document& other ) const;
     
     bool open( const QString& filePath, QString* error = 0 );
     

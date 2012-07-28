@@ -14,6 +14,9 @@ public:
     
     SpellChecking();
     virtual ~SpellChecking();
+    
+    virtual bool operator==( const Syntax::SpellChecking& other ) const;
+    virtual bool operator!=( const Syntax::SpellChecking& other ) const;
 };
 
 }; // Syntax

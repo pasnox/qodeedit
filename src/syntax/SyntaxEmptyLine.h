@@ -15,6 +15,9 @@ public:
     
     EmptyLine();
     virtual ~EmptyLine();
+    
+    virtual bool operator==( const Syntax::EmptyLine& other ) const;
+    virtual bool operator!=( const Syntax::EmptyLine& other ) const;
 };
 
 }; // Syntax

@@ -25,6 +25,9 @@ public:
     
     Context();
     virtual ~Context();
+    
+    virtual bool operator==( const Syntax::Context& other ) const;
+    virtual bool operator!=( const Syntax::Context& other ) const;
 };
 
 }; // Syntax
