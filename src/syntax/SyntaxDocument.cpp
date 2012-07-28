@@ -136,7 +136,7 @@ QHash<QString, Syntax::Document> Syntax::Document::open( const QStringList& file
     
 #if !defined( QT_NO_DEBUG )
     qWarning() << QString( "%1 files parsed in %2 seconds" ).arg( filePaths.count() ).arg( time.elapsed() /1000.0 ).toLocal8Bit().constData();
-    parser.debug();
+    //parser.debug();
 #endif
     
     return documents;

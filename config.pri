@@ -1,6 +1,7 @@
 # shared configuration file
 
-include( functions.pri )
+# include qmake-extensions
+include( qmake-extensions.pri )
 
 BUILD_TARGET = qodeedit
 BUILD_RAMDISK = /media/ramdisk

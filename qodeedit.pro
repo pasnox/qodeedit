@@ -53,7 +53,8 @@ HEADERS *=  \
     src/syntax/SyntaxIndentation.h \
     src/syntax/SyntaxSpellChecking.h \
     src/syntax/SyntaxConfiguration.h \
-    src/syntax/SyntaxEncoding.h
+    src/syntax/SyntaxEncoding.h \
+    src/QodeEdit.h
 
 SOURCES *= src/main.cpp \
     src/editor/CodeEditor.cpp \
@@ -80,4 +81,5 @@ SOURCES *= src/main.cpp \
     src/syntax/SyntaxIndentation.cpp \
     src/syntax/SyntaxSpellChecking.cpp \
     src/syntax/SyntaxConfiguration.cpp \
-    src/syntax/SyntaxEncoding.cpp
+    src/syntax/SyntaxEncoding.cpp \
+    src/QodeEdit.cpp

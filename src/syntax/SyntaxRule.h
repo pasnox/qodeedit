@@ -13,7 +13,7 @@ public:
     typedef QList<Syntax::Rule> List;
     
     QString type; ///< Type of the rule
-    //
+    
     QString attribute; // hlcchar, hlchex, hlcstringchar, linecontinue, int, detectidentifier, anychar, regexpr, stringdetect, detectspaces, detect2chars, worddetect, hlcoct, rangedetect, detectchar, float, keyword
     QString context; // hlcchar, includerules, hlchex, hlcstringchar, linecontinue, int, detectidentifier, anychar, regexpr, stringdetect, detectspaces, detect2chars, worddetect, hlcoct, rangedetect, detectchar, float, keyword
     QString string; // anychar, regexpr, stringdetect, worddetect, keyword
@@ -31,6 +31,7 @@ public:
     QString region; // regexpr
     QString lineEndContext; // keyword
     QString weakDelimiter; // keyword
+    
     Syntax::Rule::List rules;
     
     Rule();
