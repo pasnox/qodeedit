@@ -4,6 +4,7 @@
 #include "MarginStacker.h"
 
 #include "SyntaxDocument.h"
+#include "QodeEdit.h"
 
 class QodeEditor : public CodeEditor {
     Q_OBJECT
@@ -41,10 +42,14 @@ int main( int argc, char** argv )
     editor->setGeometry( rect );
     editor->show();
     
-    const QString path = "/home/pasnox/Developpement/C++/Qt5/mks-ng/3rdparty/qodeedit.git/share/syntax";
-    const QFileInfoList filesInfo = QDir( path ).entryInfoList( QStringList( "*.xml" ) );
+    const QStringList paths = QodeEdit::syntaxDefinitionFilePaths();
+    QFileInfoList filesInfo;
     QStringList files;
     QString error;
+    
+    foreach ( const QString& path, paths ) {
+        filesInfo << QDir( path ).entryInfoList( QStringList( "*.xml" ) );
+    }
     
     foreach ( const QFileInfo& file, filesInfo ) {
         files << file.absoluteFilePath();

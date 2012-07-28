@@ -11,13 +11,15 @@ namespace QodeEdit
     QString versionString();
     
     QString sharedDataFilePath( const QString& extended = QString::null );
+    
     QString userSharedDataFilePath( const QString& extended = QString::null );
+    void setUserSharedDataFilePath( const QString& filePath );
     
     QString schemaDefinitionFilePath();
     QString syntaxDefinitionFilePath();
     
-    QString customSchemaDefinitionFilePath();
-    QString customSyntaxDefinitionFilePath();
+    QString userSchemaDefinitionFilePath();
+    QString userSyntaxDefinitionFilePath();
     
     QStringList schemaDefinitionFilePaths();
     QStringList syntaxDefinitionFilePaths();

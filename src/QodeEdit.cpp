@@ -6,8 +6,7 @@
 #include <QDesktopServices>
 
 namespace QodeEdit {
-    QString mCustomSchemaFilePath;
-    QString mCustomSyntaxFilePath;
+    QString mUserSharedDataFilePath;
 };
 
 const char* QodeEdit::version()
@@ -24,17 +23,23 @@ QString QodeEdit::sharedDataFilePath( const QString& extended )
 {
     return QDir::cleanPath( QString( "%1/%2" )
         .arg( PACKAGE_ABSOLUTE_DATA_DIR )
-        .arg( extended )
-    );
+        .arg( extended ) );
 }
 
 QString QodeEdit::userSharedDataFilePath( const QString& extended )
 {
-    return QDir::cleanPath( QString( "%1/%2/%3" )
-        .arg( QDesktopServices::storageLocation( QDesktopServices::DataLocation ) )
-        .arg( PACKAGE_NAME )
-        .arg( extended )
-    );
+    return mUserSharedDataFilePath.isEmpty()
+        ? QDir::cleanPath( QString( "%1/%2/%3" )
+            .arg( QDesktopServices::storageLocation( QDesktopServices::DataLocation ) )
+            .arg( PACKAGE_NAME )
+            .arg( extended ) )
+        : mUserSharedDataFilePath
+    ;
+}
+
+void QodeEdit::setUserSharedDataFilePath( const QString& filePath )
+{
+    mUserSharedDataFilePath = filePath;
 }
 
 QString QodeEdit::schemaDefinitionFilePath()
@@ -47,46 +52,28 @@ QString QodeEdit::syntaxDefinitionFilePath()
     return QodeEdit::sharedDataFilePath( "syntax" );
 }
 
-QString QodeEdit::customSchemaDefinitionFilePath()
+QString QodeEdit::userSchemaDefinitionFilePath()
 {
-    return QodeEdit::mCustomSchemaFilePath.isEmpty()
-        ? QodeEdit::userSharedDataFilePath( "schemas" )
-        : QodeEdit::mCustomSchemaFilePath
-    ;
+    return QodeEdit::userSharedDataFilePath( "schemas" );
 }
 
-QString QodeEdit::customSyntaxDefinitionFilePath()
+QString QodeEdit::userSyntaxDefinitionFilePath()
 {
-    return QodeEdit::mCustomSyntaxFilePath.isEmpty()
-        ? QodeEdit::userSharedDataFilePath( "syntax" )
-        : QodeEdit::mCustomSyntaxFilePath
-    ;
+    return QodeEdit::userSharedDataFilePath( "syntax" );
 }
 
 QStringList QodeEdit::schemaDefinitionFilePaths()
 {
-    const QString custom = QodeEdit::customSchemaDefinitionFilePath();
-    QStringList paths;
-    
-    paths << QodeEdit::schemaDefinitionFilePath();
-    
-    if ( !custom.isEmpty() ) {
-        paths << custom;
-    }
-    
-    return paths;
+    return QStringList()
+        << QodeEdit::schemaDefinitionFilePath()
+        << QodeEdit::userSchemaDefinitionFilePath()
+    ;
 }
 
 QStringList QodeEdit::syntaxDefinitionFilePaths()
 {
-    const QString custom = QodeEdit::customSyntaxDefinitionFilePath();
-    QStringList paths;
-    
-    paths << QodeEdit::syntaxDefinitionFilePath();
-    
-    if ( !custom.isEmpty() ) {
-        paths << custom;
-    }
-    
-    return paths;
+    return QStringList()
+        << QodeEdit::syntaxDefinitionFilePath()
+        << QodeEdit::userSyntaxDefinitionFilePath()
+    ;
 }
