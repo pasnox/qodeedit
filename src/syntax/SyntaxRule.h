@@ -12,6 +12,28 @@ class Rule
 public:
     typedef QList<Syntax::Rule> List;
     
+    enum Type {
+        Invalid = -1,
+        AnyChar,
+        Detect2Chars,
+        DetectChar,
+        DetectIdentifier,
+        DetectSpaces,
+        Float,
+        HlCChar,
+        HlCHex,
+        HlCOct,
+        HlCStringChar,
+        IncludeRules,
+        Int,
+        Keyword,
+        LineContinue,
+        RangeDetect,
+        RegExpr,
+        StringDetect,
+        WordDetect
+    };
+    
     QString type; ///< Type of the rule
     
     QString attribute; // hlcchar, hlchex, hlcstringchar, linecontinue, int, detectidentifier, anychar, regexpr, stringdetect, detectspaces, detect2chars, worddetect, hlcoct, rangedetect, detectchar, float, keyword
@@ -39,6 +61,8 @@ public:
     
     virtual bool operator==( const Syntax::Rule& other ) const;
     virtual bool operator!=( const Syntax::Rule& other ) const;
+    
+    Syntax::Rule::Type enumType() const;
 };
 
 }; // Syntax
