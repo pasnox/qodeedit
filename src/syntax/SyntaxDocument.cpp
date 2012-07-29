@@ -1,5 +1,6 @@
 #include "SyntaxDocument.h"
 #include "SyntaxParser.h"
+#include "QodeEdit.h"
 
 #include <QXmlInputSource>
 #include <QTime>
@@ -81,7 +82,10 @@ bool Syntax::Document::operator!=( const Syntax::Document& other ) const
 
 bool Syntax::Document::operator<( const Syntax::Document& other ) const
 {
-    return QString::localeAwareCompare( name, other.name ) < 0;
+    return QodeEdit::localeAwareStringLessThan(
+        localizedName.isEmpty() ? name : localizedName,
+        other.localizedName.isEmpty() ? other.name : other.localizedName
+    );
 }
 
 bool Syntax::Document::open( const QString& filePath, QString* error )
