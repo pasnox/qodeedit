@@ -77,3 +77,23 @@ QStringList QodeEdit::syntaxDefinitionFilePaths()
         << QodeEdit::userSyntaxDefinitionFilePath()
     ;
 }
+
+bool QodeEdit::stringEquals( const QString& left, const QString& right, Qt::CaseSensitivity sensitivity )
+{
+    return QString::compare( left, right, sensitivity ) == 0;
+}
+
+bool QodeEdit::stringLessThan( const QString& left, const QString& right, Qt::CaseSensitivity sensitivity )
+{
+    return QString::compare( left, right, sensitivity ) < 0;
+}
+
+bool QodeEdit::localeAwareStringEquals( const QString& left, const QString& right )
+{
+    return QString::localeAwareCompare( left, right ) == 0;
+}
+
+bool QodeEdit::localeAwareStringLessThan( const QString& left, const QString& right )
+{
+    return QString::localeAwareCompare( left, right ) < 0;
+}

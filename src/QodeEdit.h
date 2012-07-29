@@ -23,6 +23,11 @@ namespace QodeEdit
     
     QStringList schemaDefinitionFilePaths();
     QStringList syntaxDefinitionFilePaths();
+    
+    bool stringEquals( const QString& left, const QString& right, Qt::CaseSensitivity sensitivity = Qt::CaseInsensitive );
+    bool stringLessThan( const QString& left, const QString& right, Qt::CaseSensitivity sensitivity = Qt::CaseInsensitive );
+    bool localeAwareStringEquals( const QString& left, const QString& right );
+    bool localeAwareStringLessThan( const QString& left, const QString& right );
 };
 
 #endif // QODEEDIT_H
