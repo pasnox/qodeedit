@@ -11,6 +11,7 @@ class Document;
 class Model : public QAbstractListModel
 {
     Q_OBJECT
+    friend class Syntax::ModelPrivate;
     
 public:
     enum ExtendedRole {
@@ -22,8 +23,6 @@ public:
     
     virtual int rowCount( const QModelIndex& parent = QModelIndex() ) const;
     virtual QVariant data( const QModelIndex& index, int role = Qt::DisplayRole ) const;
-    
-    QString internalName( const QModelIndex& index ) const;
 
 public slots:
     void update();

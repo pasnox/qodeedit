@@ -1,6 +1,9 @@
 #include "SyntaxModel.h"
 #include "SyntaxDocument.h"
+#include "QodeEdit.h"
 
+#include <QStringList>
+#include <QIcon>
 #include <QDebug>
 
 // ModelPrivate
@@ -8,7 +11,8 @@
 class Syntax::ModelPrivate {
 public:
     const QHash<QString, Syntax::Document>* constSyntaxes;
-    QList<Syntax::Document> syntaxes;
+    QStringList syntaxes;
+    QHash<QString, QIcon> icons; // name, icon
     
     ModelPrivate( Syntax::Model* _model, const QHash<QString, Syntax::Document>* _syntaxes )
         : constSyntaxes( _syntaxes ),
@@ -18,9 +22,83 @@ public:
         Q_ASSERT( constSyntaxes );
     }
     
+    void updateIcons() {
+        foreach ( const QString& syntax, syntaxes ) {
+            const Syntax::Document& document = (*constSyntaxes)[ syntax ];
+            
+            if ( icons.contains( document.name ) ) {
+                continue;
+            }
+            
+            QString iconName;
+            QIcon icon;
+            
+            foreach ( QString key, document.mimeTypes ) {
+                key = key.replace( "/", "-" );
+                
+                if ( !QIcon::hasThemeIcon( key ) ) {
+                    continue;
+                }
+                
+                iconName = key;
+            }
+            
+            if ( iconName.isEmpty() ) {
+                iconName = "text-plain";
+            }
+            
+            icon = icons.value( document.name, QIcon() );
+            
+            if ( icon.isNull() ) {
+                icon = QIcon::fromTheme( iconName );
+                icons[ document.name ] = icon;
+            }
+        }
+    }
+    
     void update() {
-        syntaxes = constSyntaxes->values();
-        qSort( syntaxes );
+        const QStringList oldSyntaxes;
+        QStringList newSyntaxes;
+        
+        foreach ( const Syntax::Document& document, constSyntaxes->values() ) {
+            newSyntaxes << ( document.localizedName.isEmpty() ? document.name : document.localizedName );
+        }
+        
+        qSort( newSyntaxes.begin(), newSyntaxes.end(), QodeEdit::localeAwareStringLessThan );
+        
+        if ( oldSyntaxes == newSyntaxes ) {
+            return;
+        }
+        
+        const QModelIndexList oldIndexes = model->persistentIndexList();
+        QModelIndexList newIndexes = oldIndexes;
+        QHash<QString, int> newPositions;
+        
+        emit model->layoutAboutToBeChanged();
+        
+        syntaxes = newSyntaxes;
+        updateIcons();
+        
+        for ( int i = 0; i < newSyntaxes.count(); i++ ) {
+            const Syntax::Document& document = (*constSyntaxes)[ newSyntaxes[ i ] ];
+            newPositions[ document.name ] = i;
+        }
+        
+        for ( int i = 0; i < oldSyntaxes.count(); i++ ) {
+            const Syntax::Document& document = (*constSyntaxes)[ oldSyntaxes[ i ] ];
+            const int row = newPositions.value( document.name, -1 );
+            
+            if ( row == -1 ) {
+                newIndexes[ i ] = QModelIndex();
+            }
+            else {
+                newIndexes[ i ] = model->index( row, 0, QModelIndex() );
+            }
+        }
+        
+        model->changePersistentIndexList( oldIndexes, newIndexes );
+        
+        emit model->layoutChanged();
     }
 
 private:
@@ -51,11 +129,11 @@ QVariant Syntax::Model::data( const QModelIndex& index, int role ) const
         return QVariant();
     }
     
-    const Syntax::Document& document = d->syntaxes[ index.row() ];
+    const Syntax::Document& document = (*d->constSyntaxes)[ d->syntaxes[ index.row() ] ];
     
     switch ( role ) {
         case Qt::DecorationRole:
-            return QVariant();
+            return d->icons.value( document.name );
         case Qt::DisplayRole:
         case Qt::ToolTipRole:
             return document.localizedName.isEmpty() ? document.name : document.localizedName;
@@ -64,11 +142,6 @@ QVariant Syntax::Model::data( const QModelIndex& index, int role ) const
     }
     
     return QVariant();
-}
-
-QString Syntax::Model::internalName( const QModelIndex& index ) const
-{
-    return d->syntaxes.value( index.row() ).name;
 }
 
 void Syntax::Model::update()
