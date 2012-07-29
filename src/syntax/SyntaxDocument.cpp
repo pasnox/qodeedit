@@ -3,7 +3,6 @@
 #include "QodeEdit.h"
 
 #include <QXmlInputSource>
-#include <QTime>
 #include <QFileInfo>
 #include <QDebug>
 
@@ -156,9 +155,6 @@ QHash<QString, Syntax::Document> Syntax::Document::open( const QStringList& file
     xmlReader.setErrorHandler( &parser );
     xmlReader.setLexicalHandler( &parser );
     
-    QTime time;
-    time.start();
-    
     foreach ( const QString& filePath, filePaths ) {
 #if !defined( QT_NO_DEBUG )
         qWarning() << QString( "--- Parsing %1" ).arg( QFileInfo( filePath ).fileName() ).toLocal8Bit().constData();
@@ -216,7 +212,6 @@ QHash<QString, Syntax::Document> Syntax::Document::open( const QStringList& file
     }
     
 #if !defined( QT_NO_DEBUG )
-    qWarning() << QString( "%1 files parsed in %2 seconds" ).arg( filePaths.count() ).arg( time.elapsed() /1000.0 ).toLocal8Bit().constData();
     //parser.debug();
 #endif
     
