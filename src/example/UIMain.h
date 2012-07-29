@@ -7,10 +7,6 @@
 
 class Ui_UIMain;
 
-namespace Syntax {
-    class Model;
-};
-
 class QodeEditor : public CodeEditor
 {
     Q_OBJECT
@@ -32,7 +28,6 @@ public:
     
 protected:
     Ui_UIMain* ui;
-    Syntax::Model* mSyntaxModel;
 };
 
 #endif // UIMAIN_H

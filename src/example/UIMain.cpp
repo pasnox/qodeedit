@@ -3,7 +3,6 @@
 #include "CodeEditor.h"
 #include "MarginStacker.h"
 #include "SyntaxFactory.h"
-#include "SyntaxModel.h"
 
 // QodeEditor
 
@@ -40,11 +39,9 @@ public:
 // UIMain
 
 UIMain::UIMain( QWidget* parent )
-    : QMainWindow( parent ), ui( new Ui_UIMain ),
-        mSyntaxModel( Syntax::Factory::model( this ) )
+    : QMainWindow( parent ), ui( new Ui_UIMain )
 {
     ui->setupUi( this );
-    ui->cbSyntax->setModel( mSyntaxModel );
     ui->toolBar->addWidget( new SpacerWidget( this ) );
     ui->toolBar->addWidget( ui->cbSyntax );
     
@@ -60,4 +57,5 @@ UIMain::UIMain( QWidget* parent )
 UIMain::~UIMain()
 {
     delete ui;
+    Syntax::Factory::free();
 }

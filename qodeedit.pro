@@ -32,6 +32,8 @@ FORMS *=  \
     src/example/UIMain.ui
 
 HEADERS *=  \
+    src/example/UIMain.h \
+    src/QodeEdit.h \
     src/editor/CodeEditor.h \
     src/document/TextDocument.h \
     src/document/PlainTextDocumentLayout.h \
@@ -58,13 +60,14 @@ HEADERS *=  \
     src/syntax/SyntaxSpellChecking.h \
     src/syntax/SyntaxConfiguration.h \
     src/syntax/SyntaxEncoding.h \
-    src/QodeEdit.h \
     src/syntax/SyntaxFactory.h \
     src/syntax/SyntaxModel.h \
     src/syntax/SyntaxHighlighter.h \
-    src/example/UIMain.h
+    src/syntax/SyntaxComboBox.h
 
 SOURCES *= src/main.cpp \
+    src/example/UIMain.cpp \
+    src/QodeEdit.cpp \
     src/editor/CodeEditor.cpp \
     src/document/TextDocument.cpp \
     src/document/PlainTextDocumentLayout.cpp \
@@ -90,8 +93,7 @@ SOURCES *= src/main.cpp \
     src/syntax/SyntaxSpellChecking.cpp \
     src/syntax/SyntaxConfiguration.cpp \
     src/syntax/SyntaxEncoding.cpp \
-    src/QodeEdit.cpp \
     src/syntax/SyntaxFactory.cpp \
     src/syntax/SyntaxModel.cpp \
     src/syntax/SyntaxHighlighter.cpp \
-    src/example/UIMain.cpp
+    src/syntax/SyntaxComboBox.cpp

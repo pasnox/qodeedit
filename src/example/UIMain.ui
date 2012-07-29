@@ -13,7 +13,7 @@
   <widget class="QWidget" name="centralwidget">
    <layout class="QVBoxLayout" name="verticalLayout">
     <item>
-     <widget class="QComboBox" name="cbSyntax">
+     <widget class="Syntax::ComboBox" name="cbSyntax">
       <property name="sizeAdjustPolicy">
        <enum>QComboBox::AdjustToContents</enum>
       </property>
@@ -50,6 +50,11 @@
    <class>QodeEditor</class>
    <extends>QPlainTextEdit</extends>
    <header>QPlainTextEdit</header>
+  </customwidget>
+  <customwidget>
+   <class>Syntax::ComboBox</class>
+   <extends>QComboBox</extends>
+   <header>SyntaxComboBox.h</header>
   </customwidget>
  </customwidgets>
  <resources/>
