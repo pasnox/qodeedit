@@ -16,65 +16,77 @@ namespace Syntax {
         QList<QPointer<Syntax::Model> > mModels;
         
         // forward declare
+        void buildDocument( Syntax::Document& document );
+        void buildContextRules( Syntax::Document& document, Syntax::Context& context );
         void buildContextRule( Syntax::Document& document, Syntax::Context& context, Syntax::Rule& rule );
         
-        Syntax::Rule::List copyRules( Syntax::Document& document, Syntax::Rule& rule ) {
-            Syntax::Rule::List rules;
+        void mergeRules( Syntax::Document& document, Syntax::Context& context, Syntax::Rule::List& list, Syntax::Rule& rule ) {
+            QString srcContextName = rule.context;
+            QString srcSyntaxName = document.name;
             
-            // import external rules
+            // import external initial context rules
             if ( rule.context.startsWith( "##" ) ) {
-                qWarning( "%s: Importing external rules is not yet handled (%s/%s)", Q_FUNC_INFO, qPrintable( document.name ), qPrintable( rule.context ) );
+                srcSyntaxName = rule.context.mid( 2 );
+                srcContextName.clear(); // fill up later with document initialContext
             }
             // import external contex rules
             else if ( rule.context.contains( "##" ) ) {
-                const QStringList contextParts = rule.context.split( "##" );
-                const QString contextName = contextParts.first();
-                const QString syntaxName = contextParts.last();
-                Q_ASSERT( !contextName.isEmpty() );
-                Q_ASSERT( !syntaxName.isEmpty() );
-                Q_ASSERT( Syntax::Factory::mDocuments.contains( syntaxName ) );
-                Syntax::Document& externalDocument = Syntax::Factory::mDocuments[ syntaxName ];
-                Syntax::Context::Hash& externalContexts = externalDocument.highlighting.contexts;
-                Q_ASSERT( externalContexts.contains( contextName ) );
-                Syntax::Context& externalContext = externalContexts[ contextName ];
-                
-                // make sure the copying context has already been built
-                for ( int i = externalContext.rules.count() -1; i >= 0; i-- ) {
-                    Syntax::Factory::buildContextRule( externalDocument, externalContext, externalContext.rules[ i ] );
-                }
-                
-                // final rules to send
-                rules = externalContext.rules;
+                const QStringList parts = rule.context.split( "##" );
+                srcSyntaxName = parts.value( 1 );
+                srcContextName = parts.value( 0 );
             }
-            // import internal context rules
+            // import from current document
             else {
-                Syntax::Context::Hash& contexts = document.highlighting.contexts;
-                Q_ASSERT( contexts.contains( rule.context ) );
-                Syntax::Context& context = contexts[ rule.context ];
-                
-                // make sure the copying context has already been built
-                for ( int i = context.rules.count() -1; i >= 0; i-- ) {
-                    Syntax::Factory::buildContextRule( document, context, context.rules[ i ] );
-                }
-                
-                // final rules to send
-                rules = context.rules;
+                // nothing to do
             }
             
-            return rules;
+            // get source document
+            Q_ASSERT( Syntax::Factory::mDocuments.contains( srcSyntaxName ) );
+            Syntax::Document& srcDocument = Syntax::Factory::mDocuments[ srcSyntaxName ];
+            
+            // get source context name if needed
+            if ( rule.context.startsWith( "##" ) ) {
+                srcContextName = srcDocument.highlighting.initialContext;
+            }
+            
+            // get source context
+            Q_ASSERT( srcDocument.highlighting.contexts.contains( srcContextName ) );
+            Syntax::Context& srcContext = srcDocument.highlighting.contexts[ srcContextName ];
+            
+            // make sure the document is built
+            if ( srcDocument.name != document.name ) {
+                buildDocument( srcDocument );
+            }
+            // make sure the context is ready
+            else {
+                buildContextRules( srcDocument, srcContext );
+            }
+            
+            // update context attribute
+            if ( rule.includeAttrib ) {
+                context.attribute = srcContext.attribute;
+            }
+            
+            // update rules
+            const Syntax::Rule::List& rules = srcContext.rules;
+            const int index = list.indexOf( rule );
+            
+            list.removeAt( index );
+            
+            for ( int i = rules.count() -1; i >= 0; i-- ) {
+                list.insert( index,  rules[ i ] );
+            }
         }
         
-        void buildRuleRule( Syntax::Document& document, Syntax::Rule& parentRule, Syntax::Rule& rule ) {
+        void buildRuleRule( Syntax::Document& document, Syntax::Context& context, Syntax::Rule& parentRule, Syntax::Rule& rule ) {
             Q_ASSERT( !rule.type.isEmpty() );
             
             if ( rule.enumType() == Syntax::Rule::IncludeRules ) {
-                const Syntax::Rule::List copiedRules = Syntax::Factory::copyRules( document, rule );
-                parentRule.rules.removeOne( rule );
-                parentRule.rules << copiedRules;
+                Syntax::Factory::mergeRules( document, context, parentRule.rules, rule );
             }
             else {
                 for ( int i = rule.rules.count() -1; i >= 0; i-- ) {
-                    Syntax::Factory::buildRuleRule( document, rule, rule.rules[ i ] );
+                    Syntax::Factory::buildRuleRule( document, context, rule, rule.rules[ i ] );
                 }
             }
         }
@@ -83,28 +95,40 @@ namespace Syntax {
             Q_ASSERT( !rule.type.isEmpty() );
             
             if ( rule.enumType() == Syntax::Rule::IncludeRules ) {
-                const Syntax::Rule::List copiedRules = Syntax::Factory::copyRules( document, rule );
-                context.rules.removeOne( rule );
-                context.rules << copiedRules;
+                Syntax::Factory::mergeRules( document, context, context.rules, rule );
             }
             else {
                 for ( int i = rule.rules.count() -1; i >= 0; i-- ) {
-                    Syntax::Factory::buildRuleRule( document, rule, rule.rules[ i ] );
+                    Syntax::Factory::buildRuleRule( document, context, rule, rule.rules[ i ] );
                 }
             }
         }
         
+        void buildContextRules( Syntax::Document& document, Syntax::Context& context ) {
+            if ( document.finalyzed ) {
+                return;
+            }
+            
+            for ( int i = context.rules.count() -1; i >= 0; i-- ) {
+                Syntax::Factory::buildContextRule( document, context, context.rules[ i ] );
+            }
+        }
+        
+        void buildDocument( Syntax::Document& document ) {
+            if ( document.finalyzed ) {
+                return;
+            }
+            
+            foreach ( const QString& contextName, document.highlighting.contexts.keys() ) {
+                buildContextRules( document, document.highlighting.contexts[ contextName ] );
+            }
+            
+            document.finalyzed = true;
+        }
+        
         void buildDocuments() {
             foreach ( const QString& syntaxName, Syntax::Factory::mDocuments.keys() ) {
-                Syntax::Document& document = Syntax::Factory::mDocuments[ syntaxName ];
-                
-                foreach ( const QString& contextName, document.highlighting.contexts.keys() ) {
-                    Syntax::Context& context = document.highlighting.contexts[ contextName ];
-                    
-                    for ( int i = context.rules.count() -1; i >= 0; i-- ) {
-                        Syntax::Factory::buildContextRule( document, context, context.rules[ i ] );
-                    }
-                }
+                buildDocument( Syntax::Factory::mDocuments[ syntaxName ] );
             }
         }
         
