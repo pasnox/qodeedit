@@ -7,6 +7,7 @@
 
 namespace Syntax {
 
+// TODO: Make this class use d pointer QExplicitSharedData to avoid rule duplication
 class Rule
 {
 public:
