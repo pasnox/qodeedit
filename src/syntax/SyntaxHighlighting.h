@@ -12,6 +12,7 @@ class Highlighting
 public:
     typedef QHash<QString, Syntax::List> Hash;
     
+    QString initialContext;
     Syntax::Highlighting::Hash lists;
     Syntax::Context::Hash contexts;
     Syntax::ItemData::Hash itemDatas;

@@ -284,6 +284,12 @@ bool Syntax::Parser::startElement( const QString& namespaceURI, const QString& l
         }
         
         d->document->highlighting.contexts[ context.name ] = context;
+        
+        if ( d->document->highlighting.initialContext.isEmpty() ) {
+            d->document->highlighting.initialContext = context.name;
+        }
+        
+        Q_ASSERT( !context.name.isEmpty() );
     }
     else if ( d->ruleNames.contains( qName.toLower() ) ) {
         Q_ASSERT( !d->contextName.isEmpty() );
