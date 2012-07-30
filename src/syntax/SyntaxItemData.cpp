@@ -2,6 +2,11 @@
 
 Syntax::ItemData::ItemData()
 {
+    spellChecking = false;
+    bold = false;
+    italic = false;
+    strikeOut = false;
+    underline = false;
 }
 
 Syntax::ItemData::~ItemData()

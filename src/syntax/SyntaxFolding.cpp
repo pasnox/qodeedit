@@ -2,6 +2,7 @@
 
 Syntax::Folding::Folding()
 {
+    indentationSensitive = false;
 }
 
 Syntax::Folding::~Folding()

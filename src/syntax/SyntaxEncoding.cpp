@@ -2,6 +2,7 @@
 
 Syntax::Encoding::Encoding()
 {
+    ignored = false;
 }
 
 Syntax::Encoding::~Encoding()

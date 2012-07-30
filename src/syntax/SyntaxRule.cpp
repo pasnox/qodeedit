@@ -3,6 +3,13 @@
 
 Syntax::Rule::Rule()
 {
+    firstNonSpace = false;
+    lookAhead = false;
+    insensitive = false;
+    column = -1;
+    dynamic = false;
+    minimal = false;
+    includeAttrib = false;
 }
 
 Syntax::Rule::~Rule()

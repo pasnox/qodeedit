@@ -6,45 +6,11 @@
 #include <QFileInfo>
 #include <QDebug>
 
-bool versionLessThan( const QString& left, const QString& right ) {
-    if ( left == right ) {
-        return false;
-    }
-    
-    const QStringList leftParts = left.split( "." );
-    const QStringList rightParts = right.split( "." );
-    
-    // major
-    if ( leftParts.value( 0 ).toInt() != rightParts.value( 0 ).toInt() ) {
-        return leftParts.value( 0 ).toInt() < rightParts.value( 0 ).toInt();
-    }
-    // minor
-    else if ( leftParts.value( 1 ).toInt() != rightParts.value( 1 ).toInt() ) {
-        return leftParts.value( 1 ).toInt() < rightParts.value( 1 ).toInt();
-    }
-    // patch
-    else if ( leftParts.value( 2 ).toInt() != rightParts.value( 2 ).toInt() ) {
-        return leftParts.value( 2 ).toInt() < rightParts.value( 2 ).toInt();
-    }
-    // build
-    else if ( leftParts.value( 3 ).toInt() != rightParts.value( 3 ).toInt() ) {
-        return leftParts.value( 3 ).toInt() < rightParts.value( 3 ).toInt();
-    }
-    // extra
-    else if ( leftParts.value( 4 ).isEmpty() && !rightParts.value( 4 ).isEmpty() ) {
-        return false;
-    }
-    // extra
-    else if ( !leftParts.value( 4 ).isEmpty() && rightParts.value( 4 ).isEmpty() ) {
-        return true;
-    }
-    
-    // extra
-    return leftParts.value( 4 ) < rightParts.value( 4 ); // not the best but afaik ;)
-}
-
 Syntax::Document::Document()
 {
+    priority = -1;
+    hidden = false;
+    caseSensitive = false;
 }
 
 Syntax::Document::~Document()
@@ -194,7 +160,7 @@ QHash<QString, Syntax::Document> Syntax::Document::open( const QStringList& file
             
             Syntax::Document& currentDocument = documents[ document.name ];
             
-            if ( versionLessThan( currentDocument.version, document.version ) ) {
+            if ( QodeEdit::versionStringLessThan( currentDocument.version, document.version ) ) {
                 currentDocument = document;
             }
             

@@ -2,6 +2,10 @@
 
 Syntax::Context::Context()
 {
+    fallThrough = false;
+    dynamic = false;
+    noIndentationBasedFolding = false;
+    caseSensitive = false;
 }
 
 Syntax::Context::~Context()

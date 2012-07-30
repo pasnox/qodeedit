@@ -2,6 +2,7 @@
 
 Syntax::EmptyLine::EmptyLine()
 {
+    caseSensitive = false;
 }
 
 Syntax::EmptyLine::~EmptyLine()

@@ -2,6 +2,7 @@
 
 Syntax::Keywords::Keywords()
 {
+    caseSensitive = false;
 }
 
 Syntax::Keywords::~Keywords()
