@@ -71,6 +71,16 @@ namespace Syntax {
             const Syntax::Rule::List& rules = srcContext.rules;
             const int index = list.indexOf( rule );
             
+            // TODO: may be usefull to resize the list and move old items
+            /*
+            // resize target
+            dest->items.resize (oldLen + itemsToInsert);
+         
+            // move old elements
+            for (int i=oldLen-1; i >= p; --i)
+              dest->items[i+itemsToInsert] = dest->items[i];
+            */
+            
             list.removeAt( index );
             
             for ( int i = rules.count() -1; i >= 0; i-- ) {
