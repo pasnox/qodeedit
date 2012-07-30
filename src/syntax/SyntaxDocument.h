@@ -30,6 +30,7 @@ public:
     QString license; ///< License; for example: "LGPL"
     bool caseSensitive;
     //QString identifier; // ?
+    bool finalyzed; ///< Tell if the document has been totally parsed and built
     
     Syntax::Highlighting highlighting;
     Syntax::General general;

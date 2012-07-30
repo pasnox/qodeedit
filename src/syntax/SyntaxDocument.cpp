@@ -11,6 +11,7 @@ Syntax::Document::Document()
     priority = -1;
     hidden = false;
     caseSensitive = false;
+    finalyzed = false;
 }
 
 Syntax::Document::~Document()
@@ -36,7 +37,8 @@ bool Syntax::Document::operator==( const Syntax::Document& other ) const
         //identifier == other.identifier &&
         highlighting == other.highlighting &&
         general == other.general &&
-        spellChecking == other.spellChecking
+        spellChecking == other.spellChecking &&
+        finalyzed == other.finalyzed
     ;
 }
 
