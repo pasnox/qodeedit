@@ -28,6 +28,7 @@ namespace QodeEdit
     bool stringLessThan( const QString& left, const QString& right, Qt::CaseSensitivity sensitivity = Qt::CaseInsensitive );
     bool localeAwareStringEquals( const QString& left, const QString& right );
     bool localeAwareStringLessThan( const QString& left, const QString& right );
+    bool versionStringLessThan( const QString& left, const QString& right );
 };
 
 #endif // QODEEDIT_H
