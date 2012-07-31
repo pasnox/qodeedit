@@ -49,6 +49,7 @@ bool Syntax::Document::operator!=( const Syntax::Document& other ) const
 
 bool Syntax::Document::operator<( const Syntax::Document& other ) const
 {
+    // HINT: compare priority too ?
     return QodeEdit::localeAwareStringLessThan(
         localizedName.isEmpty() ? name : localizedName,
         other.localizedName.isEmpty() ? other.name : other.localizedName
@@ -124,10 +125,6 @@ QHash<QString, Syntax::Document> Syntax::Document::open( const QStringList& file
     xmlReader.setLexicalHandler( &parser );
     
     foreach ( const QString& filePath, filePaths ) {
-#if !defined( QT_NO_DEBUG )
-        qWarning() << QString( "--- Parsing %1" ).arg( QFileInfo( filePath ).fileName() ).toLocal8Bit().constData();
-#endif
-        
         QFile file( filePath );
         
         if ( !file.exists() ) {
