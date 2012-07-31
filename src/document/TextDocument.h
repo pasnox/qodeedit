@@ -7,6 +7,10 @@ class TextDocumentPrivate;
 class PlainTextDocumentLayout;
 class TextBlockUserData;
 
+namespace Syntax {
+    class Highlighter;
+};
+
 class TextDocument : public QTextDocument
 {
     Q_OBJECT
@@ -18,6 +22,9 @@ public:
     
     PlainTextDocumentLayout* layout() const;
     void setLayout( PlainTextDocumentLayout* layout );
+    
+    Syntax::Highlighter* syntaxHighlighter() const;
+    void setSyntaxHighlighter( Syntax::Highlighter* highlighter );
     
     TextBlockUserData* testUserData( const QTextBlock& block ) const;
     TextBlockUserData* userData( QTextBlock& block ) const;

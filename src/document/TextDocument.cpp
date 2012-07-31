@@ -1,6 +1,7 @@
 #include "TextDocument.h"
 #include "PlainTextDocumentLayout.h"
 #include "TextBlockUserData.h"
+#include "SyntaxHighlighter.h"
 
 #include <QTextBlock>
 #include <QDebug>
@@ -11,13 +12,14 @@ class TextDocumentPrivate : public QObject {
     Q_OBJECT
 
 public:
-    TextDocument* document;
+    Syntax::Highlighter* highlighter;
     int lastUnmodifiedRevision;
     
     TextDocumentPrivate( TextDocument* _document )
         : QObject( _document ),
-            document( _document ),
-            lastUnmodifiedRevision( 0 )
+            highlighter( 0 ),
+            lastUnmodifiedRevision( 0 ),
+            document( _document )
     {
         Q_ASSERT( document );
         
@@ -65,6 +67,9 @@ public slots:
             }
         }
     }
+
+private:
+    TextDocument* document;
 };
 
 // TextDocument
@@ -75,6 +80,7 @@ TextDocument::TextDocument( QObject* parent )
 {
     setLayout( new PlainTextDocumentLayout( this ) );
     setDocumentMargin( 0 );
+    setDefaultFont( QFont( "Monospace", 9 ) );
 }
 
 TextDocument::~TextDocument()
@@ -89,6 +95,28 @@ PlainTextDocumentLayout* TextDocument::layout() const
 void TextDocument::setLayout( PlainTextDocumentLayout* layout )
 {
     setDocumentLayout( layout );
+}
+
+Syntax::Highlighter* TextDocument::syntaxHighlighter() const
+{
+    return d->highlighter;
+}
+
+void TextDocument::setSyntaxHighlighter( Syntax::Highlighter* highlighter )
+{
+    if ( d->highlighter == highlighter ) {
+        return;
+    }
+    
+    if ( d->highlighter ) {
+        d->highlighter->deleteLater();
+    }
+    
+    d->highlighter = highlighter;
+    
+    if ( d->highlighter ) {
+        highlighter->setDocument( this );
+    }
 }
 
 TextBlockUserData* TextDocument::testUserData( const QTextBlock& block ) const
