@@ -224,9 +224,35 @@ void Syntax::Factory::free()
     Syntax::Factory::mDocuments.clear();
 }
 
+QStringList Syntax::Factory::availableSyntaxes()
+{
+    QStringList syntaxes = Syntax::Factory::mDocuments.keys();
+    qSort( syntaxes.begin(), syntaxes.end(), QodeEdit::localeAwareStringLessThan );
+    return syntaxes;
+}
+
 Syntax::Highlighter* Syntax::Factory::highlighter( const QString& name, TextDocument* textDocument )
 {
     return new Syntax::Highlighter( Syntax::Factory::document( name ), textDocument );
+}
+
+Syntax::Highlighter* Syntax::Factory::highlighterForFilePath( const QString& filePath, TextDocument* textDocument )
+{
+    QMap<int, Syntax::Document*> documents;
+    
+    foreach ( const QString& name, Syntax::Factory::mDocuments.keys() ) {
+        Syntax::Document& document = Syntax::Factory::mDocuments[ name ];
+        
+        if ( QDir::match( document.extensions.toList(), filePath ) ) {
+            documents[ document.priority ] = &document;
+        }
+    }
+    
+    if ( documents.isEmpty() ) {
+        return 0;
+    }
+    
+    return Syntax::Factory::highlighter( ( documents.end() -1 ).value()->name, textDocument );
 }
 
 Syntax::Model* Syntax::Factory::model( QObject* parent )

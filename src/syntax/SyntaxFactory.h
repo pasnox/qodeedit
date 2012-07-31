@@ -18,7 +18,9 @@ namespace Factory {
     bool load( QString* error = 0 );
     void free();
     
+    QStringList availableSyntaxes();
     Syntax::Highlighter* highlighter( const QString& name, TextDocument* textDocument = 0 );
+    Syntax::Highlighter* highlighterForFilePath( const QString& filePath, TextDocument* textDocument = 0 );
     Syntax::Model* model( QObject* parent = 0 );
 }; // Factory
 
