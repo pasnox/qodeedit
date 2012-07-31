@@ -13,10 +13,14 @@ class QodeEditor : public CodeEditor
 
 public:
     QodeEditor( QWidget* parent = 0 );
+    
+    static QString fileContent( const QString& filePath, const QByteArray& textCodec = QByteArray( "UTF-8" ) );
 
 protected slots:
     void save();
 };
+
+Q_DECLARE_METATYPE( QodeEditor* )
 
 class UIMain : public QMainWindow
 {
@@ -28,6 +32,13 @@ public:
     
 protected:
     Ui_UIMain* ui;
+    QHash<QString, QodeEditor*> mEditors;
+    
+    QodeEditor* editor( int row ) const;
+    
+protected slots:
+    void on_lwEditors_currentRowChanged( int row );
+    void on_swEditors_currentChanged( int row );
 };
 
 #endif // UIMAIN_H

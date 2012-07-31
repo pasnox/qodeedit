@@ -11,16 +11,26 @@
    </rect>
   </property>
   <widget class="QWidget" name="centralwidget">
-   <layout class="QVBoxLayout" name="verticalLayout">
-    <item>
+   <layout class="QGridLayout" name="gridLayout">
+    <item row="1" column="1">
+     <widget class="QStackedWidget" name="swEditors"/>
+    </item>
+    <item row="1" column="0">
+     <widget class="QListWidget" name="lwEditors">
+      <property name="maximumSize">
+       <size>
+        <width>120</width>
+        <height>16777215</height>
+       </size>
+      </property>
+     </widget>
+    </item>
+    <item row="0" column="0" colspan="2">
      <widget class="Syntax::ComboBox" name="cbSyntax">
       <property name="sizeAdjustPolicy">
        <enum>QComboBox::AdjustToContents</enum>
       </property>
      </widget>
-    </item>
-    <item>
-     <widget class="QodeEditor" name="qeEdit"/>
     </item>
    </layout>
   </widget>
@@ -34,23 +44,9 @@
    <attribute name="toolBarBreak">
     <bool>false</bool>
    </attribute>
-   <addaction name="aOpen"/>
   </widget>
-  <action name="aOpen">
-   <property name="text">
-    <string>Open...</string>
-   </property>
-   <property name="shortcut">
-    <string>Ctrl+O</string>
-   </property>
-  </action>
  </widget>
  <customwidgets>
-  <customwidget>
-   <class>QodeEditor</class>
-   <extends>QPlainTextEdit</extends>
-   <header>QPlainTextEdit</header>
-  </customwidget>
   <customwidget>
    <class>Syntax::ComboBox</class>
    <extends>QComboBox</extends>
