@@ -1,0 +1,45 @@
+database ga4
+screen
+{
+           Saisie Des Interventions TLM - Comptes rendus journaliers
+
+    Client : [f001  ][f002                          ] Date  [f003      ]
+
+    Duree en Hres         [f004   ]
+    Code Chantier         [f005 ]              
+    Intervenant           [ab]  [nom_inter                         ]
+    Nature Intervention   [xx]  [nom_nature                        ]
+                                      
+    Demande par           [f006      ]     
+    Libelle resume        [f007                                              ]
+    Facturable ?          [x]
+
+    Detail Intervention  
+       [f008                                              ]
+       [f009                                              ]
+       [f010                                              ]
+       [f011                                              ]
+       [f012                                              ]
+}
+end
+tables
+tlm,cttr
+attributes
+f001 = tlm.tier_no;
+f002 = cttr.tier_nom, NOENTRY;
+f003 = tlm.dat_pi;
+f004 = tlm.duree, REQUIRED;
+f005 = tlm.chantier, UPSHIFT;
+ab = tlm.inter, UPSHIFT;
+nom_inter = formonly.nom_inter type char ;
+xx = tlm.nature ;
+nom_nature = formonly.nom_nature type char ;
+f006 = tlm.demande_par,UPSHIFT;
+f007 = tlm.libelle,UPSHIFT;
+x    = tlm.flgfact,UPSHIFT,INCLUDE=("O","N");
+f008 = tlm.nat1,UPSHIFT;
+f009 = tlm.nat2,UPSHIFT;
+f010 = tlm.nat3,UPSHIFT;
+f011 = tlm.nat4,UPSHIFT;
+f012 = tlm.nat5,UPSHIFT;
+end
