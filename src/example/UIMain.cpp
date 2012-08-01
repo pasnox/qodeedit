@@ -7,6 +7,8 @@
 #include "SyntaxHighlighter.h"
 #include "TextDocument.h"
 
+UIMain* UIMain::qMain = 0;
+
 // QodeEditor
 
 QodeEditor::QodeEditor( QWidget* parent )
@@ -67,14 +69,20 @@ public:
 UIMain::UIMain( QWidget* parent )
     : QMainWindow( parent ), ui( new Ui_UIMain )
 {
+    if ( !UIMain::qMain ) {
+        UIMain::qMain = this;
+    }
+    
     ui->setupUi( this );
     ui->toolBar->addWidget( new SpacerWidget( this ) );
     ui->toolBar->addWidget( ui->cbSyntax );
     
+    qInstallMsgHandler( UIMain::messageHandler );
+    
     QString error;
     
     if ( Syntax::Factory::load( &error ) ) {
-        error = "Syntaxes loaded correctly";
+        qWarning() << Q_FUNC_INFO << "Syntaxes loaded correctly";
     }
     
     //qWarning() << Syntax::Factory::availableSyntaxes();
@@ -117,7 +125,7 @@ UIMain::UIMain( QWidget* parent )
             editor->textDocument()->setSyntaxHighlighter( highlighter );
             
             QListWidgetItem* item = new QListWidgetItem( ui->lwEditors );
-            item->setText( highlighter->syntaxDocument().name );
+            item->setText( QString( "%1 (%2)" ).arg( file.fileName() ).arg( highlighter->syntaxDocument().name ) );
             item->setData( Qt::UserRole, QVariant::fromValue( editor ) );
             ui->swEditors->addWidget( editor );
         }
@@ -131,8 +139,36 @@ UIMain::UIMain( QWidget* parent )
 
 UIMain::~UIMain()
 {
+    if ( UIMain::qMain == this ) {
+        UIMain::qMain = 0;
+    }
+    
     delete ui;
     Syntax::Factory::free();
+}
+
+void UIMain::appendDebugMessage( const QString& message )
+{
+    ui->pteDebug->appendPlainText( message );
+}
+
+void UIMain::messageHandler( QtMsgType type, const char* msg )
+{
+    switch ( type ) {
+        case QtDebugMsg:
+            UIMain::qMain->appendDebugMessage( QString( "Debug: %1" ).arg( msg ) );
+            break;
+        case QtWarningMsg:
+            UIMain::qMain->appendDebugMessage( QString( "Warning: %1" ).arg( msg ) );
+            break;
+        case QtCriticalMsg:
+            UIMain::qMain->appendDebugMessage( QString( "Critical: %1" ).arg( msg ) );
+            break;
+        case QtFatalMsg:
+            UIMain::qMain->appendDebugMessage( QString( "Fatal: %1" ).arg( msg ) );
+            //abort();
+            break;
+    }
 }
 
 QodeEditor* UIMain::editor( int row ) const

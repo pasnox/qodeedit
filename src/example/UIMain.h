@@ -30,6 +30,11 @@ public:
     UIMain( QWidget* parent = 0 );
     virtual ~UIMain();
     
+    void appendDebugMessage( const QString& message );
+    
+    static void messageHandler( QtMsgType type, const char* msg );
+    static UIMain* qMain;
+    
 protected:
     Ui_UIMain* ui;
     QHash<QString, QodeEditor*> mEditors;
