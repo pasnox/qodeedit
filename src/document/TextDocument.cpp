@@ -115,7 +115,7 @@ void TextDocument::setSyntaxHighlighter( Syntax::Highlighter* highlighter )
     d->highlighter = highlighter;
     
     if ( d->highlighter ) {
-        highlighter->setDocument( this );
+        d->highlighter->setDocument( this );
     }
 }
 
