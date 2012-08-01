@@ -11,7 +11,7 @@ int main( int argc, char** argv )
     
     UIMain window;
     window.setGeometry( rect );
-    window.show();
+    window.showMaximized();
     
     return app.exec();
 }
