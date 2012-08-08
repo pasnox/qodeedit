@@ -16,10 +16,10 @@ public:
     // the order is important as it defined the presentation order of the margins
     enum Type {
         Invalid = -1,
-        LineBookmark = 0, // done
-        LineNumber = 1, // done
-        LineFold = 2,
-        LineRevision = 3, // done
+        LineBookmarking = 0, // done
+        LineNumbering = 1, // done
+        LineFolding = 2,
+        LineRevisioning = 3, // done
         LineSpacing = 4, // done
     };
     

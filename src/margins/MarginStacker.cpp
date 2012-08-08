@@ -88,16 +88,16 @@ public:
             const int index = indexOfNewMargin( type );
             
             switch ( type ) {
-                case MarginStacker::LineNumber:
+                case MarginStacker::LineNumbering:
                     margin = new LineNumberMargin( stacker );
                     break;
-                case MarginStacker::LineFold:
+                case MarginStacker::LineFolding:
                     //margin = new LineFoldMargin( stacker );
                     break;
-                case MarginStacker::LineBookmark:
+                case MarginStacker::LineBookmarking:
                     margin = new LineBookmarkMargin( stacker );
                     break;
-                case MarginStacker::LineRevision:
+                case MarginStacker::LineRevisioning:
                     margin = new LineRevisionMargin( stacker );
                     break;
                 case MarginStacker::LineSpacing:

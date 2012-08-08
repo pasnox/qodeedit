@@ -300,7 +300,7 @@ void CodeEditor::setBookmark( const QTextBlock& block, bool set )
     data->hasBookmark = set;
     
     if ( d->stacker ) {
-        AbstractMargin* margin = d->stacker->margin( MarginStacker::LineBookmark );
+        AbstractMargin* margin = d->stacker->margin( MarginStacker::LineBookmarking );
         
         if ( margin ) {
             margin->updateLineRect( block.blockNumber() );

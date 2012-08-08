@@ -17,10 +17,10 @@ QodeEditor::QodeEditor( QWidget* parent )
     setCaretLineBackground( QColor( 150, 150, 150, 150 ) );
     
     MarginStacker* margins = new MarginStacker( this );
-    margins->setVisible( MarginStacker::LineBookmark, true );
-    margins->setVisible( MarginStacker::LineNumber, true );
-    margins->setVisible( MarginStacker::LineRevision, true );
-    margins->setVisible( MarginStacker::LineFold, true );
+    margins->setVisible( MarginStacker::LineBookmarking, true );
+    margins->setVisible( MarginStacker::LineNumbering, true );
+    margins->setVisible( MarginStacker::LineRevisioning, true );
+    margins->setVisible( MarginStacker::LineFolding, true );
     margins->setVisible( MarginStacker::LineSpacing, true );
     
     // fake save document shortcut
