@@ -44,6 +44,7 @@ HEADERS *=  \
     src/margins/LineNumberMargin.h \
     src/margins/LineRevisionMargin.h \
     src/margins/LineSpacingMargin.h \
+    src/syntax/SyntaxHelpers.h \
     src/syntax/SyntaxItemData.h \
     src/syntax/SyntaxRule.h \
     src/syntax/SyntaxComment.h \
