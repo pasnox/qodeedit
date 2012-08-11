@@ -1,27 +1,35 @@
 #ifndef SYNTAXHIGHLIGHTING_H
 #define SYNTAXHIGHLIGHTING_H
 
+#include <QExplicitlySharedDataPointer>
+
+#include "SyntaxHelpers.h"
 #include "SyntaxList.h"
 #include "SyntaxContext.h"
 #include "SyntaxItemData.h"
 
 namespace Syntax {
 
+class HighlightingData;
+
 class Highlighting
 {
-public:
-    typedef QHash<QString, Syntax::List> Hash;
+private:
+    QExplicitlySharedDataPointer<Syntax::HighlightingData> d;
     
-    QString initialContext;
-    Syntax::Highlighting::Hash lists;
-    Syntax::Context::Hash contexts;
-    Syntax::ItemData::Hash itemDatas;
+public:
+    typedef QHash<QString, Syntax::List> Hash; // FIXME bad name better set Syntax::HashList typedef
+    
+    SYNTAX_DECL_MEMBER( QString, initialContext );
+    SYNTAX_DECL_MEMBER( Syntax::Highlighting::Hash, lists );
+    SYNTAX_DECL_MEMBER( Syntax::Context::Hash, contexts );
+    SYNTAX_DECL_MEMBER( Syntax::ItemData::Hash, itemDatas );
     
     Highlighting();
+    Highlighting( const Syntax::Highlighting& other );
     virtual ~Highlighting();
     
-    virtual bool operator==( const Syntax::Highlighting& other ) const;
-    virtual bool operator!=( const Syntax::Highlighting& other ) const;
+    SYNTAX_DECL_OPERATORS( Highlighting );
     
     Syntax::List list( const QString& name ) const;
 };

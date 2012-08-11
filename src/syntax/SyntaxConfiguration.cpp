@@ -22,14 +22,12 @@ public:
 };
 
 Syntax::Configuration::Configuration()
-    : d( new Syntax::ConfigurationData ),
-        SYNTAX_D_INIT( encodingReplacementPolicy )
+    : d( new Syntax::ConfigurationData )
 {
 }
 
 Syntax::Configuration::Configuration( const Syntax::Configuration& other )
-    : d( other.d ),
-        SYNTAX_D_INIT( encodingReplacementPolicy )
+    : d( other.d )
 {
 }
 
@@ -37,12 +35,5 @@ Syntax::Configuration::~Configuration()
 {
 }
 
-Syntax::Configuration& Syntax::Configuration::operator=( const Syntax::Configuration& other )
-{
-    if ( this != &other ) {
-        d = other.d;
-        SYNTAX_D_COPY( encodingReplacementPolicy );
-    }
-    
-    return *this;
-}
+SYNTAX_IMPL_MEMBER( QString, encodingReplacementPolicy, Configuration )
+SYNTAX_IMPL_OPERATORS( Configuration )

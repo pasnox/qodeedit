@@ -1,15 +1,22 @@
 #ifndef SYNTAXRULE_H
 #define SYNTAXRULE_H
 
+#include <QExplicitlySharedDataPointer>
 #include <QList>
 #include <QHash>
 #include <QString>
 
+#include "SyntaxHelpers.h"
+
 namespace Syntax {
 
-// TODO: Make this class use d pointer QExplicitSharedData to avoid rule duplication
+class RuleData;
+
 class Rule
 {
+private:
+    QExplicitlySharedDataPointer<Syntax::RuleData> d;
+    
 public:
     typedef QList<Syntax::Rule> List;
     
@@ -35,33 +42,31 @@ public:
         WordDetect
     };
     
-    QString type; ///< Type of the rule
-    
-    QString attribute; // hlcchar, hlchex, hlcstringchar, linecontinue, int, detectidentifier, anychar, regexpr, stringdetect, detectspaces, detect2chars, worddetect, hlcoct, rangedetect, detectchar, float, keyword
-    QString context; // hlcchar, includerules, hlchex, hlcstringchar, linecontinue, int, detectidentifier, anychar, regexpr, stringdetect, detectspaces, detect2chars, worddetect, hlcoct, rangedetect, detectchar, float, keyword
-    QString string; // anychar, regexpr, stringdetect, worddetect, keyword
-    QString beginRegion; // anychar, regexpr, stringdetect, detect2chars, rangedetect, detectchar, keyword
-    bool firstNonSpace; // anychar, regexpr, stringdetect, detect2chars, detectchar, keyword
-    QString char_; // detect2chars, rangedetect, detectchar
-    bool lookAhead; // anychar, regexpr, stringdetect, detectspaces, detect2chars, detectchar, keyword
-    QString endRegion; // anychar, regexpr, stringdetect, detect2chars, rangedetect, detectchar, keyword
-    bool insensitive; // regexpr, stringdetect, keyword
-    QString char1; // detect2chars, rangedetect
-    int column; // anychar, regexpr, stringdetect, detect2chars, detectchar, keyword
-    bool dynamic; // regexpr, stringdetect, detectchar
-    bool minimal; // regexpr
-    bool includeAttrib; // includerules
-    QString region; // regexpr
-    QString lineEndContext; // keyword
-    QString weakDelimiter; // keyword
-    
-    Syntax::Rule::List rules;
+    SYNTAX_DECL_MEMBER( QString, type ); ///< Type of the rule
+    SYNTAX_DECL_MEMBER( QString, attribute ); // hlcchar, hlchex, hlcstringchar, linecontinue, int, detectidentifier, anychar, regexpr, stringdetect, detectspaces, detect2chars, worddetect, hlcoct, rangedetect, detectchar, float, keyword
+    SYNTAX_DECL_MEMBER( QString, context ); // hlcchar, includerules, hlchex, hlcstringchar, linecontinue, int, detectidentifier, anychar, regexpr, stringdetect, detectspaces, detect2chars, worddetect, hlcoct, rangedetect, detectchar, float, keyword
+    SYNTAX_DECL_MEMBER( QString, string ); // anychar, regexpr, stringdetect, worddetect, keyword
+    SYNTAX_DECL_MEMBER( QString, beginRegion ); // anychar, regexpr, stringdetect, detect2chars, rangedetect, detectchar, keyword
+    SYNTAX_DECL_MEMBER( bool, firstNonSpace ); // anychar, regexpr, stringdetect, detect2chars, detectchar, keyword
+    SYNTAX_DECL_MEMBER( QString, char_ ); // detect2chars, rangedetect, detectchar
+    SYNTAX_DECL_MEMBER( bool, lookAhead ); // anychar, regexpr, stringdetect, detectspaces, detect2chars, detectchar, keyword
+    SYNTAX_DECL_MEMBER( QString, endRegion ); // anychar, regexpr, stringdetect, detect2chars, rangedetect, detectchar, keyword
+    SYNTAX_DECL_MEMBER( bool, insensitive ); // regexpr, stringdetect, keyword
+    SYNTAX_DECL_MEMBER( QString, char1 ); // detect2chars, rangedetect
+    SYNTAX_DECL_MEMBER( int, column ); // anychar, regexpr, stringdetect, detect2chars, detectchar, keyword
+    SYNTAX_DECL_MEMBER( bool, dynamic ); // regexpr, stringdetect, detectchar
+    SYNTAX_DECL_MEMBER( bool, minimal ); // regexpr
+    SYNTAX_DECL_MEMBER( bool, includeAttrib ); // includerules
+    SYNTAX_DECL_MEMBER( QString, region ); // regexpr
+    SYNTAX_DECL_MEMBER( QString, lineEndContext ); // keyword
+    SYNTAX_DECL_MEMBER( QString, weakDelimiter ); // keyword
+    SYNTAX_DECL_MEMBER( Syntax::Rule::List, rules ); // children rules
     
     Rule();
+    Rule( const Syntax::Rule& other );
     virtual ~Rule();
     
-    virtual bool operator==( const Syntax::Rule& other ) const;
-    virtual bool operator!=( const Syntax::Rule& other ) const;
+    SYNTAX_DECL_OPERATORS( Rule );
     
     Syntax::Rule::Type enumType() const;
 };

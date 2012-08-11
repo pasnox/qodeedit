@@ -19,19 +19,18 @@ private:
 public:
     typedef QList<Syntax::Comment> List;
     
-    QString& name; ///< Name of the item data
-    QString& start; ///< Comment start string
-    QString& end; ///< Comment end string
-    QString& region; ///< ?
-    QString& weakDeliminator;
-    QString& position;
+    SYNTAX_DECL_MEMBER( QString, name ); ///< Name of the item data
+    SYNTAX_DECL_MEMBER( QString, start ); ///< Comment start string
+    SYNTAX_DECL_MEMBER( QString, end ); ///< Comment end string
+    SYNTAX_DECL_MEMBER( QString, region ); ///< ?
+    SYNTAX_DECL_MEMBER( QString, weakDeliminator );
+    SYNTAX_DECL_MEMBER( QString, position );
     
     Comment();
     Comment( const Syntax::Comment& other );
     virtual ~Comment();
     
-    SYNTAX_OPERATORS( Comment )
-    virtual Syntax::Comment& operator=( const Syntax::Comment& other );
+    SYNTAX_DECL_OPERATORS( Comment );
 };
 
 }; // Syntax

@@ -1,20 +1,28 @@
 #ifndef SYNTAXFOLDING_H
 #define SYNTAXFOLDING_H
 
+#include <QExplicitlySharedDataPointer>
 #include <QString>
+
+#include "SyntaxHelpers.h"
 
 namespace Syntax {
 
+class FoldingData;
+
 class Folding
 {
+private:
+    QExplicitlySharedDataPointer<Syntax::FoldingData> d;
+    
 public:
-    bool indentationSensitive;
+    SYNTAX_DECL_MEMBER( bool, indentationSensitive );
     
     Folding();
+    Folding( const Syntax::Folding& other );
     virtual ~Folding();
     
-    virtual bool operator==( const Syntax::Folding& other ) const;
-    virtual bool operator!=( const Syntax::Folding& other ) const;
+    SYNTAX_DECL_OPERATORS( Folding );
 };
 
 }; // Syntax

@@ -1,22 +1,43 @@
 #include "SyntaxEmptyLine.h"
 
-Syntax::EmptyLine::EmptyLine()
+class Syntax::EmptyLineData : public QSharedData
 {
-    caseSensitive = false;
+public:
+    QString regExpr;
+    bool caseSensitive;
+    
+    EmptyLineData()
+        : QSharedData(),
+            caseSensitive( false )
+    {
+    }
+    
+    EmptyLineData( const Syntax::EmptyLineData& other )
+        : QSharedData( other ),
+            SYNTAX_OTHER_INIT( regExpr ),
+            SYNTAX_OTHER_INIT( caseSensitive )
+    {
+    }
+    
+    virtual ~EmptyLineData()
+    {
+    }
+};
+
+Syntax::EmptyLine::EmptyLine()
+    : d( new Syntax::EmptyLineData )
+{
+}
+
+Syntax::EmptyLine::EmptyLine( const Syntax::EmptyLine& other )
+    : d( other.d )
+{
 }
 
 Syntax::EmptyLine::~EmptyLine()
 {
 }
 
-bool Syntax::EmptyLine::operator==( const Syntax::EmptyLine& other ) const
-{
-    return regExpr == other.regExpr &&
-        caseSensitive == other.caseSensitive
-    ;
-}
-
-bool Syntax::EmptyLine::operator!=( const Syntax::EmptyLine& other ) const
-{
-    return !operator==( other );
-}
+SYNTAX_IMPL_MEMBER( QString, regExpr, EmptyLine )
+SYNTAX_IMPL_MEMBER( bool, caseSensitive, EmptyLine )
+SYNTAX_IMPL_OPERATORS( EmptyLine )

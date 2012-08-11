@@ -1,6 +1,9 @@
 #ifndef SYNTAXGENERAL_H
 #define SYNTAXGENERAL_H
 
+#include <QExplicitlySharedDataPointer>
+
+#include "SyntaxHelpers.h"
 #include "SyntaxComment.h"
 #include "SyntaxKeywords.h"
 #include "SyntaxFolding.h"
@@ -9,20 +12,25 @@
 
 namespace Syntax {
 
+class GeneralData;
+
 class General
 {
+private:
+    QExplicitlySharedDataPointer<Syntax::GeneralData> d;
+    
 public:
-    Syntax::Comment::List comments;
-    Syntax::Keywords keywords;
-    Syntax::Folding folding;
-    Syntax::Indentation indentation;
-    Syntax::EmptyLine::List emptyLines;
+    SYNTAX_DECL_MEMBER( Syntax::Comment::List, comments );
+    SYNTAX_DECL_MEMBER( Syntax::Keywords, keywords );
+    SYNTAX_DECL_MEMBER( Syntax::Folding, folding );
+    SYNTAX_DECL_MEMBER( Syntax::Indentation, indentation );
+    SYNTAX_DECL_MEMBER( Syntax::EmptyLine::List, emptyLines );
     
     General();
+    General( const Syntax::General& other );
     virtual ~General();
     
-    virtual bool operator==( const Syntax::General& other ) const;
-    virtual bool operator!=( const Syntax::General& other ) const;
+    SYNTAX_DECL_OPERATORS( General );
 };
 
 }; // Syntax

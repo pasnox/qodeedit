@@ -32,24 +32,12 @@ public:
 };
 
 Syntax::Comment::Comment()
-    : d( new Syntax::CommentData ),
-        SYNTAX_D_INIT( name ),
-        SYNTAX_D_INIT( start ),
-        SYNTAX_D_INIT( end ),
-        SYNTAX_D_INIT( region ),
-        SYNTAX_D_INIT( weakDeliminator ),
-        SYNTAX_D_INIT( position )
+    : d( new Syntax::CommentData )
 {
 }
 
 Syntax::Comment::Comment( const Syntax::Comment& other )
-    : d( other.d ),
-        SYNTAX_D_INIT( name ),
-        SYNTAX_D_INIT( start ),
-        SYNTAX_D_INIT( end ),
-        SYNTAX_D_INIT( region ),
-        SYNTAX_D_INIT( weakDeliminator ),
-        SYNTAX_D_INIT( position )
+    : d( other.d )
 {
 }
 
@@ -57,17 +45,10 @@ Syntax::Comment::~Comment()
 {
 }
 
-Syntax::Comment& Syntax::Comment::operator=( const Syntax::Comment& other )
-{
-    if ( this != &other ) {
-        d = other.d;
-        SYNTAX_D_COPY( name );
-        SYNTAX_D_COPY( start );
-        SYNTAX_D_COPY( end );
-        SYNTAX_D_COPY( region );
-        SYNTAX_D_COPY( weakDeliminator );
-        SYNTAX_D_COPY( position );
-    }
-    
-    return *this;
-}
+SYNTAX_IMPL_MEMBER( QString, name, Comment )
+SYNTAX_IMPL_MEMBER( QString, start, Comment )
+SYNTAX_IMPL_MEMBER( QString, end, Comment )
+SYNTAX_IMPL_MEMBER( QString, region, Comment )
+SYNTAX_IMPL_MEMBER( QString, weakDeliminator, Comment )
+SYNTAX_IMPL_MEMBER( QString, position, Comment )
+SYNTAX_IMPL_OPERATORS( Comment )

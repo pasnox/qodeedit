@@ -125,7 +125,7 @@ UIMain::UIMain( QWidget* parent )
             editor->textDocument()->setSyntaxHighlighter( highlighter );
             
             QListWidgetItem* item = new QListWidgetItem( ui->lwEditors );
-            item->setText( QString( "%1 (%2)" ).arg( file.fileName() ).arg( highlighter->syntaxDocument().name ) );
+            item->setText( QString( "%1 (%2)" ).arg( file.fileName() ).arg( highlighter->syntaxDocument().name() ) );
             item->setData( Qt::UserRole, QVariant::fromValue( editor ) );
             ui->swEditors->addWidget( editor );
         }
@@ -196,5 +196,5 @@ void UIMain::on_swEditors_currentChanged( int row )
         ui->lwEditors->setCurrentRow( row );
     }
     
-    ui->cbSyntax->setCurrentSyntax( editor( row )->textDocument()->syntaxHighlighter()->syntaxDocument().name );
+    ui->cbSyntax->setCurrentSyntax( editor( row )->textDocument()->syntaxHighlighter()->syntaxDocument().name() );
 }

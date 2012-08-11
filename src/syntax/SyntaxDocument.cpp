@@ -68,50 +68,12 @@ public:
 };
 
 Syntax::Document::Document()
-    : d( new Syntax::DocumentData ),
-        SYNTAX_D_INIT( name ),
-        SYNTAX_D_INIT( localizedName ),
-        SYNTAX_D_INIT( section ),
-        SYNTAX_D_INIT( extensions ),
-        SYNTAX_D_INIT( version ),
-        SYNTAX_D_INIT( kateVersion ),
-        SYNTAX_D_INIT( indenter ),
-        SYNTAX_D_INIT( mimeTypes ),
-        SYNTAX_D_INIT( priority ),
-        SYNTAX_D_INIT( hidden ),
-        SYNTAX_D_INIT( style ),
-        SYNTAX_D_INIT( author ),
-        SYNTAX_D_INIT( license ),
-        SYNTAX_D_INIT( caseSensitive ),
-        //SYNTAX_D_INIT( identifier ),
-        SYNTAX_D_INIT( finalyzed ),
-        SYNTAX_D_INIT( highlighting ),
-        SYNTAX_D_INIT( general ),
-        SYNTAX_D_INIT( spellChecking )
+    : d( new Syntax::DocumentData )
 {
 }
 
 Syntax::Document::Document( const Syntax::Document& other )
-    : d( other.d ),
-        SYNTAX_D_INIT( name ),
-        SYNTAX_D_INIT( localizedName ),
-        SYNTAX_D_INIT( section ),
-        SYNTAX_D_INIT( extensions ),
-        SYNTAX_D_INIT( version ),
-        SYNTAX_D_INIT( kateVersion ),
-        SYNTAX_D_INIT( indenter ),
-        SYNTAX_D_INIT( mimeTypes ),
-        SYNTAX_D_INIT( priority ),
-        SYNTAX_D_INIT( hidden ),
-        SYNTAX_D_INIT( style ),
-        SYNTAX_D_INIT( author ),
-        SYNTAX_D_INIT( license ),
-        SYNTAX_D_INIT( caseSensitive ),
-        //SYNTAX_D_INIT( identifier ),
-        SYNTAX_D_INIT( finalyzed ),
-        SYNTAX_D_INIT( highlighting ),
-        SYNTAX_D_INIT( general ),
-        SYNTAX_D_INIT( spellChecking )
+    : d( other.d )
 {
 }
 
@@ -119,40 +81,33 @@ Syntax::Document::~Document()
 {
 }
 
-Syntax::Document& Syntax::Document::operator=( const Syntax::Document& other )
-{
-    if ( this != &other ) {
-        d = other.d;
-        SYNTAX_D_COPY( name );
-        SYNTAX_D_COPY( localizedName );
-        SYNTAX_D_COPY( section );
-        SYNTAX_D_COPY( extensions );
-        SYNTAX_D_COPY( version );
-        SYNTAX_D_COPY( kateVersion );
-        SYNTAX_D_COPY( indenter );
-        SYNTAX_D_COPY( mimeTypes );
-        SYNTAX_D_COPY( priority );
-        SYNTAX_D_COPY( hidden );
-        SYNTAX_D_COPY( style );
-        SYNTAX_D_COPY( author );
-        SYNTAX_D_COPY( license );
-        SYNTAX_D_COPY( caseSensitive );
-        //SYNTAX_D_COPY( identifier );
-        SYNTAX_D_COPY( finalyzed );
-        SYNTAX_D_COPY( highlighting );
-        SYNTAX_D_COPY( general );
-        SYNTAX_D_COPY( spellChecking );
-    }
-    
-    return *this;
-}
+SYNTAX_IMPL_MEMBER( QString, name, Document )
+SYNTAX_IMPL_MEMBER( QString, localizedName, Document )
+SYNTAX_IMPL_MEMBER( QString, section, Document )
+SYNTAX_IMPL_MEMBER( Syntax::List, extensions, Document )
+SYNTAX_IMPL_MEMBER( QString, version, Document )
+SYNTAX_IMPL_MEMBER( QString, kateVersion, Document )
+SYNTAX_IMPL_MEMBER( QString, indenter, Document )
+SYNTAX_IMPL_MEMBER( Syntax::List, mimeTypes, Document )
+SYNTAX_IMPL_MEMBER( int, priority, Document )
+SYNTAX_IMPL_MEMBER( bool, hidden, Document )
+SYNTAX_IMPL_MEMBER( QString, style, Document )
+SYNTAX_IMPL_MEMBER( QString, author, Document )
+SYNTAX_IMPL_MEMBER( QString, license, Document )
+SYNTAX_IMPL_MEMBER( bool, caseSensitive, Document )
+//SYNTAX_IMPL_MEMBER( QString, identifier, Document )
+SYNTAX_IMPL_MEMBER( bool, finalyzed, Document )
+SYNTAX_IMPL_MEMBER( Syntax::Highlighting, highlighting, Document )
+SYNTAX_IMPL_MEMBER( Syntax::General, general, Document )
+SYNTAX_IMPL_MEMBER( Syntax::SpellChecking, spellChecking, Document )
+SYNTAX_IMPL_OPERATORS( Document )
 
 bool Syntax::Document::operator<( const Syntax::Document& other ) const
 {
     // HINT: compare priority too ?
     return QodeEdit::localeAwareStringLessThan(
-        localizedName.isEmpty() ? name : localizedName,
-        other.localizedName.isEmpty() ? other.name : other.localizedName
+        d->localizedName.isEmpty() ? d->name : d->localizedName,
+        other.d->localizedName.isEmpty() ? other.d->name : other.d->localizedName
     );
 }
 
@@ -255,11 +210,11 @@ QHash<QString, Syntax::Document> Syntax::Document::open( const QStringList& file
         QXmlInputSource source( &file );
         
         if ( xmlReader.parse( &document, source ) ) {
-            Q_ASSERT( !document.name.isEmpty() );
+            Q_ASSERT( !document.name().isEmpty() );
             
-            Syntax::Document& currentDocument = documents[ document.name ];
+            Syntax::Document& currentDocument = documents[ document.name() ];
             
-            if ( QodeEdit::versionStringLessThan( currentDocument.version, document.version ) ) {
+            if ( QodeEdit::versionStringLessThan( currentDocument.version(), document.version() ) ) {
                 currentDocument = document;
             }
             

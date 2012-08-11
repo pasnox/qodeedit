@@ -1,22 +1,30 @@
 #ifndef SYNTAXSPELLCHECKING_H
 #define SYNTAXSPELLCHECKING_H
 
+#include <QExplicitlySharedDataPointer>
+
+#include "SyntaxHelpers.h"
 #include "SyntaxConfiguration.h"
 #include "SyntaxEncoding.h"
 
 namespace Syntax {
 
+class SpellCheckingData;
+
 class SpellChecking
 {
+private:
+    QExplicitlySharedDataPointer<Syntax::SpellCheckingData> d;
+    
 public:
-    Syntax::Configuration configuration;
-    Syntax::Encoding::List encodings;
+    SYNTAX_DECL_MEMBER( Syntax::Configuration, configuration );
+    SYNTAX_DECL_MEMBER( Syntax::Encoding::List, encodings );
     
     SpellChecking();
+    SpellChecking( const Syntax::SpellChecking& other );
     virtual ~SpellChecking();
     
-    virtual bool operator==( const Syntax::SpellChecking& other ) const;
-    virtual bool operator!=( const Syntax::SpellChecking& other ) const;
+    SYNTAX_DECL_OPERATORS( SpellChecking );
 };
 
 }; // Syntax

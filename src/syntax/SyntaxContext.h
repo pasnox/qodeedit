@@ -20,22 +20,21 @@ private:
 public:
     typedef QHash<QString, Syntax::Context> Hash;
     
-    QString& name; ///< Name of the context
-    QString& attribute;
-    QString& lineEndContext;
-    bool& fallThrough;
-    QString& fallThroughContext;
-    bool& dynamic;
-    bool& noIndentationBasedFolding;
-    bool& caseSensitive;
-    Syntax::Rule::List& rules; ///< Rules of the context
+    SYNTAX_DECL_MEMBER( QString, name ); ///< Name of the context
+    SYNTAX_DECL_MEMBER( QString, attribute );
+    SYNTAX_DECL_MEMBER( QString, lineEndContext );
+    SYNTAX_DECL_MEMBER( bool, fallThrough );
+    SYNTAX_DECL_MEMBER( QString, fallThroughContext );
+    SYNTAX_DECL_MEMBER( bool, dynamic );
+    SYNTAX_DECL_MEMBER( bool, noIndentationBasedFolding );
+    SYNTAX_DECL_MEMBER( bool, caseSensitive );
+    SYNTAX_DECL_MEMBER( Syntax::Rule::List, rules ); ///< Rules of the context
     
     Context();
     Context( const Syntax::Context& other );
     virtual ~Context();
     
-    SYNTAX_OPERATORS( Context )
-    virtual Syntax::Context& operator=( const Syntax::Context& other );
+    SYNTAX_DECL_OPERATORS( Context );
 };
 
 }; // Syntax

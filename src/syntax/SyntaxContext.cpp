@@ -42,30 +42,12 @@ public:
 };
 
 Syntax::Context::Context()
-    : d( new Syntax::ContextData ),
-        SYNTAX_D_INIT( name ),
-        SYNTAX_D_INIT( attribute ),
-        SYNTAX_D_INIT( lineEndContext ),
-        SYNTAX_D_INIT( fallThrough ),
-        SYNTAX_D_INIT( fallThroughContext ),
-        SYNTAX_D_INIT( dynamic ),
-        SYNTAX_D_INIT( noIndentationBasedFolding ),
-        SYNTAX_D_INIT( caseSensitive ),
-        SYNTAX_D_INIT( rules )
+    : d( new Syntax::ContextData )
 {
 }
 
 Syntax::Context::Context( const Syntax::Context& other )
-    : d( other.d ),
-        SYNTAX_D_INIT( name ),
-        SYNTAX_D_INIT( attribute ),
-        SYNTAX_D_INIT( lineEndContext ),
-        SYNTAX_D_INIT( fallThrough ),
-        SYNTAX_D_INIT( fallThroughContext ),
-        SYNTAX_D_INIT( dynamic ),
-        SYNTAX_D_INIT( noIndentationBasedFolding ),
-        SYNTAX_D_INIT( caseSensitive ),
-        SYNTAX_D_INIT( rules )
+    : d( other.d )
 {
 }
 
@@ -73,20 +55,13 @@ Syntax::Context::~Context()
 {
 }
 
-Syntax::Context& Syntax::Context::operator=( const Syntax::Context& other )
-{
-    if ( this != &other ) {
-        d = other.d;
-        SYNTAX_D_COPY( name );
-        SYNTAX_D_COPY( attribute );
-        SYNTAX_D_COPY( lineEndContext );
-        SYNTAX_D_COPY( fallThrough );
-        SYNTAX_D_COPY( fallThroughContext );
-        SYNTAX_D_COPY( dynamic );
-        SYNTAX_D_COPY( noIndentationBasedFolding );
-        SYNTAX_D_COPY( caseSensitive );
-        SYNTAX_D_COPY( rules );
-    }
-    
-    return *this;
-}
+SYNTAX_IMPL_MEMBER( QString, name, Context )
+SYNTAX_IMPL_MEMBER( QString, attribute, Context )
+SYNTAX_IMPL_MEMBER( QString, lineEndContext, Context )
+SYNTAX_IMPL_MEMBER( bool, fallThrough, Context )
+SYNTAX_IMPL_MEMBER( QString, fallThroughContext, Context )
+SYNTAX_IMPL_MEMBER( bool, dynamic, Context )
+SYNTAX_IMPL_MEMBER( bool, noIndentationBasedFolding, Context )
+SYNTAX_IMPL_MEMBER( bool, caseSensitive, Context )
+SYNTAX_IMPL_MEMBER( Syntax::Rule::List, rules, Context )
+SYNTAX_IMPL_OPERATORS( Context )

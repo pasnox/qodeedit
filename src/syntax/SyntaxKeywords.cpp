@@ -1,24 +1,49 @@
 #include "SyntaxKeywords.h"
 
-Syntax::Keywords::Keywords()
+class Syntax::KeywordsData : public QSharedData
 {
-    caseSensitive = false;
+public:
+    bool caseSensitive;
+    QString weakDeliminator;
+    QString additionalDeliminator;
+    QString wordWrapDeliminator;
+    
+    KeywordsData()
+        : QSharedData(),
+            caseSensitive( false )
+    {
+    }
+    
+    KeywordsData( const Syntax::KeywordsData& other )
+        : QSharedData( other ),
+            SYNTAX_OTHER_INIT( caseSensitive ),
+            SYNTAX_OTHER_INIT( weakDeliminator ),
+            SYNTAX_OTHER_INIT( additionalDeliminator ),
+            SYNTAX_OTHER_INIT( wordWrapDeliminator )
+    {
+    }
+    
+    virtual ~KeywordsData()
+    {
+    }
+};
+
+Syntax::Keywords::Keywords()
+    : d( new Syntax::KeywordsData )
+{
+}
+
+Syntax::Keywords::Keywords( const Syntax::Keywords& other )
+    : d( other.d )
+{
 }
 
 Syntax::Keywords::~Keywords()
 {
 }
 
-bool Syntax::Keywords::operator==( const Syntax::Keywords& other ) const
-{
-    return caseSensitive == other.caseSensitive &&
-        weakDeliminator == other.weakDeliminator &&
-        additionalDeliminator == other.additionalDeliminator &&
-        wordWrapDeliminator == other.wordWrapDeliminator
-    ;
-}
-
-bool Syntax::Keywords::operator!=( const Syntax::Keywords& other ) const
-{
-    return !operator==( other );
-}
+SYNTAX_IMPL_MEMBER( bool, caseSensitive, Keywords )
+SYNTAX_IMPL_MEMBER( QString, weakDeliminator, Keywords )
+SYNTAX_IMPL_MEMBER( QString, additionalDeliminator, Keywords )
+SYNTAX_IMPL_MEMBER( QString, wordWrapDeliminator, Keywords )
+SYNTAX_IMPL_OPERATORS( Keywords )

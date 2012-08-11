@@ -26,14 +26,14 @@ public:
         foreach ( const QString& syntax, syntaxes ) {
             const Syntax::Document& document = (*constSyntaxes)[ syntax ];
             
-            if ( icons.contains( document.name ) ) {
+            if ( icons.contains( document.name() ) ) {
                 continue;
             }
             
             QString iconName;
             QIcon icon;
             
-            foreach ( QString key, document.mimeTypes ) {
+            foreach ( QString key, document.mimeTypes() ) {
                 key = key.replace( "/", "-" );
                 
                 if ( !QIcon::hasThemeIcon( key ) ) {
@@ -47,11 +47,11 @@ public:
                 iconName = "text-plain";
             }
             
-            icon = icons.value( document.name, QIcon() );
+            icon = icons.value( document.name(), QIcon() );
             
             if ( icon.isNull() ) {
                 icon = QIcon::fromTheme( iconName );
-                icons[ document.name ] = icon;
+                icons[ document.name() ] = icon;
             }
         }
     }
@@ -61,7 +61,7 @@ public:
         QStringList newSyntaxes;
         
         foreach ( const Syntax::Document& document, constSyntaxes->values() ) {
-            newSyntaxes << ( document.localizedName.isEmpty() ? document.name : document.localizedName );
+            newSyntaxes << ( document.localizedName().isEmpty() ? document.name() : document.localizedName() );
         }
         
         qSort( newSyntaxes.begin(), newSyntaxes.end(), QodeEdit::localeAwareStringLessThan );
@@ -81,12 +81,12 @@ public:
         
         for ( int i = 0; i < newSyntaxes.count(); i++ ) {
             const Syntax::Document& document = (*constSyntaxes)[ newSyntaxes[ i ] ];
-            newPositions[ document.name ] = i;
+            newPositions[ document.name() ] = i;
         }
         
         for ( int i = 0; i < oldSyntaxes.count(); i++ ) {
             const Syntax::Document& document = (*constSyntaxes)[ oldSyntaxes[ i ] ];
-            const int row = newPositions.value( document.name, -1 );
+            const int row = newPositions.value( document.name(), -1 );
             
             if ( row == -1 ) {
                 newIndexes[ i ] = QModelIndex();
@@ -133,12 +133,12 @@ QVariant Syntax::Model::data( const QModelIndex& index, int role ) const
     
     switch ( role ) {
         case Qt::DecorationRole:
-            return d->icons.value( document.name );
+            return d->icons.value( document.name() );
         case Qt::DisplayRole:
         case Qt::ToolTipRole:
-            return document.localizedName.isEmpty() ? document.name : document.localizedName;
+            return document.localizedName().isEmpty() ? document.name() : document.localizedName();
         case Syntax::Model::InternalName:
-            return document.name;
+            return document.name();
     }
     
     return QVariant();

@@ -16,14 +16,13 @@ private:
     QExplicitlySharedDataPointer<Syntax::ConfigurationData> d;
     
 public:
-    QString& encodingReplacementPolicy;
+    SYNTAX_DECL_MEMBER( QString, encodingReplacementPolicy );
     
     Configuration();
     Configuration( const Syntax::Configuration& other );
     virtual ~Configuration();
     
-    SYNTAX_OPERATORS( Configuration )
-    virtual Syntax::Configuration& operator=( const Syntax::Configuration& other );
+    SYNTAX_DECL_OPERATORS( Configuration );
 };
 
 }; // Syntax
