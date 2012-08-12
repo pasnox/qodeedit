@@ -7,6 +7,8 @@
 #include "SyntaxHighlighter.h"
 #include "TextDocument.h"
 
+#include <QUrl>
+
 UIMain* UIMain::qMain = 0;
 
 // QodeEditor
@@ -135,6 +137,24 @@ UIMain::UIMain( QWidget* parent )
     }
     
     statusBar()->showMessage( error );
+    
+    /*qWarning() << Syntax::Factory::mimeTypeForFile( "toto.h" );
+    qWarning() << Syntax::Factory::mimeTypeForFile( "toto.c" );
+    qWarning() << Syntax::Factory::mimeTypeForFile( "toto.cpp" );
+    qWarning() << Syntax::Factory::mimeTypeForFile( "toto.adb" );
+    
+    qWarning() << Syntax::Factory::mimeTypeForData( "#include <iostream>\n" );
+    qWarning() << Syntax::Factory::mimeTypeForData( "#include <stdlib.h>\n" );
+    qWarning() << Syntax::Factory::mimeTypeForData( "#import <stdlib.h>\n" );
+    
+    qWarning() << Syntax::Factory::mimeTypeForUrl( QUrl( "http://toto.com/test.html" ) );
+    qWarning() << Syntax::Factory::mimeTypeForUrl( QUrl( "http://toto.com/test.pdf" ) );
+    qWarning() << Syntax::Factory::mimeTypeForUrl( QUrl( "http://toto.com/test.jpg" ) );
+    
+    qWarning() << Syntax::Factory::mimeTypesForFileName( "toto.h" );
+    qWarning() << Syntax::Factory::mimeTypesForFileName( "toto.c" );
+    qWarning() << Syntax::Factory::mimeTypesForFileName( "toto.cpp" );
+    qWarning() << Syntax::Factory::mimeTypesForFileName( "toto.adb" );*/
 }
 
 UIMain::~UIMain()

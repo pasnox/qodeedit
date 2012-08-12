@@ -8,12 +8,14 @@
 #include <QDir>
 #include <QPointer>
 #include <QTime>
+#include <QMimeDatabase>
 #include <QDebug>
 
 namespace Syntax {
     namespace Factory {
         QHash<QString, Syntax::Document> mDocuments;
         QList<QPointer<Syntax::Model> > mModels;
+        QMimeDatabase mMimeDatabase;
         
         // forward declare
         void buildDocument( Syntax::Document& document );
@@ -227,6 +229,53 @@ QStringList Syntax::Factory::availableSyntaxes()
     return syntaxes;
 }
 
+QString Syntax::Factory::mimeTypeForFile( const QString& fileName )
+{
+    return mMimeDatabase.mimeTypeForFile( fileName ).name();
+}
+
+QString Syntax::Factory::mimeTypeForFile( const QFileInfo& fileInfo )
+{
+    return mMimeDatabase.mimeTypeForFile( fileInfo ).name();
+}
+
+QString Syntax::Factory::mimeTypeForData( const QByteArray& data )
+{
+    return mMimeDatabase.mimeTypeForData( data ).name();
+}
+
+QString Syntax::Factory::mimeTypeForData( QIODevice* device )
+{
+    return mMimeDatabase.mimeTypeForData( device ).name();
+}
+
+QString Syntax::Factory::mimeTypeForFileNameAndData( const QString& fileName, QIODevice* device )
+{
+    return mMimeDatabase.mimeTypeForFileNameAndData( fileName, device ).name();
+}
+
+QString Syntax::Factory::mimeTypeForFileNameAndData( const QString& fileName, const QByteArray& data )
+{
+    return mMimeDatabase.mimeTypeForFileNameAndData( fileName, data ).name();
+}
+
+QString Syntax::Factory::mimeTypeForUrl( const QUrl& url )
+{
+    return mMimeDatabase.mimeTypeForUrl( url ).name();
+}
+
+QStringList Syntax::Factory::mimeTypesForFileName( const QString& fileName )
+{
+    const QList<QMimeType> mimeTypes = mMimeDatabase.mimeTypesForFileName( fileName );
+    QStringList names;
+    
+    for ( int i = 0; i < mimeTypes.count(); i++ ) {
+        names << mimeTypes[ i ].name();
+    }
+    
+    return names;
+}
+
 Syntax::Highlighter* Syntax::Factory::highlighter( const QString& name, TextDocument* textDocument )
 {
     return new Syntax::Highlighter( Syntax::Factory::document( name ), textDocument );
@@ -240,6 +289,25 @@ Syntax::Highlighter* Syntax::Factory::highlighterForFilePath( const QString& fil
         Syntax::Document& document = Syntax::Factory::mDocuments[ name ];
         
         if ( QDir::match( document.extensions().toList(), filePath ) ) {
+            documents[ document.priority() ] = &document;
+        }
+    }
+    
+    if ( documents.isEmpty() ) {
+        return 0;
+    }
+    
+    return Syntax::Factory::highlighter( ( documents.end() -1 ).value()->name(), textDocument );
+}
+
+Syntax::Highlighter* Syntax::Factory::highlighterForMimeType( const QString& mimeType, TextDocument* textDocument )
+{
+    QMap<int, Syntax::Document*> documents;
+    
+    foreach ( const QString& name, Syntax::Factory::mDocuments.keys() ) {
+        Syntax::Document& document = Syntax::Factory::mDocuments[ name ];
+        
+        if ( document.mimeTypes().contains( mimeType ) ) {
             documents[ document.priority() ] = &document;
         }
     }

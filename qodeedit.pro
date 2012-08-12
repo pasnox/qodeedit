@@ -28,6 +28,32 @@ QT *= xml
 INCLUDEPATH *= $$getFolders( . )
 DEPENDPATH *= $${INCLUDEPATH}
 
+greaterThan( QT_MAJOR_VERSION, 4 ) {
+} else:greaterThan( QT_MAJOR_VERSION, 3 ) {
+    MIMETYPES_QT4_ROOT = mimetypes-qt4.git
+    
+    exists( $${MIMETYPES_QT4_ROOT} ) {
+        SOURCES_PATHS = $$getFolders( $${MIMETYPES_QT4_ROOT} )
+        DEPENDPATH *= $${SOURCES_PATHS}
+        INCLUDEPATH *= $${SOURCES_PATHS}
+
+        include( $${MIMETYPES_QT4_ROOT}/mimetypes/mimetypes.pri )
+
+        HEADERS *= $${MIMETYPES_QT4_ROOT}/io/qstandardpaths.h
+        SOURCES *= $${MIMETYPES_QT4_ROOT}/io/qstandardpaths.cpp
+
+        macx {
+            SOURCES *= $${MIMETYPES_QT4_ROOT}/io/*_mac.c*
+        } else:unix {
+            SOURCES *= $${MIMETYPES_QT4_ROOT}/io/*_unix.c*
+        } else:win32 {
+            SOURCES *= $${MIMETYPES_QT4_ROOT}/io/*_win.c*
+        }
+    } else {
+        error( Qt 4 build need dependency project mimetypes-qt4 uncompressed in current folder as $${MIMETYPES_QT4_ROOT}. You can get it here https://github.com/pasnox/mimetypes-qt4 )
+    }
+}
+
 FORMS *=  \
     src/example/UIMain.ui
 
