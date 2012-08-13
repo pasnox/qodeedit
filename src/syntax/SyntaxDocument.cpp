@@ -62,8 +62,7 @@ public:
     {
     }
     
-    virtual ~DocumentData()
-    {
+    virtual ~DocumentData() {
     }
 };
 

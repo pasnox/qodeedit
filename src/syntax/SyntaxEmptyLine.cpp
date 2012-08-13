@@ -19,8 +19,7 @@ public:
     {
     }
     
-    virtual ~EmptyLineData()
-    {
+    virtual ~EmptyLineData() {
     }
 };
 

@@ -39,8 +39,7 @@ public:
     {
     }
     
-    virtual ~ItemDataData()
-    {
+    virtual ~ItemDataData() {
     }
 };
 

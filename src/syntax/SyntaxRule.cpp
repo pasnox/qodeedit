@@ -60,8 +60,7 @@ public:
     {
     }
     
-    virtual ~RuleData()
-    {
+    virtual ~RuleData() {
     }
 };
 

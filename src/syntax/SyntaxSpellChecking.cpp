@@ -18,8 +18,7 @@ public:
     {
     }
     
-    virtual ~SpellCheckingData()
-    {
+    virtual ~SpellCheckingData() {
     }
 };
 

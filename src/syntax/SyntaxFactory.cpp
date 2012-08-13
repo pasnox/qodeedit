@@ -1,4 +1,5 @@
 #include "SyntaxFactory.h"
+#include "SyntaxDocumentBuilder.h"
 #include "SyntaxHighlighter.h"
 #include "SyntaxModel.h"
 #include "TextDocument.h"
@@ -17,128 +18,6 @@ namespace Syntax {
         QList<QPointer<Syntax::Model> > mModels;
         QMimeDatabase mMimeDatabase;
         
-        // forward declare
-        void buildDocument( Syntax::Document& document );
-        void buildContextRules( Syntax::Document& document, Syntax::Context& context );
-        void buildContextRule( Syntax::Document& document, Syntax::Context& context, Syntax::Rule& rule );
-        
-        void mergeRules( Syntax::Document& document, Syntax::Context& context, Syntax::Rule& rule ) {
-            QString srcContextName = rule.context();
-            QString srcSyntaxName = document.name();
-            
-            // import external initial context rules
-            if ( srcContextName.startsWith( "##" ) ) {
-                srcSyntaxName = srcContextName.mid( 2 );
-                srcContextName.clear(); // filled up later with document initialContext
-            }
-            // import external contex rules
-            else if ( srcContextName.contains( "##" ) ) {
-                const QStringList parts = srcContextName.split( "##" );
-                srcSyntaxName = parts.value( 1 );
-                srcContextName = parts.value( 0 );
-            }
-            // import from current document
-            else {
-                // nothing to do
-            }
-            
-            // get source document
-            Q_ASSERT( Syntax::Factory::mDocuments.contains( srcSyntaxName ) );
-            Syntax::Document& srcDocument = Syntax::Factory::mDocuments[ srcSyntaxName ];
-            
-            // get source context name if needed
-            if ( rule.context().startsWith( "##" ) ) {
-                srcContextName = srcDocument.highlighting().initialContext();
-            }
-            
-            // get source context
-            Q_ASSERT( srcDocument.highlighting().contexts().contains( srcContextName ) );
-            Syntax::Context& srcContext = srcDocument.highlighting().contexts()[ srcContextName ];
-            
-            // make sure the document is built
-            if ( srcDocument.name() != document.name() ) {
-                buildDocument( srcDocument );
-            }
-            // make sure the context is ready
-            else {
-                buildContextRules( srcDocument, srcContext );
-            }
-            
-            // update context attribute
-            if ( rule.includeAttrib() ) {
-                context.attribute() = srcContext.attribute();
-            }
-            
-            // update rules
-            const Syntax::Rule::List& rules = srcContext.rules();
-            
-            for ( int i = 0; i < rules.count(); i++ ) {
-                rule.rules() << rules[ i ];
-            }
-        }
-        
-        void buildRuleRule( Syntax::Document& document, Syntax::Context& context, Syntax::Rule& rule ) {
-            Q_ASSERT( !rule.type().isEmpty() );
-            
-            if ( rule.enumType() == Syntax::Rule::IncludeRules ) {
-                Syntax::Factory::mergeRules( document, context, rule );
-            }
-            else {
-                Syntax::Rule::List& rules = rule.rules();
-                
-                for ( int i = rules.count() -1; i >= 0; i-- ) {
-                    Syntax::Factory::buildRuleRule( document, context, rules[ i ] );
-                }
-            }
-        }
-        
-        void buildContextRule( Syntax::Document& document, Syntax::Context& context, Syntax::Rule& rule ) {
-            Q_ASSERT( !rule.type().isEmpty() );
-            
-            if ( rule.enumType() == Syntax::Rule::IncludeRules ) {
-                Syntax::Factory::mergeRules( document, context, rule );
-            }
-            else {
-                Syntax::Rule::List& rules = rule.rules();
-                
-                for ( int i = rules.count() -1; i >= 0; i-- ) {
-                    Syntax::Factory::buildRuleRule( document, context, rules[ i ] );
-                }
-            }
-        }
-        
-        void buildContextRules( Syntax::Document& document, Syntax::Context& context ) {
-            if ( document.finalyzed() ) {
-                return;
-            }
-            
-            Syntax::Rule::List& rules = context.rules();
-            
-            for ( int i = rules.count() -1; i >= 0; i-- ) {
-                Syntax::Factory::buildContextRule( document, context, rules[ i ] );
-            }
-        }
-        
-        void buildDocument( Syntax::Document& document ) {
-            if ( document.finalyzed() ) {
-                return;
-            }
-            
-            Syntax::Context::Hash& contexts = document.highlighting().contexts();
-            
-            foreach ( const QString& contextName, contexts.keys() ) {
-                buildContextRules( document, contexts[ contextName ] );
-            }
-            
-            document.finalyzed() = true;
-        }
-        
-        void buildDocuments() {
-            foreach ( const QString& syntaxName, Syntax::Factory::mDocuments.keys() ) {
-                buildDocument( Syntax::Factory::mDocuments[ syntaxName ] );
-            }
-        }
-        
         void updateModels() {
             for ( int i = Syntax::Factory::mModels.count() -1; i >= 0; i-- ) {
                 Syntax::Model* model = Syntax::Factory::mModels[ i ];
@@ -154,10 +33,6 @@ namespace Syntax {
         
         Syntax::Document::List documents() {
             return Syntax::Factory::mDocuments.values();
-        }
-        
-        Syntax::Document document( const QString& name ) {
-            return Syntax::Factory::mDocuments.value( name );
         }
     };
 };
@@ -198,7 +73,9 @@ bool Syntax::Factory::load( QString* _error )
     
     if ( error.isEmpty() ) {
         Syntax::Factory::mDocuments = documents;
-        Syntax::Factory::buildDocuments();
+        
+        Syntax::DocumentBuilder builder( Syntax::Factory::mDocuments );
+        builder.buildDocuments();
         
 #if !defined( QT_NO_DEBUG )
         qWarning( "%s: Build files in %f seconds", Q_FUNC_INFO , time.elapsed() /1000.0 );
@@ -274,6 +151,11 @@ QStringList Syntax::Factory::mimeTypesForFileName( const QString& fileName )
     }
     
     return names;
+}
+
+Syntax::Document Syntax::Factory::document( const QString& name )
+{
+    return Syntax::Factory::mDocuments.value( name );
 }
 
 Syntax::Highlighter* Syntax::Factory::highlighter( const QString& name, TextDocument* textDocument )

@@ -36,8 +36,7 @@ public:
     {
     }
     
-    virtual ~ContextData()
-    {
+    virtual ~ContextData() {
     }
 };
 

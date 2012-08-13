@@ -22,8 +22,7 @@ public:
     {
     }
     
-    virtual ~HighlightingData()
-    {
+    virtual ~HighlightingData() {
     }
 };
 

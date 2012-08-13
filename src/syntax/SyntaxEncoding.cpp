@@ -21,8 +21,7 @@ public:
     {
     }
     
-    virtual ~EncodingData()
-    {
+    virtual ~EncodingData() {
     }
 };
 

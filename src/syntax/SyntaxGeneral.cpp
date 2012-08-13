@@ -24,8 +24,7 @@ public:
     {
     }
     
-    virtual ~GeneralData()
-    {
+    virtual ~GeneralData() {
     }
 };
 

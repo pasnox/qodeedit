@@ -16,8 +16,7 @@ public:
     {
     }
     
-    virtual ~ConfigurationData()
-    {
+    virtual ~ConfigurationData() {
     }
 };
 

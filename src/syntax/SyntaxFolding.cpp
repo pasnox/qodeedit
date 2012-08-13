@@ -17,8 +17,7 @@ public:
     {
     }
     
-    virtual ~FoldingData()
-    {
+    virtual ~FoldingData() {
     }
 };
 

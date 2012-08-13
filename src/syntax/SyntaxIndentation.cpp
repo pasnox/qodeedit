@@ -16,8 +16,7 @@ public:
     {
     }
     
-    virtual ~IndentationData()
-    {
+    virtual ~IndentationData() {
     }
 };
 

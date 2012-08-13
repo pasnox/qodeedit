@@ -23,8 +23,7 @@ public:
     {
     }
     
-    virtual ~KeywordsData()
-    {
+    virtual ~KeywordsData() {
     }
 };
 

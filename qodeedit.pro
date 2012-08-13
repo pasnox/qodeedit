@@ -31,7 +31,7 @@ DEPENDPATH *= $${INCLUDEPATH}
 greaterThan( QT_MAJOR_VERSION, 4 ) {
 } else:greaterThan( QT_MAJOR_VERSION, 3 ) {
     MIMETYPES_QT4_ROOT = mimetypes-qt4.git
-    
+
     exists( $${MIMETYPES_QT4_ROOT} ) {
         SOURCES_PATHS = $$getFolders( $${MIMETYPES_QT4_ROOT} )
         DEPENDPATH *= $${SOURCES_PATHS}
@@ -44,12 +44,13 @@ greaterThan( QT_MAJOR_VERSION, 4 ) {
 
         macx {
             SOURCES *= $${MIMETYPES_QT4_ROOT}/io/*_mac.c*
-        } else:unix {
+        }         else:unix {
             SOURCES *= $${MIMETYPES_QT4_ROOT}/io/*_unix.c*
-        } else:win32 {
+        }
+        else:win32 {
             SOURCES *= $${MIMETYPES_QT4_ROOT}/io/*_win.c*
         }
-    } else {
+    }     else {
         error( Qt 4 build need dependency project mimetypes-qt4 uncompressed in current folder as $${MIMETYPES_QT4_ROOT}. You can get it here https://github.com/pasnox/mimetypes-qt4 )
     }
 }
@@ -90,7 +91,9 @@ HEADERS *=  \
     src/syntax/SyntaxFactory.h \
     src/syntax/SyntaxModel.h \
     src/syntax/SyntaxHighlighter.h \
-    src/syntax/SyntaxComboBox.h
+    src/syntax/SyntaxComboBox.h \
+    src/syntax/SyntaxDocumentBuilder.h \
+    src/syntax/SyntaxTheme.h
 
 SOURCES *= src/main.cpp \
     src/example/UIMain.cpp \
@@ -123,4 +126,6 @@ SOURCES *= src/main.cpp \
     src/syntax/SyntaxFactory.cpp \
     src/syntax/SyntaxModel.cpp \
     src/syntax/SyntaxHighlighter.cpp \
-    src/syntax/SyntaxComboBox.cpp
+    src/syntax/SyntaxComboBox.cpp \
+    src/syntax/SyntaxDocumentBuilder.cpp \
+    src/syntax/SyntaxTheme.cpp
