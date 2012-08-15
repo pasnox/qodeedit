@@ -17,7 +17,7 @@ class MarginStackerPrivate : public QObject {
     Q_OBJECT
 
 public:
-    QMap<MarginStacker::Type, AbstractMargin*> margins;
+    QMap<QodeEdit::Margin, AbstractMargin*> margins;
     MarginStacker* stacker;
     QHBoxLayout* layout;
     CodeEditor* editor;
@@ -41,8 +41,8 @@ public:
         connect( updateLayoutTimer, SIGNAL( timeout() ), this, SLOT( updateLayoutTimeout() ) );
     }
     
-    int indexOfNewMargin( MarginStacker::Type type ) const {
-        QSet<MarginStacker::Type> types = margins.keys().toSet();
+    int indexOfNewMargin( QodeEdit::Margin type ) const {
+        QSet<QodeEdit::Margin> types = margins.keys().toSet();
         
         if ( types.isEmpty() ) {
             return 0;
@@ -57,7 +57,7 @@ public:
         }
         
         for ( int i = 0; i < types.count(); i++ ) {
-            const MarginStacker::Type current = *( types.begin() +i );
+            const QodeEdit::Margin current = *( types.begin() +i );
             
             if ( type < current +1 ) {
                 return i;
@@ -68,7 +68,7 @@ public:
         return -1;
     }
     
-    void setVisible( MarginStacker::Type type, bool visible ) {
+    void setVisible( QodeEdit::Margin type, bool visible ) {
         AbstractMargin* margin = margins.value( type );
         
         if ( !margin && !visible ) {
@@ -88,19 +88,19 @@ public:
             const int index = indexOfNewMargin( type );
             
             switch ( type ) {
-                case MarginStacker::LineNumbering:
+                case QodeEdit::NumberMargin:
                     margin = new LineNumberMargin( stacker );
                     break;
-                case MarginStacker::LineFolding:
+                case QodeEdit::FoldMargin:
                     //margin = new LineFoldMargin( stacker );
                     break;
-                case MarginStacker::LineBookmarking:
+                case QodeEdit::BookmarkMargin:
                     margin = new LineBookmarkMargin( stacker );
                     break;
-                case MarginStacker::LineRevisioning:
+                case QodeEdit::RevisionMargin:
                     margin = new LineRevisionMargin( stacker );
                     break;
-                case MarginStacker::LineSpacing:
+                case QodeEdit::SpaceMargin:
                     margin = new LineSpacingMargin( stacker );
                     break;
                 default:
@@ -162,7 +162,7 @@ MarginStacker::~MarginStacker()
 {
 }
 
-AbstractMargin* MarginStacker::margin( MarginStacker::Type type ) const
+AbstractMargin* MarginStacker::margin( QodeEdit::Margin type ) const
 {
     return d->margins.value( type );
 }
@@ -192,12 +192,12 @@ void MarginStacker::setEditor( CodeEditor* editor )
     }
 }
 
-bool MarginStacker::isVisible( MarginStacker::Type type ) const
+bool MarginStacker::isVisible( QodeEdit::Margin type ) const
 {
     return d->margins.value( type ) != 0;
 }
 
-void MarginStacker::setVisible( MarginStacker::Type type, bool visible )
+void MarginStacker::setVisible( QodeEdit::Margin type, bool visible )
 {
     d->setVisible( type, visible );
 }

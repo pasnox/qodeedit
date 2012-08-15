@@ -1,6 +1,8 @@
 #ifndef SYNTAXHELPERS_H
 #define SYNTAXHELPERS_H
 
+#include <QObject>
+
 #define SYNTAX_DECL_MEMBER( type, name ) \
     const type& name() const; \
     type& name()

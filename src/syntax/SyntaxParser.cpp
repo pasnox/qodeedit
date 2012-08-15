@@ -124,6 +124,8 @@ bool Syntax::Parser::startDocument()
 
 bool Syntax::Parser::endDocument()
 {
+    Q_ASSERT( !d->document->name().isEmpty() );
+    Q_ASSERT( !d->document->section().isEmpty() );
     Q_ASSERT( d->counts.value( "highlighting" ) <= 1 );
     Q_ASSERT( d->counts.value( "contexts" ) <= 1 );
     Q_ASSERT( d->counts.value( "itemdatas" ) <= 1 );
@@ -296,7 +298,7 @@ bool Syntax::Parser::startElement( const QString& namespaceURI, const QString& l
         Syntax::Context& context = d->document->highlighting().contexts()[ d->contextName ];
         Syntax::Rule rule;
         
-        rule.type() = qName;
+        rule.name() = qName;
         
         for ( int i = 0; i < atts.count(); i++ ) {
             const QString name = atts.qName( i );
@@ -617,7 +619,7 @@ bool Syntax::Parser::endElement( const QString& namespaceURI, const QString& loc
 {
     if ( QodeEdit::stringEquals( qName, "item" ) ) {
         Q_ASSERT( !d->listName.isEmpty() );
-        d->document->highlighting().lists()[ d->listName ] << d->text.trimmed();
+        d->document->highlighting().lists()[ d->listName ] << ( d->document->caseSensitive() ? d->text.trimmed() : d->text.trimmed().toLower() );
         d->text.clear();
     }
     else if ( QodeEdit::stringEquals( qName, "list" ) ) {

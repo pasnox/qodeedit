@@ -19,11 +19,11 @@ QodeEditor::QodeEditor( QWidget* parent )
     setCaretLineBackground( QColor( 150, 150, 150, 150 ) );
     
     MarginStacker* margins = new MarginStacker( this );
-    margins->setVisible( MarginStacker::LineBookmarking, true );
-    margins->setVisible( MarginStacker::LineNumbering, true );
-    margins->setVisible( MarginStacker::LineRevisioning, true );
-    margins->setVisible( MarginStacker::LineFolding, true );
-    margins->setVisible( MarginStacker::LineSpacing, true );
+    margins->setVisible( QodeEdit::BookmarkMargin, true );
+    margins->setVisible( QodeEdit::NumberMargin, true );
+    margins->setVisible( QodeEdit::RevisionMargin, true );
+    margins->setVisible( QodeEdit::FoldMargin, true );
+    margins->setVisible( QodeEdit::SpaceMargin, true );
     
     // fake save document shortcut
     new QShortcut( QKeySequence::Save, this, SLOT( save() ) );
@@ -154,7 +154,13 @@ UIMain::UIMain( QWidget* parent )
     qWarning() << Syntax::Factory::mimeTypesForFileName( "toto.h" );
     qWarning() << Syntax::Factory::mimeTypesForFileName( "toto.c" );
     qWarning() << Syntax::Factory::mimeTypesForFileName( "toto.cpp" );
-    qWarning() << Syntax::Factory::mimeTypesForFileName( "toto.adb" );*/
+    qWarning() << Syntax::Factory::mimeTypesForFileName( "toto.adb" );
+    
+    qWarning() << QodeEdit::rulerToString( QodeEdit::NoRuler );
+    qWarning() << QodeEdit::rulerToString( QodeEdit::BackgroundRuler );
+    qWarning() << QodeEdit::stringToRuler( "background" );
+    qWarning() << QodeEdit::stringToRuler( "backgroundRuler" );
+    qWarning() << QodeEdit::stringToRuler( "Background" );*/
 }
 
 UIMain::~UIMain()

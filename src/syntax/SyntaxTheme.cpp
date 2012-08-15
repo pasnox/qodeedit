@@ -5,7 +5,7 @@
 class Syntax::ThemeData : public QSharedData
 {
 public:
-    QHash<Syntax::Theme::DefaultStyle, Syntax::ThemeStyle> styles;
+    QHash<QodeEdit::Style, Syntax::ThemeStyle> styles;
     QString name;
     
     ThemeData()
@@ -25,34 +25,34 @@ public:
     }
     
     void initToDefault() {
-        //styles[ Syntax::Theme::dsNormal ].;
+        //styles[ QodeEdit::Normal ].;
         
-        styles[ Syntax::Theme::dsKeyword ].setFontWeight( QFont::Bold );
+        styles[ QodeEdit::KeywordStyle ].setFontWeight( QFont::Bold );
         
-        styles[ Syntax::Theme::dsDataType ].setForeground( QBrush( QColor( "#0057ae" ) ) );
+        styles[ QodeEdit::DataTypeStyle ].setForeground( QBrush( QColor( "#0057ae" ) ) );
         
-        styles[ Syntax::Theme::dsDecVal ].setForeground( QBrush( QColor( "#b07e00" ) ) );
-        styles[ Syntax::Theme::dsBaseN ].setForeground( QBrush( QColor( "#b07e00" ) ) );
-        styles[ Syntax::Theme::dsFloat ].setForeground( QBrush( QColor( "#b07e00" ) ) );
+        styles[ QodeEdit::DecValStyle ].setForeground( QBrush( QColor( "#b07e00" ) ) );
+        styles[ QodeEdit::BaseNStyle ].setForeground( QBrush( QColor( "#b07e00" ) ) );
+        styles[ QodeEdit::FloatStyle ].setForeground( QBrush( QColor( "#b07e00" ) ) );
         
-        styles[ Syntax::Theme::dsChar ].setForeground( QBrush( QColor( "#ff80e0" ) ) );
+        styles[ QodeEdit::CharStyle ].setForeground( QBrush( QColor( "#ff80e0" ) ) );
         
-        styles[ Syntax::Theme::dsString ].setForeground( QBrush( QColor( "#bf0303" ) ) );
+        styles[ QodeEdit::StringStyle ].setForeground( QBrush( QColor( "#bf0303" ) ) );
         
-        styles[ Syntax::Theme::dsComment ].setForeground( QBrush( QColor( "#888786" ) ) );
-        styles[ Syntax::Theme::dsComment ].setFontItalic( true );
+        styles[ QodeEdit::CommentStyle ].setForeground( QBrush( QColor( "#888786" ) ) );
+        styles[ QodeEdit::CommentStyle ].setFontItalic( true );
         
-        styles[ Syntax::Theme::dsOthers ].setForeground( QBrush( QColor( "#006e26" ) ) );
+        styles[ QodeEdit::OthersStyle ].setForeground( QBrush( QColor( "#006e26" ) ) );
         
-        styles[ Syntax::Theme::dsAlert ].setForeground( QBrush( QColor( "#bf0303" ) ) );
-        styles[ Syntax::Theme::dsAlert ].setBackground( QBrush( QColor( "#f7e7e7" ) ) );
-        styles[ Syntax::Theme::dsAlert ].setFontWeight( QFont::Bold );
+        styles[ QodeEdit::AlertStyle ].setForeground( QBrush( QColor( "#bf0303" ) ) );
+        styles[ QodeEdit::AlertStyle ].setBackground( QBrush( QColor( "#f7e7e7" ) ) );
+        styles[ QodeEdit::AlertStyle ].setFontWeight( QFont::Bold );
         
-        styles[ Syntax::Theme::dsFunction ].setForeground( QBrush( QColor( "#442886" ) ) );
+        styles[ QodeEdit::FunctionStyle ].setForeground( QBrush( QColor( "#442886" ) ) );
         
-        styles[ Syntax::Theme::dsRegionMarker ].setForeground( QBrush( QColor( "#0057ae" ) ) );
+        styles[ QodeEdit::RegionMarkerStyle ].setForeground( QBrush( QColor( "#0057ae" ) ) );
         
-        styles[ Syntax::Theme::dsError ].setForeground( QBrush( QColor( "#e1eaf8" ) ) );
+        styles[ QodeEdit::ErrorStyle ].setForeground( QBrush( QColor( "#e1eaf8" ) ) );
     }
 };
 
@@ -85,12 +85,12 @@ void Syntax::Theme::setName( const QString& name )
     d->name = name;
 }
 
-Syntax::ThemeStyle Syntax::Theme::style( Syntax::Theme::DefaultStyle type ) const
+Syntax::ThemeStyle Syntax::Theme::style( QodeEdit::Style type ) const
 {
     return d->styles.value( type );
 }
 
-void Syntax::Theme::setStyle( Syntax::Theme::DefaultStyle type, const Syntax::ThemeStyle& style )
+void Syntax::Theme::setStyle( QodeEdit::Style type, const Syntax::ThemeStyle& style )
 {
     d->styles[ type ] = style;
 }

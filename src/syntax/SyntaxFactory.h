@@ -31,9 +31,9 @@ namespace Factory {
     QString mimeTypeForUrl( const QUrl& url );
     QStringList mimeTypesForFileName( const QString& fileName );
     
-    Syntax::Document document( const QString& name );
+    Syntax::Document document( const QString& syntaxName );
     
-    Syntax::Highlighter* highlighter( const QString& name, TextDocument* textDocument = 0 );
+    Syntax::Highlighter* highlighter( const QString& syntaxName, const QString& syntaxThemeName, TextDocument* textDocument = 0 );
     Syntax::Highlighter* highlighterForFilePath( const QString& filePath, TextDocument* textDocument = 0 );
     Syntax::Highlighter* highlighterForMimeType( const QString& mimeType, TextDocument* textDocument = 0 );
     

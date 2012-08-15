@@ -3,6 +3,8 @@
 
 #include <QWidget>
 
+#include "QodeEdit.h"
+
 class MarginStackerPrivate;
 class AbstractMargin;
 class CodeEditor;
@@ -13,26 +15,16 @@ class MarginStacker : public QWidget
     friend class MarginStackerPrivate;
     
 public:
-    // the order is important as it defined the presentation order of the margins
-    enum Type {
-        Invalid = -1,
-        LineBookmarking = 0, // done
-        LineNumbering = 1, // done
-        LineFolding = 2,
-        LineRevisioning = 3, // done
-        LineSpacing = 4, // done
-    };
-    
     MarginStacker( CodeEditor* editor = 0 );
     virtual ~MarginStacker();
     
-    AbstractMargin* margin( MarginStacker::Type type ) const;
+    AbstractMargin* margin( QodeEdit::Margin type ) const;
     
     CodeEditor* editor() const;
     void setEditor( CodeEditor* editor );
     
-    bool isVisible( MarginStacker::Type type ) const;
-    void setVisible( MarginStacker::Type type, bool visible = true );
+    bool isVisible( QodeEdit::Margin type ) const;
+    void setVisible( QodeEdit::Margin type, bool visible = true );
     
 public slots:
     void updateLayout();

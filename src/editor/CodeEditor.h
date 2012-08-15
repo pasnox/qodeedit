@@ -3,6 +3,8 @@
 
 #include <QPlainTextEdit>
 
+#include "QodeEdit.h"
+
 class CodeEditorPrivate;
 class TextDocument;
 class MarginStacker;
@@ -15,12 +17,6 @@ class CodeEditor : public QPlainTextEdit
     friend class MarginStackerPrivate;
 
 public:
-    enum Ruler {
-        NoRuler = 0x0,
-        LineRuler = 0x1,
-        BackgroundRuler = 0x2
-    };
-    
     CodeEditor( QWidget* parent = 0 );
     virtual ~CodeEditor();
     
@@ -35,7 +31,7 @@ public:
     QPoint cursorPosition() const;
     int currentLine() const;
     int currentColumn() const;
-    CodeEditor::Ruler rulerMode() const;
+    QodeEdit::Ruler rulerMode() const;
     int rulerWidth() const;
     
     QBrush paper() const;
@@ -58,7 +54,7 @@ public slots:
     void setCursorPosition( const QPoint& pos );
     void setCurrentLine( int line );
     void setCurrentColumn( int column );
-    void setRulerMode( CodeEditor::Ruler mode );
+    void setRulerMode( QodeEdit::Ruler mode );
     void setRulerWidth( int width );
     
     void setPaper( const QBrush& brush );

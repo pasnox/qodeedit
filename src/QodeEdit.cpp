@@ -4,10 +4,101 @@
 #include <QStringList>
 #include <QDir>
 #include <QDesktopServices>
+#include <QMetaObject>
+#include <QMetaEnum>
+#include <QDebug>
 
-namespace QodeEdit {
-    QString mUserSharedDataFilePath;
+class CaseInsensitiveEnumerator {
+public:
+    CaseInsensitiveEnumerator( const QMetaEnum& enumerator = QMetaEnum() ) {
+        name = QString::fromAscii( enumerator.name() ).toLower();
+        
+        for ( int i = 0; i < enumerator.keyCount(); i++ ) {
+            const int value( enumerator.value( i ) );
+            QString key( enumerator.key( i ) );
+            key.chop( name.size() );
+            normal[ value ] = key;
+            lower[ key.toLower() ] = value;
+        }
+    }
+    
+    QString valueToKey( int value ) const {
+        return normal.value( value );
+    }
+    
+    int keyToValue( const QString& key ) const {
+        QString string = key.toLower();
+        
+        if ( string.endsWith( name ) ) {
+            string.chop( name.size() );
+        }
+        
+        return lower.value( string );
+    }
+
+private:
+    QString name;
+    QHash<int, QString> normal;
+    QHash<QString, int> lower;
 };
+
+struct QodeEditData {
+    QodeEditData() {
+        const QMetaObject& mo = QodeEdit::staticMetaObject;
+        ruler = CaseInsensitiveEnumerator( mo.enumerator( mo.indexOfEnumerator( "Ruler" ) ) );
+        margin = CaseInsensitiveEnumerator( mo.enumerator( mo.indexOfEnumerator( "Margin" ) ) );
+        rule = CaseInsensitiveEnumerator( mo.enumerator( mo.indexOfEnumerator( "Rule" ) ) );
+        style = CaseInsensitiveEnumerator( mo.enumerator( mo.indexOfEnumerator( "Style" ) ) );
+    }
+    
+    QString userSharedDataFilePath;
+    CaseInsensitiveEnumerator ruler;
+    CaseInsensitiveEnumerator margin;
+    CaseInsensitiveEnumerator rule;
+    CaseInsensitiveEnumerator style;
+};
+
+static QodeEditData qodeEditData;
+
+QString QodeEdit::rulerToString( QodeEdit::Ruler ruler )
+{
+    return qodeEditData.ruler.valueToKey( ruler );
+}
+
+QodeEdit::Ruler QodeEdit::stringToRuler( const QString& string )
+{
+    return QodeEdit::Ruler( qodeEditData.ruler.keyToValue( string ) );
+}
+
+QString QodeEdit::marginToString( QodeEdit::Margin margin )
+{
+    return qodeEditData.margin.valueToKey( margin );
+}
+
+QodeEdit::Margin QodeEdit::stringToMargin( const QString& string )
+{
+    return QodeEdit::Margin( qodeEditData.margin.keyToValue( string ) );
+}
+
+QString QodeEdit::ruleToString( QodeEdit::Rule rule )
+{
+    return qodeEditData.rule.valueToKey( rule );
+}
+
+QodeEdit::Rule QodeEdit::stringToRule( const QString& string )
+{
+    return QodeEdit::Rule( qodeEditData.rule.keyToValue( string ) );
+}
+
+QString QodeEdit::styleToString( QodeEdit::Style style )
+{
+    return qodeEditData.style.valueToKey( style );
+}
+
+QodeEdit::Style QodeEdit::stringToStyle( const QString& string )
+{
+    return QodeEdit::Style( qodeEditData.style.keyToValue( string ) );
+}
 
 const char* QodeEdit::version()
 {
@@ -28,18 +119,18 @@ QString QodeEdit::sharedDataFilePath( const QString& extended )
 
 QString QodeEdit::userSharedDataFilePath( const QString& extended )
 {
-    return mUserSharedDataFilePath.isEmpty()
+    return qodeEditData.userSharedDataFilePath.isEmpty()
         ? QDir::cleanPath( QString( "%1/%2/%3" )
             .arg( QDesktopServices::storageLocation( QDesktopServices::DataLocation ) )
             .arg( PACKAGE_NAME )
             .arg( extended ) )
-        : mUserSharedDataFilePath
+        : qodeEditData.userSharedDataFilePath
     ;
 }
 
 void QodeEdit::setUserSharedDataFilePath( const QString& filePath )
 {
-    mUserSharedDataFilePath = filePath;
+    qodeEditData.userSharedDataFilePath = filePath;
 }
 
 QString QodeEdit::schemaDefinitionFilePath()

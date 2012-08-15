@@ -38,6 +38,7 @@ public:
     SYNTAX_DECL_MEMBER( QString, license ); ///< License; for example: "LGPL"
     SYNTAX_DECL_MEMBER( bool, caseSensitive );
     //SYNTAX_DECL_MEMBER( QString, identifier ); // ?
+    SYNTAX_DECL_MEMBER( QString, defaultDeliminator );
     SYNTAX_DECL_MEMBER( bool, finalyzed ); ///< Tell if the document has been totally parsed and built
     SYNTAX_DECL_MEMBER( Syntax::Highlighting, highlighting );
     SYNTAX_DECL_MEMBER( Syntax::General, general );

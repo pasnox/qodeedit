@@ -76,9 +76,9 @@ public:
     }
     
     void buildRuleRule( Syntax::Document& document, Syntax::Context& context, Syntax::Rule& rule ) {
-        Q_ASSERT( !rule.type().isEmpty() );
+        Q_ASSERT( !rule.name().isEmpty() );
         
-        if ( rule.enumType() == Syntax::Rule::IncludeRules ) {
+        if ( rule.type() == QodeEdit::IncludeRule ) {
             mergeRules( document, context, rule );
         }
         else {
@@ -91,9 +91,9 @@ public:
     }
     
     void buildContextRule( Syntax::Document& document, Syntax::Context& context, Syntax::Rule& rule ) {
-        Q_ASSERT( !rule.type().isEmpty() );
+        Q_ASSERT( !rule.name().isEmpty() );
         
-        if ( rule.enumType() == Syntax::Rule::IncludeRules ) {
+        if ( rule.type() == QodeEdit::IncludeRule ) {
             mergeRules( document, context, rule );
         }
         else {

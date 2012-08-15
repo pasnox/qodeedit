@@ -16,14 +16,14 @@ public:
     CodeEditor* editor;
     MarginStacker* stacker;
     QPalette originalPalette;
-    CodeEditor::Ruler rulerMode;
+    QodeEdit::Ruler rulerMode;
     int rulerWidth;
     
     CodeEditorPrivate( CodeEditor* _editor )
             : editor( _editor ),
             stacker( 0 ),
             originalPalette( _editor->palette() ),
-            rulerMode( CodeEditor::NoRuler ),
+            rulerMode( QodeEdit::NoRuler ),
             rulerWidth( 80 )
     {
         Q_ASSERT( editor );
@@ -187,12 +187,12 @@ void CodeEditor::setCurrentColumn( int column )
     setCursorPosition( QPoint( column, currentLine() ) );
 }
 
-CodeEditor::Ruler CodeEditor::rulerMode() const
+QodeEdit::Ruler CodeEditor::rulerMode() const
 {
     return d->rulerMode;
 }
 
-void CodeEditor::setRulerMode( CodeEditor::Ruler mode )
+void CodeEditor::setRulerMode( QodeEdit::Ruler mode )
 {
     d->rulerMode = mode;
     viewport()->update();
@@ -300,7 +300,7 @@ void CodeEditor::setBookmark( const QTextBlock& block, bool set )
     data->hasBookmark = set;
     
     if ( d->stacker ) {
-        AbstractMargin* margin = d->stacker->margin( MarginStacker::LineBookmarking );
+        AbstractMargin* margin = d->stacker->margin( QodeEdit::BookmarkMargin );
         
         if ( margin ) {
             margin->updateLineRect( block.blockNumber() );
@@ -360,13 +360,13 @@ void CodeEditor::paintEvent( QPaintEvent* event )
     
     // draw ruler
     switch ( d->rulerMode ) {
-        case CodeEditor::NoRuler:
+        case QodeEdit::NoRuler:
             break;
-        case CodeEditor::LineRuler:
+        case QodeEdit::LineRuler:
             painter.setPen( QPen( caretLineForeground(), painter.pen().widthF() ) );
             painter.drawLine( d->rulerLine() );
             break;
-        case CodeEditor::BackgroundRuler:
+        case QodeEdit::BackgroundRuler:
             painter.setPen( Qt::NoPen );
             painter.setBrush( caretLineForeground() );
             painter.drawRect( d->rulerRect() );

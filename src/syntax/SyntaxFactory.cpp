@@ -1,4 +1,6 @@
 #include "SyntaxFactory.h"
+#include "SyntaxDocument.h"
+#include "SyntaxTheme.h"
 #include "SyntaxDocumentBuilder.h"
 #include "SyntaxHighlighter.h"
 #include "SyntaxModel.h"
@@ -158,9 +160,11 @@ Syntax::Document Syntax::Factory::document( const QString& name )
     return Syntax::Factory::mDocuments.value( name );
 }
 
-Syntax::Highlighter* Syntax::Factory::highlighter( const QString& name, TextDocument* textDocument )
+Syntax::Highlighter* Syntax::Factory::highlighter( const QString& syntaxName, const QString& syntaxThemeName, TextDocument* textDocument )
 {
-    return new Syntax::Highlighter( Syntax::Factory::document( name ), textDocument );
+    Q_UNUSED( syntaxThemeName );
+    #warning update me after having themes factory
+    return new Syntax::Highlighter( Syntax::Factory::document( syntaxName ), Syntax::Theme(), textDocument );
 }
 
 Syntax::Highlighter* Syntax::Factory::highlighterForFilePath( const QString& filePath, TextDocument* textDocument )
@@ -179,7 +183,7 @@ Syntax::Highlighter* Syntax::Factory::highlighterForFilePath( const QString& fil
         return 0;
     }
     
-    return Syntax::Factory::highlighter( ( documents.end() -1 ).value()->name(), textDocument );
+    return Syntax::Factory::highlighter( ( documents.end() -1 ).value()->name(), QString::null, textDocument );
 }
 
 Syntax::Highlighter* Syntax::Factory::highlighterForMimeType( const QString& mimeType, TextDocument* textDocument )
@@ -198,7 +202,7 @@ Syntax::Highlighter* Syntax::Factory::highlighterForMimeType( const QString& mim
         return 0;
     }
     
-    return Syntax::Factory::highlighter( ( documents.end() -1 ).value()->name(), textDocument );
+    return Syntax::Factory::highlighter( ( documents.end() -1 ).value()->name(), QString::null, textDocument );
 }
 
 Syntax::Model* Syntax::Factory::model( QObject* parent )

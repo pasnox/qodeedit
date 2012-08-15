@@ -7,6 +7,7 @@
 #include <QString>
 
 #include "SyntaxHelpers.h"
+#include "QodeEdit.h"
 
 namespace Syntax {
 
@@ -20,29 +21,7 @@ private:
 public:
     typedef QList<Syntax::Rule> List;
     
-    enum Type {
-        Invalid = -1,
-        AnyChar,
-        Detect2Chars,
-        DetectChar,
-        DetectIdentifier,
-        DetectSpaces,
-        Float,
-        HlCChar,
-        HlCHex,
-        HlCOct,
-        HlCStringChar,
-        IncludeRules,
-        Int,
-        Keyword,
-        LineContinue,
-        RangeDetect,
-        RegExpr,
-        StringDetect,
-        WordDetect
-    };
-    
-    SYNTAX_DECL_MEMBER( QString, type ); ///< Type of the rule
+    SYNTAX_DECL_MEMBER( QString, name ); ///< Name of the rule
     SYNTAX_DECL_MEMBER( QString, attribute ); // hlcchar, hlchex, hlcstringchar, linecontinue, int, detectidentifier, anychar, regexpr, stringdetect, detectspaces, detect2chars, worddetect, hlcoct, rangedetect, detectchar, float, keyword
     SYNTAX_DECL_MEMBER( QString, context ); // hlcchar, includerules, hlchex, hlcstringchar, linecontinue, int, detectidentifier, anychar, regexpr, stringdetect, detectspaces, detect2chars, worddetect, hlcoct, rangedetect, detectchar, float, keyword
     SYNTAX_DECL_MEMBER( QString, string ); // anychar, regexpr, stringdetect, worddetect, keyword
@@ -68,7 +47,7 @@ public:
     
     SYNTAX_DECL_OPERATORS( Rule );
     
-    Syntax::Rule::Type enumType() const;
+    QodeEdit::Rule type() const;
 };
 
 }; // Syntax

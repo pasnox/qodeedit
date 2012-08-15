@@ -1,14 +1,39 @@
 #include "SyntaxDocument.h"
 #include "SyntaxParser.h"
+#include "SyntaxTheme.h"
 #include "QodeEdit.h"
 
 #include <QXmlInputSource>
 #include <QFileInfo>
 #include <QDebug>
 
+QHash<QString, QodeEdit::Style> initializedStyleMapping()
+{
+    QHash<QString, QodeEdit::Style> hash;
+    hash[ "alert" ] = QodeEdit::AlertStyle;
+    hash[ "base-n integer" ] = QodeEdit::BaseNStyle;
+    hash[ "character" ] = QodeEdit::CharStyle;
+    hash[ "string char" ] = QodeEdit::CharStyle;
+    hash[ "comment" ] = QodeEdit::CommentStyle;
+    hash[ "data type" ] = QodeEdit::DataTypeStyle;
+    hash[ "decimal/value" ] = QodeEdit::DecValStyle;
+    hash[ "error" ] = QodeEdit::ErrorStyle;
+    hash[ "floating point" ] = QodeEdit::FloatStyle;
+    hash[ "function" ] = QodeEdit::FunctionStyle;
+    hash[ "keyword" ] = QodeEdit::KeywordStyle;
+    hash[ "normal" ] = QodeEdit::NormalStyle;
+    hash[ "others" ] = QodeEdit::OthersStyle;
+    hash[ "region marker" ] = QodeEdit::RegionMarkerStyle;
+    hash[ "string" ] = QodeEdit::StringStyle;
+    return hash;
+}
+
 class Syntax::DocumentData : public QSharedData
 {
 public:
+    static QString globalDefaultDeliminator;
+    static QHash<QString, QodeEdit::Style> globalStyleMapping;
+    
     QString name;
     QString localizedName;
     QString section;
@@ -24,6 +49,7 @@ public:
     QString license;
     bool caseSensitive;
     //QString identifier;
+    QString defaultDeliminator;
     bool finalyzed;
     Syntax::Highlighting highlighting;
     Syntax::General general;
@@ -33,7 +59,8 @@ public:
         : QSharedData(),
             priority( -1 ),
             hidden( false ),
-            caseSensitive( false ),
+            caseSensitive( true ),
+            defaultDeliminator( Syntax::DocumentData::globalDefaultDeliminator ),
             finalyzed( false )
     {
     }
@@ -55,6 +82,7 @@ public:
             SYNTAX_OTHER_INIT( license ),
             SYNTAX_OTHER_INIT( caseSensitive ),
             //SYNTAX_OTHER_INIT( identifier ),
+            SYNTAX_OTHER_INIT( defaultDeliminator ),
             SYNTAX_OTHER_INIT( finalyzed ),
             SYNTAX_OTHER_INIT( highlighting ),
             SYNTAX_OTHER_INIT( general ),
@@ -65,6 +93,10 @@ public:
     virtual ~DocumentData() {
     }
 };
+
+QString Syntax::DocumentData::globalDefaultDeliminator( " \t.():!+,-<=>%&*/;?[]^{|}~\\" );
+QHash<QString, QodeEdit::Style> Syntax::DocumentData::globalStyleMapping( initializedStyleMapping() );
+
 
 Syntax::Document::Document()
     : d( new Syntax::DocumentData )
@@ -95,6 +127,7 @@ SYNTAX_IMPL_MEMBER( QString, author, Document )
 SYNTAX_IMPL_MEMBER( QString, license, Document )
 SYNTAX_IMPL_MEMBER( bool, caseSensitive, Document )
 //SYNTAX_IMPL_MEMBER( QString, identifier, Document )
+SYNTAX_IMPL_MEMBER( QString, defaultDeliminator, Document )
 SYNTAX_IMPL_MEMBER( bool, finalyzed, Document )
 SYNTAX_IMPL_MEMBER( Syntax::Highlighting, highlighting, Document )
 SYNTAX_IMPL_MEMBER( Syntax::General, general, Document )

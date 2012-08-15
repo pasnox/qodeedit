@@ -4,7 +4,7 @@
 class Syntax::RuleData : public QSharedData
 {
 public:
-    QString type;
+    QString name;
     QString attribute;
     QString context;
     QString string;
@@ -38,7 +38,7 @@ public:
     
     RuleData( const Syntax::RuleData& other )
         : QSharedData( other ),
-            SYNTAX_OTHER_INIT( type ),
+            SYNTAX_OTHER_INIT( name ),
             SYNTAX_OTHER_INIT( attribute ),
             SYNTAX_OTHER_INIT( context ),
             SYNTAX_OTHER_INIT( string ),
@@ -78,7 +78,7 @@ Syntax::Rule::~Rule()
 {
 }
 
-SYNTAX_IMPL_MEMBER( QString, type, Rule )
+SYNTAX_IMPL_MEMBER( QString, name, Rule )
 SYNTAX_IMPL_MEMBER( QString, attribute, Rule )
 SYNTAX_IMPL_MEMBER( QString, context, Rule )
 SYNTAX_IMPL_MEMBER( QString, string, Rule )
@@ -99,65 +99,65 @@ SYNTAX_IMPL_MEMBER( QString, weakDelimiter, Rule )
 SYNTAX_IMPL_MEMBER( Syntax::Rule::List, rules, Rule )
 SYNTAX_IMPL_OPERATORS( Rule )
 
-Syntax::Rule::Type Syntax::Rule::enumType() const
+QodeEdit::Rule Syntax::Rule::type() const
 {
-    if ( d->type.isEmpty() ) {
-        return Syntax::Rule::Invalid;
+    /*if ( d->type.isEmpty() ) {
+        return QodeEdit::InvalidRule;
     }
     else if ( QodeEdit::stringEquals( d->type, "AnyChar" ) ) {
-        return Syntax::Rule::AnyChar;
+        return QodeEdit::AnyChar;
     }
     else if ( QodeEdit::stringEquals( d->type, "Detect2Chars" ) ) {
-        return Syntax::Rule::Detect2Chars;
+        return QodeEdit::Detect2Chars;
     }
     else if ( QodeEdit::stringEquals( d->type, "DetectChar" ) ) {
-        return Syntax::Rule::DetectChar;
+        return QodeEdit::DetectChar;
     }
     else if ( QodeEdit::stringEquals( d->type, "DetectIdentifier" ) ) {
-        return Syntax::Rule::DetectIdentifier;
+        return QodeEdit::DetectIdentifier;
     }
     else if ( QodeEdit::stringEquals( d->type, "DetectSpaces" ) ) {
-        return Syntax::Rule::DetectSpaces;
+        return QodeEdit::DetectSpaces;
     }
     else if ( QodeEdit::stringEquals( d->type, "Float" ) ) {
-        return Syntax::Rule::Float;
+        return QodeEdit::Float;
     }
     else if ( QodeEdit::stringEquals( d->type, "HlCChar" ) ) {
-        return Syntax::Rule::HlCChar;
+        return QodeEdit::HlCChar;
     }
     else if ( QodeEdit::stringEquals( d->type, "HlCHex" ) ) {
-        return Syntax::Rule::HlCHex;
+        return QodeEdit::HlCHex;
     }
     else if ( QodeEdit::stringEquals( d->type, "HlCOct" ) ) {
-        return Syntax::Rule::HlCOct;
+        return QodeEdit::HlCOct;
     }
     else if ( QodeEdit::stringEquals( d->type, "HlCStringChar" ) ) {
-        return Syntax::Rule::HlCStringChar;
+        return QodeEdit::HlCStringChar;
     }
     else if ( QodeEdit::stringEquals( d->type, "IncludeRules" ) ) {
-        return Syntax::Rule::IncludeRules;
+        return QodeEdit::IncludeRules;
     }
     else if ( QodeEdit::stringEquals( d->type, "Int" ) ) {
-        return Syntax::Rule::Int;
+        return QodeEdit::Int;
     }
     else if ( QodeEdit::stringEquals( d->type, "Keyword" ) ) {
-        return Syntax::Rule::Keyword;
+        return QodeEdit::Keyword;
     }
     else if ( QodeEdit::stringEquals( d->type, "LineContinue" ) ) {
-        return Syntax::Rule::LineContinue;
+        return QodeEdit::LineContinue;
     }
     else if ( QodeEdit::stringEquals( d->type, "RangeDetect" ) ) {
-        return Syntax::Rule::RangeDetect;
+        return QodeEdit::RangeDetect;
     }
     else if ( QodeEdit::stringEquals( d->type, "RegExpr" ) ) {
-        return Syntax::Rule::RegExpr;
+        return QodeEdit::RegExpr;
     }
     else if ( QodeEdit::stringEquals( d->type, "StringDetect" ) ) {
-        return Syntax::Rule::StringDetect;
+        return QodeEdit::StringDetect;
     }
     else if ( QodeEdit::stringEquals( d->type, "WordDetect" ) ) {
-        return Syntax::Rule::WordDetect;
-    }
+        return QodeEdit::WordDetect;
+    }*/
     
-    return Syntax::Rule::Invalid;
+    return QodeEdit::InvalidRule;
 }
