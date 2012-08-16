@@ -3,6 +3,7 @@
 #include "QodeEdit.h"
 
 #include <QStack>
+#include <QVariant>
 #include <QDebug>
 
 // ParserPrivate
