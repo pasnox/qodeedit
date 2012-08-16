@@ -12,19 +12,19 @@ class QodeEdit : public QObject
     
 public:
     enum Ruler {
-        NoRuler = 0x0,
-        LineRuler = 0x1,
-        BackgroundRuler = 0x2
+        NoRuler = -1,
+        LineRuler,
+        BackgroundRuler
     };
     
     // the order is important as it defined the presentation order of the margins
     enum Margin {
         InvalidMargin = -1,
-        BookmarkMargin = 0, // done
-        NumberMargin = 1, // done
-        FoldMargin = 2,
-        RevisionMargin = 3, // done
-        SpaceMargin = 4, // done
+        BookmarkMargin,
+        NumberMargin,
+        FoldMargin,
+        RevisionMargin,
+        SpaceMargin
     };
     
     enum Rule {
@@ -50,6 +50,7 @@ public:
     };
     
     enum Style {
+        InvalidStyle = -1,
         NormalStyle,
         KeywordStyle,
         DataTypeStyle,

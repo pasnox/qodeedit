@@ -18,10 +18,8 @@ private:
     QExplicitlySharedDataPointer<Syntax::HighlightingData> d;
     
 public:
-    typedef QHash<QString, Syntax::List> Hash; // FIXME bad name better set Syntax::HashList typedef
-    
-    SYNTAX_DECL_MEMBER( QString, initialContext );
-    SYNTAX_DECL_MEMBER( Syntax::Highlighting::Hash, lists );
+    SYNTAX_DECL_MEMBER( QString, defaultContext );
+    SYNTAX_DECL_MEMBER( Syntax::HashList, lists );
     SYNTAX_DECL_MEMBER( Syntax::Context::Hash, contexts );
     SYNTAX_DECL_MEMBER( Syntax::ItemData::Hash, itemDatas );
     

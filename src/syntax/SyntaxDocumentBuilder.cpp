@@ -27,7 +27,7 @@ public:
         // import external initial context rules
         if ( srcContextName.startsWith( "##" ) ) {
             srcSyntaxName = srcContextName.mid( 2 );
-            srcContextName.clear(); // filled up later with document initialContext
+            srcContextName.clear(); // filled up later with document defaultContext
         }
         // import external contex rules
         else if ( srcContextName.contains( "##" ) ) {
@@ -46,7 +46,7 @@ public:
         
         // get source context name if needed
         if ( rule.context().startsWith( "##" ) ) {
-            srcContextName = srcDocument.highlighting().initialContext();
+            srcContextName = srcDocument.highlighting().defaultContext();
         }
         
         // get source context

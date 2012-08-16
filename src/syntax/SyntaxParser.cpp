@@ -6,6 +6,29 @@
 #include <QVariant>
 #include <QDebug>
 
+QHash<QString, QodeEdit::Style> initializedStyleMapping()
+{
+    QHash<QString, QodeEdit::Style> hash;
+    hash[ "alert" ] = QodeEdit::AlertStyle;
+    hash[ "base-n integer" ] = QodeEdit::BaseNStyle;
+    hash[ "character" ] = QodeEdit::CharStyle;
+    hash[ "string char" ] = QodeEdit::CharStyle;
+    hash[ "comment" ] = QodeEdit::CommentStyle;
+    hash[ "data type" ] = QodeEdit::DataTypeStyle;
+    hash[ "decimal/value" ] = QodeEdit::DecValStyle;
+    hash[ "error" ] = QodeEdit::ErrorStyle;
+    hash[ "floating point" ] = QodeEdit::FloatStyle;
+    hash[ "function" ] = QodeEdit::FunctionStyle;
+    hash[ "keyword" ] = QodeEdit::KeywordStyle;
+    hash[ "normal" ] = QodeEdit::NormalStyle;
+    hash[ "others" ] = QodeEdit::OthersStyle;
+    hash[ "region marker" ] = QodeEdit::RegionMarkerStyle;
+    hash[ "string" ] = QodeEdit::StringStyle;
+    return hash;
+}
+
+static QHash<QString, QodeEdit::Style> globalStyleMapping( initializedStyleMapping() );
+
 // ParserPrivate
 
 class Syntax::ParserPrivate {
@@ -25,33 +48,33 @@ public:
     
     ParserPrivate( Syntax::Parser* _parser )
         : ruleNames( Syntax::List()
-            << "anychar" // AnyChar
-            
-            << "detect2chars" // Detect2Chars
-            << "detectchar" // DetectChar
-            << "detectidentifier" // DetectIdentifier
-            << "detectspaces" // DetectSpaces
-            
-            << "float" // Float
-            
-            << "hlcchar" // HlCChar
-            << "hlchex" // HlCHex
-            << "hlcoct" // HlCOct
-            << "hlcstringchar" // HlCStringChar
-            
-            << "includerules" // IncludeRules
-            << "int" // Int
-            
-            << "keyword" // Keyword
-            
-            << "linecontinue" // LineContinue
-            
-            << "rangedetect" // RangeDetect
-            << "regexpr" // RegExpr
-            
-            << "stringdetect" // StringDetect
-            
-            << "worddetect" // WordDetect
+                << "anychar" // AnyChar
+                
+                << "detect2chars" // Detect2Chars
+                << "detectchar" // DetectChar
+                << "detectidentifier" // DetectIdentifier
+                << "detectspaces" // DetectSpaces
+                
+                << "float" // Float
+                
+                << "hlcchar" // HlCChar
+                << "hlchex" // HlCHex
+                << "hlcoct" // HlCOct
+                << "hlcstringchar" // HlCStringChar
+                
+                << "includerules" // IncludeRules
+                << "int" // Int
+                
+                << "keyword" // Keyword
+                
+                << "linecontinue" // LineContinue
+                
+                << "rangedetect" // RangeDetect
+                << "regexpr" // RegExpr
+                
+                << "stringdetect" // StringDetect
+                
+                << "worddetect" // WordDetect
             ),
             document( 0 ),
             parser( _parser )
@@ -288,8 +311,8 @@ bool Syntax::Parser::startElement( const QString& namespaceURI, const QString& l
         
         d->document->highlighting().contexts()[ context.name() ] = context;
         
-        if ( d->document->highlighting().initialContext().isEmpty() ) {
-            d->document->highlighting().initialContext() = context.name();
+        if ( d->document->highlighting().defaultContext().isEmpty() ) {
+            d->document->highlighting().defaultContext() = context.name();
         }
         
         Q_ASSERT( !context.name().isEmpty() );
@@ -385,10 +408,15 @@ bool Syntax::Parser::startElement( const QString& namespaceURI, const QString& l
             const QString name = atts.qName( i );
             
             if ( QodeEdit::stringEquals( name, "name" ) ) {
-                itemData.name() = atts.value( i );
+                itemData.name() = atts.value( i ).toLower();
             }
             else if ( QodeEdit::stringEquals( name, "defStyleNum" ) ) {
                 itemData.defStyleNum() = atts.value( i );
+                
+                if ( QodeEdit::stringToStyle( itemData.defStyleNum() ) == -1 ) {
+                    qWarning( "%s: Fixed invalid style to dsNormal in %s", Q_FUNC_INFO, qPrintable( d->document->name() ) );
+                    itemData.defStyleNum() = "dsNormal";
+                }
             }
             else if ( QodeEdit::stringEquals( name, "spellChecking" ) ) {
                 itemData.spellChecking() = QVariant( atts.value( i ) ).toBool();

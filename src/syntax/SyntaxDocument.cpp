@@ -7,32 +7,10 @@
 #include <QFileInfo>
 #include <QDebug>
 
-QHash<QString, QodeEdit::Style> initializedStyleMapping()
-{
-    QHash<QString, QodeEdit::Style> hash;
-    hash[ "alert" ] = QodeEdit::AlertStyle;
-    hash[ "base-n integer" ] = QodeEdit::BaseNStyle;
-    hash[ "character" ] = QodeEdit::CharStyle;
-    hash[ "string char" ] = QodeEdit::CharStyle;
-    hash[ "comment" ] = QodeEdit::CommentStyle;
-    hash[ "data type" ] = QodeEdit::DataTypeStyle;
-    hash[ "decimal/value" ] = QodeEdit::DecValStyle;
-    hash[ "error" ] = QodeEdit::ErrorStyle;
-    hash[ "floating point" ] = QodeEdit::FloatStyle;
-    hash[ "function" ] = QodeEdit::FunctionStyle;
-    hash[ "keyword" ] = QodeEdit::KeywordStyle;
-    hash[ "normal" ] = QodeEdit::NormalStyle;
-    hash[ "others" ] = QodeEdit::OthersStyle;
-    hash[ "region marker" ] = QodeEdit::RegionMarkerStyle;
-    hash[ "string" ] = QodeEdit::StringStyle;
-    return hash;
-}
-
 class Syntax::DocumentData : public QSharedData
 {
 public:
     static QString globalDefaultDeliminator;
-    static QHash<QString, QodeEdit::Style> globalStyleMapping;
     
     QString name;
     QString localizedName;
@@ -95,7 +73,6 @@ public:
 };
 
 QString Syntax::DocumentData::globalDefaultDeliminator( " \t.():!+,-<=>%&*/;?[]^{|}~\\" );
-QHash<QString, QodeEdit::Style> Syntax::DocumentData::globalStyleMapping( initializedStyleMapping() );
 
 
 Syntax::Document::Document()
