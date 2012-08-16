@@ -16,6 +16,7 @@
 
 XUP.QT_VERSION = Qt System (4.8.1)
 XUP.OTHERS_PLATFORM_TARGET_DEFAULT = bin/Linux/qodeedit_debug
+XUP.MAC_PLATFORM_TARGET_DEFAULT = bin/Darwin/qodeedit_debug.app
 
 ABSOLUTE_DATA_DIR = $$PWD/share
 
@@ -44,13 +45,13 @@ greaterThan( QT_MAJOR_VERSION, 4 ) {
 
         macx {
             SOURCES *= $${MIMETYPES_QT4_ROOT}/io/*_mac.c*
-        }         else:unix {
+            LIBS *= "-framework Carbon"
+        } else:unix {
             SOURCES *= $${MIMETYPES_QT4_ROOT}/io/*_unix.c*
-        }
-        else:win32 {
+        } else:win32 {
             SOURCES *= $${MIMETYPES_QT4_ROOT}/io/*_win.c*
         }
-    }     else {
+    } else {
         error( Qt 4 build need dependency project mimetypes-qt4 uncompressed in current folder as $${MIMETYPES_QT4_ROOT}. You can get it here https://github.com/pasnox/mimetypes-qt4 )
     }
 }
