@@ -193,7 +193,7 @@ Syntax::Highlighter* Syntax::Factory::highlighterForMimeType( const QString& mim
     foreach ( const QString& name, Syntax::Factory::mDocuments.keys() ) {
         Syntax::Document& document = Syntax::Factory::mDocuments[ name ];
         
-        if ( document.mimeTypes().contains( mimeType ) ) {
+        if ( document.mimeType().contains( mimeType ) ) {
             documents[ document.priority() ] = &document;
         }
     }

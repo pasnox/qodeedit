@@ -19,7 +19,7 @@ public:
     QString version;
     QString kateVersion;
     QString indenter;
-    Syntax::List mimeTypes;
+    Syntax::List mimeType;
     int priority;
     bool hidden;
     QString style;
@@ -52,7 +52,7 @@ public:
             SYNTAX_OTHER_INIT( version ),
             SYNTAX_OTHER_INIT( kateVersion ),
             SYNTAX_OTHER_INIT( indenter ),
-            SYNTAX_OTHER_INIT( mimeTypes ),
+            SYNTAX_OTHER_INIT( mimeType ),
             SYNTAX_OTHER_INIT( priority ),
             SYNTAX_OTHER_INIT( hidden ),
             SYNTAX_OTHER_INIT( style ),
@@ -96,7 +96,7 @@ SYNTAX_IMPL_MEMBER( Syntax::List, extensions, Document )
 SYNTAX_IMPL_MEMBER( QString, version, Document )
 SYNTAX_IMPL_MEMBER( QString, kateVersion, Document )
 SYNTAX_IMPL_MEMBER( QString, indenter, Document )
-SYNTAX_IMPL_MEMBER( Syntax::List, mimeTypes, Document )
+SYNTAX_IMPL_MEMBER( Syntax::List, mimeType, Document )
 SYNTAX_IMPL_MEMBER( int, priority, Document )
 SYNTAX_IMPL_MEMBER( bool, hidden, Document )
 SYNTAX_IMPL_MEMBER( QString, style, Document )

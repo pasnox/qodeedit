@@ -16,6 +16,8 @@ private:
     QExplicitlySharedDataPointer<Syntax::FoldingData> d;
     
 public:
+    // Required
+    // optional
     SYNTAX_DECL_MEMBER( bool, indentationSensitive );
     
     Folding();

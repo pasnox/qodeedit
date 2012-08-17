@@ -16,6 +16,8 @@ private:
     QExplicitlySharedDataPointer<Syntax::IndentationData> d;
     
 public:
+    // Required
+    // Optional
     SYNTAX_DECL_MEMBER( QString, mode );
     
     Indentation();

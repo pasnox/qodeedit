@@ -16,6 +16,8 @@ private:
     QExplicitlySharedDataPointer<Syntax::KeywordsData> d;
     
 public:
+    // Required
+    // Optional
     SYNTAX_DECL_MEMBER( bool, caseSensitive );
     SYNTAX_DECL_MEMBER( QString, weakDeliminator );
     SYNTAX_DECL_MEMBER( QString, additionalDeliminator );

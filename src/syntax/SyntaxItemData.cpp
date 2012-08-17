@@ -13,6 +13,7 @@ public:
     bool strikeOut;
     bool underline;
     QColor backgroundColor;
+    QColor selBackgroundColor;
     
     ItemDataData()
         : QSharedData(),
@@ -35,7 +36,8 @@ public:
             SYNTAX_OTHER_INIT( italic ),
             SYNTAX_OTHER_INIT( strikeOut ),
             SYNTAX_OTHER_INIT( underline ),
-            SYNTAX_OTHER_INIT( backgroundColor )
+            SYNTAX_OTHER_INIT( backgroundColor ),
+            SYNTAX_OTHER_INIT( selBackgroundColor )
     {
     }
     
@@ -67,4 +69,5 @@ SYNTAX_IMPL_MEMBER( bool, italic, ItemData )
 SYNTAX_IMPL_MEMBER( bool, strikeOut, ItemData )
 SYNTAX_IMPL_MEMBER( bool, underline, ItemData )
 SYNTAX_IMPL_MEMBER( QColor, backgroundColor, ItemData )
+SYNTAX_IMPL_MEMBER( QColor, selBackgroundColor, ItemData )
 SYNTAX_IMPL_OPERATORS( ItemData )

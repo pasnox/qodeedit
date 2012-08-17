@@ -33,7 +33,7 @@ public:
             QString iconName;
             QIcon icon;
             
-            foreach ( QString key, document.mimeTypes() ) {
+            foreach ( QString key, document.mimeType() ) {
                 key = key.replace( "/", "-" );
                 
                 if ( !QIcon::hasThemeIcon( key ) ) {

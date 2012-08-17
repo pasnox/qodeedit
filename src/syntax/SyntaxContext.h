@@ -20,15 +20,17 @@ private:
 public:
     typedef QHash<QString, Syntax::Context> Hash;
     
-    SYNTAX_DECL_MEMBER( QString, name ); ///< Name of the context
+    // Required
     SYNTAX_DECL_MEMBER( QString, attribute );
-    SYNTAX_DECL_MEMBER( QString, lineBeginContext );
     SYNTAX_DECL_MEMBER( QString, lineEndContext );
+    // Optional
+    SYNTAX_DECL_MEMBER( QString, name ); ///< Name of the context
+    SYNTAX_DECL_MEMBER( QString, lineBeginContext );
     SYNTAX_DECL_MEMBER( bool, fallThrough );
     SYNTAX_DECL_MEMBER( QString, fallThroughContext );
     SYNTAX_DECL_MEMBER( bool, dynamic );
     SYNTAX_DECL_MEMBER( bool, noIndentationBasedFolding );
-    SYNTAX_DECL_MEMBER( bool, caseSensitive );
+    // Others
     SYNTAX_DECL_MEMBER( Syntax::Rule::List, rules ); ///< Rules of the context
     
     Context();

@@ -20,9 +20,9 @@ private:
     QExplicitlySharedDataPointer<Syntax::GeneralData> d;
     
 public:
+    SYNTAX_DECL_MEMBER( Syntax::Folding, folding );
     SYNTAX_DECL_MEMBER( Syntax::Comment::List, comments );
     SYNTAX_DECL_MEMBER( Syntax::Keywords, keywords );
-    SYNTAX_DECL_MEMBER( Syntax::Folding, folding );
     SYNTAX_DECL_MEMBER( Syntax::Indentation, indentation );
     SYNTAX_DECL_MEMBER( Syntax::EmptyLine::List, emptyLines );
     

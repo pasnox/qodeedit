@@ -7,7 +7,6 @@ public:
     QString start;
     QString end;
     QString region;
-    QString weakDeliminator;
     QString position;
     
     CommentData()
@@ -21,7 +20,6 @@ public:
             SYNTAX_OTHER_INIT( start ),
             SYNTAX_OTHER_INIT( end ),
             SYNTAX_OTHER_INIT( region ),
-            SYNTAX_OTHER_INIT( weakDeliminator ),
             SYNTAX_OTHER_INIT( position )
     {
     }
@@ -48,6 +46,5 @@ SYNTAX_IMPL_MEMBER( QString, name, Comment )
 SYNTAX_IMPL_MEMBER( QString, start, Comment )
 SYNTAX_IMPL_MEMBER( QString, end, Comment )
 SYNTAX_IMPL_MEMBER( QString, region, Comment )
-SYNTAX_IMPL_MEMBER( QString, weakDeliminator, Comment )
 SYNTAX_IMPL_MEMBER( QString, position, Comment )
 SYNTAX_IMPL_OPERATORS( Comment )

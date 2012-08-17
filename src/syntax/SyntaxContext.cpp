@@ -11,7 +11,6 @@ public:
     QString fallThroughContext;
     bool dynamic;
     bool noIndentationBasedFolding;
-    bool caseSensitive;
     Syntax::Rule::List rules;
     
     ContextData()
@@ -22,8 +21,7 @@ public:
             fallThrough( false ),
             fallThroughContext( "#stay" ),
             dynamic( false ),
-            noIndentationBasedFolding( false ),
-            caseSensitive( false )
+            noIndentationBasedFolding( false )
     {
     }
     
@@ -37,7 +35,6 @@ public:
             SYNTAX_OTHER_INIT( fallThroughContext ),
             SYNTAX_OTHER_INIT( dynamic ),
             SYNTAX_OTHER_INIT( noIndentationBasedFolding ),
-            SYNTAX_OTHER_INIT( caseSensitive ),
             SYNTAX_OTHER_INIT( rules )
     {
     }
@@ -68,6 +65,5 @@ SYNTAX_IMPL_MEMBER( bool, fallThrough, Context )
 SYNTAX_IMPL_MEMBER( QString, fallThroughContext, Context )
 SYNTAX_IMPL_MEMBER( bool, dynamic, Context )
 SYNTAX_IMPL_MEMBER( bool, noIndentationBasedFolding, Context )
-SYNTAX_IMPL_MEMBER( bool, caseSensitive, Context )
 SYNTAX_IMPL_MEMBER( Syntax::Rule::List, rules, Context )
 SYNTAX_IMPL_OPERATORS( Context )

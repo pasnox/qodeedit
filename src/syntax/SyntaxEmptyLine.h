@@ -18,7 +18,9 @@ private:
 public:
     typedef QList<Syntax::EmptyLine> List;
     
+    // Required
     SYNTAX_DECL_MEMBER( QString, regExpr );
+    // Optional
     SYNTAX_DECL_MEMBER( bool, caseSensitive );
     
     EmptyLine();

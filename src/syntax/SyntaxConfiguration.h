@@ -16,7 +16,9 @@ private:
     QExplicitlySharedDataPointer<Syntax::ConfigurationData> d;
     
 public:
-    SYNTAX_DECL_MEMBER( QString, encodingReplacementPolicy );
+    // Required
+    // Optional
+    SYNTAX_DECL_MEMBER( QString, encodingReplacementPolicy ); // enum: EncodeAlways, EncodeWhenPresent, EncodeNever,
     
     Configuration();
     Configuration( const Syntax::Configuration& other );

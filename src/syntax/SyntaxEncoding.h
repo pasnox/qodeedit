@@ -19,8 +19,10 @@ private:
 public:
     typedef QList<Syntax::Encoding> List;
     
-    SYNTAX_DECL_MEMBER( QString, char_ );
+    // Required
     SYNTAX_DECL_MEMBER( QString, string );
+    // Optional
+    SYNTAX_DECL_MEMBER( QString, char_ );
     SYNTAX_DECL_MEMBER( bool, ignored );
     
     Encoding();

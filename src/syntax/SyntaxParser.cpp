@@ -206,7 +206,7 @@ bool Syntax::Parser::startElement( const QString& namespaceURI, const QString& l
                 d->document->indenter() = atts.value( i );
             }
             else if ( QodeEdit::stringEquals( name, "mimeType" ) ) {
-                d->document->mimeTypes() = atts.value( i ).split( ";", QString::SkipEmptyParts ).toSet();
+                d->document->mimeType() = atts.value( i ).split( ";", QString::SkipEmptyParts ).toSet();
             }
             else if ( QodeEdit::stringEquals( name, "extensions" ) ) {
                 d->document->extensions() = atts.value( i ).split( ";", QString::SkipEmptyParts ).toSet();
@@ -304,7 +304,7 @@ bool Syntax::Parser::startElement( const QString& namespaceURI, const QString& l
                 context.noIndentationBasedFolding() = QVariant( atts.value( i ) ).toBool();
             }
             else if ( QodeEdit::stringEquals( name, "caseSensitive" ) ) {
-                context.caseSensitive() = QVariant( atts.value( i ) ).toBool();
+                qWarning( "%s: Invalid attribute (%s) meet in %s", Q_FUNC_INFO, qPrintable( name ), qPrintable( qName ) );
             }
             else {
                 d->error = QString( "%1: Unhandled context attribute: %2" ).arg( Q_FUNC_INFO ).arg( name );
@@ -449,6 +449,9 @@ bool Syntax::Parser::startElement( const QString& namespaceURI, const QString& l
             else if ( QodeEdit::stringEquals( name, "backgroundColor" ) ) {
                 itemData.backgroundColor() = QColor( atts.value( i ) );
             }
+            else if ( QodeEdit::stringEquals( name, "selBackgroundColor" ) ) {
+                itemData.selBackgroundColor() = QColor( atts.value( i ) );
+            }
             else {
                 d->error = QString( "%1: Unhandled itemData attribute: %2" ).arg( Q_FUNC_INFO ).arg( name );
                 return false;
@@ -491,11 +494,11 @@ bool Syntax::Parser::startElement( const QString& namespaceURI, const QString& l
             else if ( QodeEdit::stringEquals( name, "region" ) ) {
                 comment.region() = atts.value( i );
             }
-            else if ( QodeEdit::stringEquals( name, "weakDeliminator" ) ) {
-                comment.weakDeliminator() = atts.value( i );
-            }
             else if ( QodeEdit::stringEquals( name, "position" ) ) {
                 comment.position() = atts.value( i );
+            }
+            else if ( QodeEdit::stringEquals( name, "weakDeliminator" ) ) {
+                qWarning( "%s: Invalid attribute (%s) meet in %s", Q_FUNC_INFO, qPrintable( name ), qPrintable( qName ) );
             }
             else {
                 d->error = QString( "%1: Unhandled comment attribute: %2" ).arg( Q_FUNC_INFO ).arg( name );
