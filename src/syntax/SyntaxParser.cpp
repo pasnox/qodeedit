@@ -191,7 +191,7 @@ bool Syntax::Parser::startElement( const QString& namespaceURI, const QString& l
             const QString name = atts.qName( i );
             
             if ( QodeEdit::stringEquals( name, "name" ) ) {
-                d->document->name() = atts.value( i );
+                d->document->name() = atts.value( i ).toLower();
             }
             else if ( QodeEdit::stringEquals( name, "section" ) ) {
                 d->document->section() = atts.value( i );
@@ -248,7 +248,7 @@ bool Syntax::Parser::startElement( const QString& namespaceURI, const QString& l
             const QString name = atts.qName( i );
             
             if ( QodeEdit::stringEquals( name, "name" ) ) {
-                d->listName = atts.value( i );
+                d->listName = atts.value( i ).toLower();
             }
             else {
                 d->error = QString( "%1: Unhandled list attribute: %2" ).arg( Q_FUNC_INFO ).arg( name );
@@ -279,23 +279,23 @@ bool Syntax::Parser::startElement( const QString& namespaceURI, const QString& l
             const QString name = atts.qName( i );
             
             if ( QodeEdit::stringEquals( name, "name" ) ) {
-                d->contextName = atts.value( i );
+                d->contextName = atts.value( i ).toLower();
                 context.name() = d->contextName;
             }
             else if ( QodeEdit::stringEquals( name, "lineBeginContext" ) ) {
-                context.lineBeginContext() = atts.value( i );
+                context.lineBeginContext() = atts.value( i ).toLower();
             }
             else if ( QodeEdit::stringEquals( name, "lineEndContext" ) ) {
-                context.lineEndContext() = atts.value( i );
+                context.lineEndContext() = atts.value( i ).toLower();
             }
             else if ( QodeEdit::stringEquals( name, "attribute" ) ) {
-                context.attribute() = atts.value( i );
+                context.attribute() = atts.value( i ).toLower();
             }
             else if ( QodeEdit::stringEquals( name, "fallThrough" ) ) {
                 context.fallThrough() = QVariant( atts.value( i ) ).toBool();
             }
             else if ( QodeEdit::stringEquals( name, "fallThroughContext" ) ) {
-                context.fallThroughContext() = atts.value( i );
+                context.fallThroughContext() = atts.value( i ).toLower();
             }
             else if ( QodeEdit::stringEquals( name, "dynamic" ) ) {
                 context.dynamic() = QVariant( atts.value( i ) ).toBool();
@@ -335,13 +335,13 @@ bool Syntax::Parser::startElement( const QString& namespaceURI, const QString& l
             const QString name = atts.qName( i );
             
             if ( QodeEdit::stringEquals( name, "attribute" ) ) {
-                rule.attribute() = atts.value( i );
+                rule.attribute() = atts.value( i ).toLower();
             }
             else if ( QodeEdit::stringEquals( name, "context" ) || QodeEdit::stringEquals( name, "contex" ) ) { // fucking bad ruby xml file
-                rule.context() = atts.value( i );
+                rule.context() = atts.value( i ).toLower();
             }
             else if ( QodeEdit::stringEquals( name, "string" ) ) {
-                rule.string() = atts.value( i );
+                rule.string() = atts.value( i ).toLower();
             }
             else if ( QodeEdit::stringEquals( name, "beginRegion" ) ) {
                 rule.beginRegion() = atts.value( i );
@@ -380,7 +380,7 @@ bool Syntax::Parser::startElement( const QString& namespaceURI, const QString& l
                 rule.region() = atts.value( i );
             }
             else if ( QodeEdit::stringEquals( name, "lineEndContext" ) ) {
-                rule.lineEndContext() = atts.value( i );
+                rule.lineEndContext() = atts.value( i ).toLower();
             }
             else if ( QodeEdit::stringEquals( name, "weakDelimiter" ) ) {
                 rule.weakDelimiter() = atts.value( i );
@@ -480,7 +480,7 @@ bool Syntax::Parser::startElement( const QString& namespaceURI, const QString& l
             const QString name = atts.qName( i );
             
             if ( QodeEdit::stringEquals( name, "name" ) ) {
-                comment.name() = atts.value( i );
+                comment.name() = atts.value( i ).toLower();
             }
             else if ( QodeEdit::stringEquals( name, "start" ) ) {
                 comment.start() = atts.value( i );

@@ -26,6 +26,7 @@ public:
     
     RuleData()
         : QSharedData(),
+            context( "#stay" ),
             firstNonSpace( false ),
             lookAhead( false ),
             insensitive( false ),
