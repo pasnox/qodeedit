@@ -282,6 +282,9 @@ bool Syntax::Parser::startElement( const QString& namespaceURI, const QString& l
                 d->contextName = atts.value( i );
                 context.name() = d->contextName;
             }
+            else if ( QodeEdit::stringEquals( name, "lineBeginContext" ) ) {
+                context.lineBeginContext() = atts.value( i );
+            }
             else if ( QodeEdit::stringEquals( name, "lineEndContext" ) ) {
                 context.lineEndContext() = atts.value( i );
             }
@@ -307,6 +310,10 @@ bool Syntax::Parser::startElement( const QString& namespaceURI, const QString& l
                 d->error = QString( "%1: Unhandled context attribute: %2" ).arg( Q_FUNC_INFO ).arg( name );
                 return false;
             }
+        }
+        
+        if ( !context.fallThrough() ) {
+            context.fallThroughContext().clear();
         }
         
         d->document->highlighting().contexts()[ context.name() ] = context;

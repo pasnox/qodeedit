@@ -72,7 +72,7 @@ public:
     }
 };
 
-QString Syntax::DocumentData::globalDefaultDeliminator( " \t.():!+,-<=>%&*/;?[]^{|}~\\" );
+QString Syntax::DocumentData::globalDefaultDeliminator( ".():!+,-<=>%&*/;?[]^{|}~\\ \t" );
 
 
 Syntax::Document::Document()

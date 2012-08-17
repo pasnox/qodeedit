@@ -22,6 +22,7 @@ public:
     
     SYNTAX_DECL_MEMBER( QString, name ); ///< Name of the context
     SYNTAX_DECL_MEMBER( QString, attribute );
+    SYNTAX_DECL_MEMBER( QString, lineBeginContext );
     SYNTAX_DECL_MEMBER( QString, lineEndContext );
     SYNTAX_DECL_MEMBER( bool, fallThrough );
     SYNTAX_DECL_MEMBER( QString, fallThroughContext );

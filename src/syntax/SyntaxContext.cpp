@@ -5,6 +5,7 @@ class Syntax::ContextData : public QSharedData
 public:
     QString name;
     QString attribute;
+    QString lineBeginContext;
     QString lineEndContext;
     bool fallThrough;
     QString fallThroughContext;
@@ -15,7 +16,11 @@ public:
     
     ContextData()
         : QSharedData(),
+            attribute( "normal" ),
+            lineBeginContext( "#stay" ),
+            lineEndContext( "#stay" ),
             fallThrough( false ),
+            fallThroughContext( "#stay" ),
             dynamic( false ),
             noIndentationBasedFolding( false ),
             caseSensitive( false )
@@ -26,6 +31,7 @@ public:
         : QSharedData( other ),
             SYNTAX_OTHER_INIT( name ),
             SYNTAX_OTHER_INIT( attribute ),
+            SYNTAX_OTHER_INIT( lineBeginContext ),
             SYNTAX_OTHER_INIT( lineEndContext ),
             SYNTAX_OTHER_INIT( fallThrough ),
             SYNTAX_OTHER_INIT( fallThroughContext ),
@@ -56,6 +62,7 @@ Syntax::Context::~Context()
 
 SYNTAX_IMPL_MEMBER( QString, name, Context )
 SYNTAX_IMPL_MEMBER( QString, attribute, Context )
+SYNTAX_IMPL_MEMBER( QString, lineBeginContext, Context )
 SYNTAX_IMPL_MEMBER( QString, lineEndContext, Context )
 SYNTAX_IMPL_MEMBER( bool, fallThrough, Context )
 SYNTAX_IMPL_MEMBER( QString, fallThroughContext, Context )
