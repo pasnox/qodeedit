@@ -1,0 +1,1165 @@
+<schema
+  xmlns='http://www.w3.org/2000/10/XMLSchema'
+  targetNamespace='http://www.w3.org/namespace/'
+  xmlns:t='http://www.w3.org/namespace/'>
+
+ <element name='language'>
+  <complexType>
+   <sequence>
+    <element ref='t:highlighting'/>
+    <element ref='t:general' minOccurs='0' maxOccurs='1'/>
+    <element ref='t:spellchecking' minOccurs='0' maxOccurs='1'/>
+   </sequence>
+   <attribute name='name' type='string' use='required'/>
+   <attribute name='section' type='NMTOKEN' use='required'/>
+   <attribute name='extensions' type='string' use='required'/>
+   <attribute name='version' type='string' use='required'/>
+   <attribute name='kateversion' type='string' use='required'/>
+   <attribute name='style' type='string' use='optional'/>
+   <attribute name='mimetype' type='string' use='optional'/>
+   <attribute name='casesensitive' use='optional'>
+    <simpleType>
+     <restriction base='string'>
+      <enumeration value='true'/>
+      <enumeration value='false'/>
+      <enumeration value='TRUE'/>
+      <enumeration value='FALSE'/>
+      <enumeration value='0'/>
+      <enumeration value='1'/>
+     </restriction>
+    </simpleType>
+   </attribute>
+   <attribute name='priority' type='string' use='optional'/>
+   <attribute name='author' type='string' use='optional'/>
+   <attribute name='license' type='string' use='optional'/>
+   <attribute name='indenter' type='string' use='optional'/>
+   <attribute name='hidden' use='optional'>
+    <simpleType>
+     <restriction base='string'>
+      <enumeration value='true'/>
+      <enumeration value='false'/>
+      <enumeration value='TRUE'/>
+      <enumeration value='FALSE'/>
+      <enumeration value='0'/>
+      <enumeration value='1'/>
+     </restriction>
+    </simpleType>
+   </attribute>
+  </complexType>
+ </element>
+
+ <element name='general'>
+  <complexType>
+   <choice minOccurs='0' maxOccurs='unbounded'>
+    <element ref='t:folding'/>
+    <element ref='t:comments'/>
+    <element ref='t:keywords'/>
+    <element ref='t:indentation'/>
+    <element ref='t:emptyLines'/>
+   </choice>
+  </complexType>
+ </element>
+
+ <element name='folding'>
+  <complexType>
+   <attribute name='indentationsensitive' use='optional'>
+    <simpleType>
+     <restriction base='string'>
+      <enumeration value='true'/>
+      <enumeration value='false'/>
+      <enumeration value='TRUE'/>
+      <enumeration value='FALSE'/>
+      <enumeration value='0'/>
+      <enumeration value='1'/>
+     </restriction>
+    </simpleType>
+   </attribute>
+  </complexType>
+ </element>
+
+ <element name='comments'>
+  <complexType>
+   <sequence maxOccurs='unbounded'>
+    <element ref='t:comment'/>
+   </sequence>
+  </complexType>
+ </element>
+
+ <element name='comment'>
+  <complexType>
+   <attribute name='name' use='required'>
+    <simpleType>
+     <restriction base='string'>
+      <enumeration value='singleLine'/>
+      <enumeration value='multiLine'/>
+     </restriction>
+    </simpleType>
+   </attribute>
+   <attribute name='start' type='string' use='required'/>
+   <attribute name='end' type='string' use='optional'/>
+   <attribute name='region' type='string' use='optional'/>
+   <attribute name='position' use='optional'>
+    <simpleType>
+     <restriction base='string'>
+      <enumeration value='afterwhitespace'/>
+     </restriction>
+    </simpleType>
+   </attribute>
+  </complexType>
+ </element>
+
+ <element name='keywords'>
+  <complexType>
+   <attribute name='casesensitive' use='optional'>
+    <simpleType>
+     <restriction base='string'>
+      <enumeration value='true'/>
+      <enumeration value='false'/>
+      <enumeration value='TRUE'/>
+      <enumeration value='FALSE'/>
+      <enumeration value='0'/>
+      <enumeration value='1'/>
+     </restriction>
+    </simpleType>
+   </attribute>
+   <attribute name='weakDeliminator' type='string' use='optional'/>
+   <attribute name='additionalDeliminator' type='string' use='optional'/>
+   <attribute name='wordWrapDeliminator' type='string' use='optional'/>
+  </complexType>
+ </element>
+
+ <element name='indentation'>
+  <complexType>
+   <attribute name='mode' type='string' use='optional'/>
+  </complexType>
+ </element>
+
+ <element name='emptyLines'>
+  <complexType>
+   <sequence>
+    <element ref='t:emptyLine' minOccurs='0' maxOccurs='unbounded'/>
+   </sequence>
+  </complexType>
+ </element>
+
+ <element name='emptyLine'>
+  <complexType>
+   <attribute name='regexpr' type='string' use='required'/>
+   <attribute name='casesensitive' use='optional'>
+    <simpleType>
+     <restriction base='string'>
+      <enumeration value='true'/>
+      <enumeration value='false'/>
+      <enumeration value='TRUE'/>
+      <enumeration value='FALSE'/>
+      <enumeration value='0'/>
+      <enumeration value='1'/>
+     </restriction>
+    </simpleType>
+   </attribute>
+  </complexType>
+ </element>
+
+ <element name='highlighting'>
+  <complexType>
+   <sequence>
+    <element ref='t:list' minOccurs='0' maxOccurs='unbounded'/>
+    <element ref='t:contexts'/>
+    <element ref='t:itemDatas'/>
+   </sequence>
+  </complexType>
+ </element>
+
+ <element name='list'>
+  <complexType>
+   <sequence minOccurs='0' maxOccurs='unbounded'>
+    <element ref='t:item'/>
+   </sequence>
+   <attribute name='name' type='string' use='required'/>
+  </complexType>
+ </element>
+
+ <element name='item'>
+  <complexType mixed='true'>
+  </complexType>
+ </element>
+
+ <element name='contexts'>
+  <complexType>
+   <sequence maxOccurs='unbounded'>
+    <element ref='t:context'/>
+   </sequence>
+  </complexType>
+ </element>
+
+ <element name='context'>
+  <complexType>
+   <choice minOccurs='0' maxOccurs='unbounded'>
+    <element ref='t:keyword'/>
+    <element ref='t:Float'/>
+    <element ref='t:HlCOct'/>
+    <element ref='t:HlCHex'/>
+    <element ref='t:HlCFloat'/>
+    <element ref='t:Int'/>
+    <element ref='t:DetectChar'/>
+    <element ref='t:Detect2Chars'/>
+    <element ref='t:AnyChar'/>
+    <element ref='t:StringDetect'/>
+    <element ref='t:WordDetect'/>
+    <element ref='t:RegExpr'/>
+    <element ref='t:LineContinue'/>
+    <element ref='t:HlCStringChar'/>
+    <element ref='t:RangeDetect'/>
+    <element ref='t:HlCChar'/>
+    <element ref='t:IncludeRules'/>
+    <element ref='t:DetectSpaces'/>
+    <element ref='t:DetectIdentifier'/>
+   </choice>
+   <attribute name='name' type='string' use='optional'/>
+   <attribute name='attribute' type='string' use='required'/>
+   <attribute name='lineEndContext' type='string' use='required'/>
+   <attribute name='lineBeginContext' type='string' use='optional'/>
+   <attribute name='fallthrough' use='optional'>
+    <simpleType>
+     <restriction base='string'>
+      <enumeration value='true'/>
+      <enumeration value='false'/>
+      <enumeration value='TRUE'/>
+      <enumeration value='FALSE'/>
+      <enumeration value='0'/>
+      <enumeration value='1'/>
+     </restriction>
+    </simpleType>
+   </attribute>
+   <attribute name='fallthroughContext' type='string' use='optional'/>
+   <attribute name='dynamic' use='optional'>
+    <simpleType>
+     <restriction base='string'>
+      <enumeration value='true'/>
+      <enumeration value='false'/>
+      <enumeration value='TRUE'/>
+      <enumeration value='FALSE'/>
+      <enumeration value='0'/>
+      <enumeration value='1'/>
+     </restriction>
+    </simpleType>
+   </attribute>
+   <attribute name='noIndentationBasedFolding' use='optional'>
+    <simpleType>
+     <restriction base='string'>
+      <enumeration value='true'/>
+      <enumeration value='false'/>
+      <enumeration value='TRUE'/>
+      <enumeration value='FALSE'/>
+      <enumeration value='0'/>
+      <enumeration value='1'/>
+     </restriction>
+    </simpleType>
+   </attribute>
+  </complexType>
+ </element>
+
+ <element name='keyword'>
+  <complexType>
+   <attribute name='attribute' type='string' use='optional'/>
+   <attribute name='context' type='string' use='optional'/>
+   <attribute name='beginRegion' type='string' use='optional'/>
+   <attribute name='endRegion' type='string' use='optional'/>
+   <attribute name='lookAhead' use='optional'>
+    <simpleType>
+     <restriction base='string'>
+      <enumeration value='true'/>
+      <enumeration value='false'/>
+      <enumeration value='TRUE'/>
+      <enumeration value='FALSE'/>
+      <enumeration value='0'/>
+      <enumeration value='1'/>
+     </restriction>
+    </simpleType>
+   </attribute>
+   <attribute name='firstNonSpace' use='optional'>
+    <simpleType>
+     <restriction base='string'>
+      <enumeration value='true'/>
+      <enumeration value='false'/>
+      <enumeration value='TRUE'/>
+      <enumeration value='FALSE'/>
+      <enumeration value='0'/>
+      <enumeration value='1'/>
+     </restriction>
+    </simpleType>
+   </attribute>
+   <attribute name='column' type='string' use='optional'/>
+   <attribute name='insensitive' type='string' use='optional'/>
+   <attribute name='String' type='string' use='required'/>
+   <attribute name='weakDelimiter' type='string' use='optional'/>
+  </complexType>
+ </element>
+
+ <element name='Float'>
+  <complexType>
+   <sequence minOccurs='0' maxOccurs='unbounded'>
+    <element ref='t:AnyChar'/>
+   </sequence>
+   <attribute name='attribute' type='string' use='optional'/>
+   <attribute name='context' type='string' use='optional'/>
+   <attribute name='beginRegion' type='string' use='optional'/>
+   <attribute name='endRegion' type='string' use='optional'/>
+   <attribute name='lookAhead' use='optional'>
+    <simpleType>
+     <restriction base='string'>
+      <enumeration value='true'/>
+      <enumeration value='false'/>
+      <enumeration value='TRUE'/>
+      <enumeration value='FALSE'/>
+      <enumeration value='0'/>
+      <enumeration value='1'/>
+     </restriction>
+    </simpleType>
+   </attribute>
+   <attribute name='firstNonSpace' use='optional'>
+    <simpleType>
+     <restriction base='string'>
+      <enumeration value='true'/>
+      <enumeration value='false'/>
+      <enumeration value='TRUE'/>
+      <enumeration value='FALSE'/>
+      <enumeration value='0'/>
+      <enumeration value='1'/>
+     </restriction>
+    </simpleType>
+   </attribute>
+   <attribute name='column' type='string' use='optional'/>
+  </complexType>
+ </element>
+
+ <element name='HlCOct'>
+  <complexType>
+   <attribute name='attribute' type='string' use='optional'/>
+   <attribute name='context' type='string' use='optional'/>
+   <attribute name='beginRegion' type='string' use='optional'/>
+   <attribute name='endRegion' type='string' use='optional'/>
+   <attribute name='lookAhead' use='optional'>
+    <simpleType>
+     <restriction base='string'>
+      <enumeration value='true'/>
+      <enumeration value='false'/>
+      <enumeration value='TRUE'/>
+      <enumeration value='FALSE'/>
+      <enumeration value='0'/>
+      <enumeration value='1'/>
+     </restriction>
+    </simpleType>
+   </attribute>
+   <attribute name='firstNonSpace' use='optional'>
+    <simpleType>
+     <restriction base='string'>
+      <enumeration value='true'/>
+      <enumeration value='false'/>
+      <enumeration value='TRUE'/>
+      <enumeration value='FALSE'/>
+      <enumeration value='0'/>
+      <enumeration value='1'/>
+     </restriction>
+    </simpleType>
+   </attribute>
+   <attribute name='column' type='string' use='optional'/>
+  </complexType>
+ </element>
+
+ <element name='HlCHex'>
+  <complexType>
+   <attribute name='attribute' type='string' use='optional'/>
+   <attribute name='context' type='string' use='optional'/>
+   <attribute name='beginRegion' type='string' use='optional'/>
+   <attribute name='endRegion' type='string' use='optional'/>
+   <attribute name='lookAhead' use='optional'>
+    <simpleType>
+     <restriction base='string'>
+      <enumeration value='true'/>
+      <enumeration value='false'/>
+      <enumeration value='TRUE'/>
+      <enumeration value='FALSE'/>
+      <enumeration value='0'/>
+      <enumeration value='1'/>
+     </restriction>
+    </simpleType>
+   </attribute>
+   <attribute name='firstNonSpace' use='optional'>
+    <simpleType>
+     <restriction base='string'>
+      <enumeration value='true'/>
+      <enumeration value='false'/>
+      <enumeration value='TRUE'/>
+      <enumeration value='FALSE'/>
+      <enumeration value='0'/>
+      <enumeration value='1'/>
+     </restriction>
+    </simpleType>
+   </attribute>
+   <attribute name='column' type='string' use='optional'/>
+  </complexType>
+ </element>
+
+ <element name='HlCFloat'>
+  <complexType>
+   <attribute name='attribute' type='string' use='optional'/>
+   <attribute name='context' type='string' use='optional'/>
+   <attribute name='beginRegion' type='string' use='optional'/>
+   <attribute name='endRegion' type='string' use='optional'/>
+   <attribute name='lookAhead' use='optional'>
+    <simpleType>
+     <restriction base='string'>
+      <enumeration value='true'/>
+      <enumeration value='false'/>
+      <enumeration value='TRUE'/>
+      <enumeration value='FALSE'/>
+      <enumeration value='0'/>
+      <enumeration value='1'/>
+     </restriction>
+    </simpleType>
+   </attribute>
+   <attribute name='firstNonSpace' use='optional'>
+    <simpleType>
+     <restriction base='string'>
+      <enumeration value='true'/>
+      <enumeration value='false'/>
+      <enumeration value='TRUE'/>
+      <enumeration value='FALSE'/>
+      <enumeration value='0'/>
+      <enumeration value='1'/>
+     </restriction>
+    </simpleType>
+   </attribute>
+   <attribute name='column' type='string' use='optional'/>
+  </complexType>
+ </element>
+
+ <element name='HlCChar'>
+  <complexType>
+   <attribute name='attribute' type='string' use='optional'/>
+   <attribute name='context' type='string' use='optional'/>
+   <attribute name='beginRegion' type='string' use='optional'/>
+   <attribute name='endRegion' type='string' use='optional'/>
+   <attribute name='lookAhead' use='optional'>
+    <simpleType>
+     <restriction base='string'>
+      <enumeration value='true'/>
+      <enumeration value='false'/>
+      <enumeration value='TRUE'/>
+      <enumeration value='FALSE'/>
+      <enumeration value='0'/>
+      <enumeration value='1'/>
+     </restriction>
+    </simpleType>
+   </attribute>
+   <attribute name='firstNonSpace' use='optional'>
+    <simpleType>
+     <restriction base='string'>
+      <enumeration value='true'/>
+      <enumeration value='false'/>
+      <enumeration value='TRUE'/>
+      <enumeration value='FALSE'/>
+      <enumeration value='0'/>
+      <enumeration value='1'/>
+     </restriction>
+    </simpleType>
+   </attribute>
+   <attribute name='column' type='string' use='optional'/>
+  </complexType>
+ </element>
+
+ <element name='Int'>
+  <complexType>
+   <sequence minOccurs='0' maxOccurs='unbounded'>
+    <element ref='t:StringDetect'/>
+   </sequence>
+   <attribute name='attribute' type='string' use='optional'/>
+   <attribute name='context' type='string' use='optional'/>
+   <attribute name='beginRegion' type='string' use='optional'/>
+   <attribute name='endRegion' type='string' use='optional'/>
+   <attribute name='lookAhead' use='optional'>
+    <simpleType>
+     <restriction base='string'>
+      <enumeration value='true'/>
+      <enumeration value='false'/>
+      <enumeration value='TRUE'/>
+      <enumeration value='FALSE'/>
+      <enumeration value='0'/>
+      <enumeration value='1'/>
+     </restriction>
+    </simpleType>
+   </attribute>
+   <attribute name='firstNonSpace' use='optional'>
+    <simpleType>
+     <restriction base='string'>
+      <enumeration value='true'/>
+      <enumeration value='false'/>
+      <enumeration value='TRUE'/>
+      <enumeration value='FALSE'/>
+      <enumeration value='0'/>
+      <enumeration value='1'/>
+     </restriction>
+    </simpleType>
+   </attribute>
+   <attribute name='column' type='string' use='optional'/>
+  </complexType>
+ </element>
+
+ <element name='DetectChar'>
+  <complexType>
+   <attribute name='attribute' type='string' use='optional'/>
+   <attribute name='context' type='string' use='optional'/>
+   <attribute name='beginRegion' type='string' use='optional'/>
+   <attribute name='endRegion' type='string' use='optional'/>
+   <attribute name='lookAhead' use='optional'>
+    <simpleType>
+     <restriction base='string'>
+      <enumeration value='true'/>
+      <enumeration value='false'/>
+      <enumeration value='TRUE'/>
+      <enumeration value='FALSE'/>
+      <enumeration value='0'/>
+      <enumeration value='1'/>
+     </restriction>
+    </simpleType>
+   </attribute>
+   <attribute name='firstNonSpace' use='optional'>
+    <simpleType>
+     <restriction base='string'>
+      <enumeration value='true'/>
+      <enumeration value='false'/>
+      <enumeration value='TRUE'/>
+      <enumeration value='FALSE'/>
+      <enumeration value='0'/>
+      <enumeration value='1'/>
+     </restriction>
+    </simpleType>
+   </attribute>
+   <attribute name='column' type='string' use='optional'/>
+   <attribute name='char' type='string' use='required'/>
+   <attribute name='dynamic' use='optional'>
+    <simpleType>
+     <restriction base='string'>
+      <enumeration value='true'/>
+      <enumeration value='false'/>
+      <enumeration value='TRUE'/>
+      <enumeration value='FALSE'/>
+      <enumeration value='0'/>
+      <enumeration value='1'/>
+     </restriction>
+    </simpleType>
+   </attribute>
+  </complexType>
+ </element>
+
+ <element name='Detect2Chars'>
+  <complexType>
+   <attribute name='attribute' type='string' use='optional'/>
+   <attribute name='context' type='string' use='optional'/>
+   <attribute name='beginRegion' type='string' use='optional'/>
+   <attribute name='endRegion' type='string' use='optional'/>
+   <attribute name='lookAhead' use='optional'>
+    <simpleType>
+     <restriction base='string'>
+      <enumeration value='true'/>
+      <enumeration value='false'/>
+      <enumeration value='TRUE'/>
+      <enumeration value='FALSE'/>
+      <enumeration value='0'/>
+      <enumeration value='1'/>
+     </restriction>
+    </simpleType>
+   </attribute>
+   <attribute name='firstNonSpace' use='optional'>
+    <simpleType>
+     <restriction base='string'>
+      <enumeration value='true'/>
+      <enumeration value='false'/>
+      <enumeration value='TRUE'/>
+      <enumeration value='FALSE'/>
+      <enumeration value='0'/>
+      <enumeration value='1'/>
+     </restriction>
+    </simpleType>
+   </attribute>
+   <attribute name='column' type='string' use='optional'/>
+   <attribute name='char' type='string' use='required'/>
+   <attribute name='char1' type='string' use='required'/>
+   <attribute name='dynamic' use='optional'>
+    <simpleType>
+     <restriction base='string'>
+      <enumeration value='true'/>
+      <enumeration value='false'/>
+      <enumeration value='TRUE'/>
+      <enumeration value='FALSE'/>
+      <enumeration value='0'/>
+      <enumeration value='1'/>
+     </restriction>
+    </simpleType>
+   </attribute>
+  </complexType>
+ </element>
+
+ <element name='AnyChar'>
+  <complexType>
+   <attribute name='attribute' type='string' use='optional'/>
+   <attribute name='context' type='string' use='optional'/>
+   <attribute name='beginRegion' type='string' use='optional'/>
+   <attribute name='endRegion' type='string' use='optional'/>
+   <attribute name='lookAhead' use='optional'>
+    <simpleType>
+     <restriction base='string'>
+      <enumeration value='true'/>
+      <enumeration value='false'/>
+      <enumeration value='TRUE'/>
+      <enumeration value='FALSE'/>
+      <enumeration value='0'/>
+      <enumeration value='1'/>
+     </restriction>
+    </simpleType>
+   </attribute>
+   <attribute name='firstNonSpace' use='optional'>
+    <simpleType>
+     <restriction base='string'>
+      <enumeration value='true'/>
+      <enumeration value='false'/>
+      <enumeration value='TRUE'/>
+      <enumeration value='FALSE'/>
+      <enumeration value='0'/>
+      <enumeration value='1'/>
+     </restriction>
+    </simpleType>
+   </attribute>
+   <attribute name='column' type='string' use='optional'/>
+   <attribute name='String' type='string' use='required'/>
+  </complexType>
+ </element>
+
+ <element name='StringDetect'>
+  <complexType>
+   <attribute name='attribute' type='string' use='optional'/>
+   <attribute name='context' type='string' use='optional'/>
+   <attribute name='beginRegion' type='string' use='optional'/>
+   <attribute name='endRegion' type='string' use='optional'/>
+   <attribute name='lookAhead' use='optional'>
+    <simpleType>
+     <restriction base='string'>
+      <enumeration value='true'/>
+      <enumeration value='false'/>
+      <enumeration value='TRUE'/>
+      <enumeration value='FALSE'/>
+      <enumeration value='0'/>
+      <enumeration value='1'/>
+     </restriction>
+    </simpleType>
+   </attribute>
+   <attribute name='firstNonSpace' use='optional'>
+    <simpleType>
+     <restriction base='string'>
+      <enumeration value='true'/>
+      <enumeration value='false'/>
+      <enumeration value='TRUE'/>
+      <enumeration value='FALSE'/>
+      <enumeration value='0'/>
+      <enumeration value='1'/>
+     </restriction>
+    </simpleType>
+   </attribute>
+   <attribute name='column' type='string' use='optional'/>
+   <attribute name='String' type='string' use='required'/>
+   <attribute name='insensitive' use='optional'>
+    <simpleType>
+     <restriction base='string'>
+      <enumeration value='true'/>
+      <enumeration value='false'/>
+      <enumeration value='TRUE'/>
+      <enumeration value='FALSE'/>
+      <enumeration value='0'/>
+      <enumeration value='1'/>
+     </restriction>
+    </simpleType>
+   </attribute>
+   <attribute name='dynamic' use='optional'>
+    <simpleType>
+     <restriction base='string'>
+      <enumeration value='true'/>
+      <enumeration value='false'/>
+      <enumeration value='TRUE'/>
+      <enumeration value='FALSE'/>
+      <enumeration value='0'/>
+      <enumeration value='1'/>
+     </restriction>
+    </simpleType>
+   </attribute>
+  </complexType>
+ </element>
+
+ <element name='WordDetect'>
+  <complexType>
+   <attribute name='attribute' type='string' use='optional'/>
+   <attribute name='context' type='string' use='optional'/>
+   <attribute name='beginRegion' type='string' use='optional'/>
+   <attribute name='endRegion' type='string' use='optional'/>
+   <attribute name='lookAhead' use='optional'>
+    <simpleType>
+     <restriction base='string'>
+      <enumeration value='true'/>
+      <enumeration value='false'/>
+      <enumeration value='TRUE'/>
+      <enumeration value='FALSE'/>
+      <enumeration value='0'/>
+      <enumeration value='1'/>
+     </restriction>
+    </simpleType>
+   </attribute>
+   <attribute name='firstNonSpace' use='optional'>
+    <simpleType>
+     <restriction base='string'>
+      <enumeration value='true'/>
+      <enumeration value='false'/>
+      <enumeration value='TRUE'/>
+      <enumeration value='FALSE'/>
+      <enumeration value='0'/>
+      <enumeration value='1'/>
+     </restriction>
+    </simpleType>
+   </attribute>
+   <attribute name='column' type='string' use='optional'/>
+   <attribute name='String' type='string' use='required'/>
+   <attribute name='insensitive' use='optional'>
+    <simpleType>
+     <restriction base='string'>
+      <enumeration value='true'/>
+      <enumeration value='false'/>
+      <enumeration value='TRUE'/>
+      <enumeration value='FALSE'/>
+      <enumeration value='0'/>
+      <enumeration value='1'/>
+     </restriction>
+    </simpleType>
+   </attribute>
+   <attribute name='dynamic' use='optional'>
+    <simpleType>
+     <restriction base='string'>
+      <enumeration value='true'/>
+      <enumeration value='false'/>
+      <enumeration value='TRUE'/>
+      <enumeration value='FALSE'/>
+      <enumeration value='0'/>
+      <enumeration value='1'/>
+     </restriction>
+    </simpleType>
+   </attribute>
+  </complexType>
+ </element>
+
+ <element name='RegExpr'>
+  <complexType>
+   <attribute name='attribute' type='string' use='optional'/>
+   <attribute name='context' type='string' use='optional'/>
+   <attribute name='beginRegion' type='string' use='optional'/>
+   <attribute name='endRegion' type='string' use='optional'/>
+   <attribute name='lookAhead' use='optional'>
+    <simpleType>
+     <restriction base='string'>
+      <enumeration value='true'/>
+      <enumeration value='false'/>
+      <enumeration value='TRUE'/>
+      <enumeration value='FALSE'/>
+      <enumeration value='0'/>
+      <enumeration value='1'/>
+     </restriction>
+    </simpleType>
+   </attribute>
+   <attribute name='firstNonSpace' use='optional'>
+    <simpleType>
+     <restriction base='string'>
+      <enumeration value='true'/>
+      <enumeration value='false'/>
+      <enumeration value='TRUE'/>
+      <enumeration value='FALSE'/>
+      <enumeration value='0'/>
+      <enumeration value='1'/>
+     </restriction>
+    </simpleType>
+   </attribute>
+   <attribute name='column' type='string' use='optional'/>
+   <attribute name='String' type='string' use='required'/>
+   <attribute name='insensitive' use='optional'>
+    <simpleType>
+     <restriction base='string'>
+      <enumeration value='true'/>
+      <enumeration value='false'/>
+      <enumeration value='TRUE'/>
+      <enumeration value='FALSE'/>
+      <enumeration value='0'/>
+      <enumeration value='1'/>
+     </restriction>
+    </simpleType>
+   </attribute>
+   <attribute name='minimal' use='optional'>
+    <simpleType>
+     <restriction base='string'>
+      <enumeration value='true'/>
+      <enumeration value='false'/>
+      <enumeration value='TRUE'/>
+      <enumeration value='FALSE'/>
+      <enumeration value='0'/>
+      <enumeration value='1'/>
+     </restriction>
+    </simpleType>
+   </attribute>
+   <attribute name='dynamic' use='optional'>
+    <simpleType>
+     <restriction base='string'>
+      <enumeration value='true'/>
+      <enumeration value='false'/>
+      <enumeration value='TRUE'/>
+      <enumeration value='FALSE'/>
+      <enumeration value='0'/>
+      <enumeration value='1'/>
+     </restriction>
+    </simpleType>
+   </attribute>
+  </complexType>
+ </element>
+
+ <element name='LineContinue'>
+  <complexType>
+   <attribute name='attribute' type='string' use='optional'/>
+   <attribute name='context' type='string' use='optional'/>
+   <attribute name='beginRegion' type='string' use='optional'/>
+   <attribute name='endRegion' type='string' use='optional'/>
+   <attribute name='lookAhead' use='optional'>
+    <simpleType>
+     <restriction base='string'>
+      <enumeration value='true'/>
+      <enumeration value='false'/>
+      <enumeration value='TRUE'/>
+      <enumeration value='FALSE'/>
+      <enumeration value='0'/>
+      <enumeration value='1'/>
+     </restriction>
+    </simpleType>
+   </attribute>
+   <attribute name='firstNonSpace' use='optional'>
+    <simpleType>
+     <restriction base='string'>
+      <enumeration value='true'/>
+      <enumeration value='false'/>
+      <enumeration value='TRUE'/>
+      <enumeration value='FALSE'/>
+      <enumeration value='0'/>
+      <enumeration value='1'/>
+     </restriction>
+    </simpleType>
+   </attribute>
+   <attribute name='column' type='string' use='optional'/>
+  </complexType>
+ </element>
+
+ <element name='HlCStringChar'>
+  <complexType>
+   <attribute name='attribute' type='string' use='optional'/>
+   <attribute name='context' type='string' use='optional'/>
+   <attribute name='beginRegion' type='string' use='optional'/>
+   <attribute name='endRegion' type='string' use='optional'/>
+   <attribute name='lookAhead' use='optional'>
+    <simpleType>
+     <restriction base='string'>
+      <enumeration value='true'/>
+      <enumeration value='false'/>
+      <enumeration value='TRUE'/>
+      <enumeration value='FALSE'/>
+      <enumeration value='0'/>
+      <enumeration value='1'/>
+     </restriction>
+    </simpleType>
+   </attribute>
+   <attribute name='firstNonSpace' use='optional'>
+    <simpleType>
+     <restriction base='string'>
+      <enumeration value='true'/>
+      <enumeration value='false'/>
+      <enumeration value='TRUE'/>
+      <enumeration value='FALSE'/>
+      <enumeration value='0'/>
+      <enumeration value='1'/>
+     </restriction>
+    </simpleType>
+   </attribute>
+   <attribute name='column' type='string' use='optional'/>
+  </complexType>
+ </element>
+
+ <element name='RangeDetect'>
+  <complexType>
+   <attribute name='attribute' type='string' use='optional'/>
+   <attribute name='context' type='string' use='optional'/>
+   <attribute name='beginRegion' type='string' use='optional'/>
+   <attribute name='endRegion' type='string' use='optional'/>
+   <attribute name='lookAhead' use='optional'>
+    <simpleType>
+     <restriction base='string'>
+      <enumeration value='true'/>
+      <enumeration value='false'/>
+      <enumeration value='TRUE'/>
+      <enumeration value='FALSE'/>
+      <enumeration value='0'/>
+      <enumeration value='1'/>
+     </restriction>
+    </simpleType>
+   </attribute>
+   <attribute name='firstNonSpace' use='optional'>
+    <simpleType>
+     <restriction base='string'>
+      <enumeration value='true'/>
+      <enumeration value='false'/>
+      <enumeration value='TRUE'/>
+      <enumeration value='FALSE'/>
+      <enumeration value='0'/>
+      <enumeration value='1'/>
+     </restriction>
+    </simpleType>
+   </attribute>
+   <attribute name='column' type='string' use='optional'/>
+   <attribute name='char' type='string' use='required'/>
+   <attribute name='char1' type='string' use='required'/>
+  </complexType>
+ </element>
+
+ <element name='IncludeRules'>
+  <complexType>
+   <attribute name='context' type='string' use='required'/>
+   <attribute name='includeAttrib' use='optional'>
+    <simpleType>
+     <restriction base='string'>
+      <enumeration value='true'/>
+      <enumeration value='false'/>
+      <enumeration value='TRUE'/>
+      <enumeration value='FALSE'/>
+      <enumeration value='0'/>
+      <enumeration value='1'/>
+     </restriction>
+    </simpleType>
+   </attribute>
+  </complexType>
+ </element>
+
+ <element name='DetectSpaces'>
+  <complexType>
+   <attribute name='attribute' type='string' use='optional'/>
+   <attribute name='context' type='string' use='optional'/>
+   <attribute name='beginRegion' type='string' use='optional'/>
+   <attribute name='endRegion' type='string' use='optional'/>
+   <attribute name='lookAhead' use='optional'>
+    <simpleType>
+     <restriction base='string'>
+      <enumeration value='true'/>
+      <enumeration value='false'/>
+      <enumeration value='TRUE'/>
+      <enumeration value='FALSE'/>
+      <enumeration value='0'/>
+      <enumeration value='1'/>
+     </restriction>
+    </simpleType>
+   </attribute>
+   <attribute name='firstNonSpace' use='optional'>
+    <simpleType>
+     <restriction base='string'>
+      <enumeration value='true'/>
+      <enumeration value='false'/>
+      <enumeration value='TRUE'/>
+      <enumeration value='FALSE'/>
+      <enumeration value='0'/>
+      <enumeration value='1'/>
+     </restriction>
+    </simpleType>
+   </attribute>
+   <attribute name='column' type='string' use='optional'/>
+  </complexType>
+ </element>
+
+ <element name='DetectIdentifier'>
+  <complexType>
+   <attribute name='attribute' type='string' use='optional'/>
+   <attribute name='context' type='string' use='optional'/>
+   <attribute name='beginRegion' type='string' use='optional'/>
+   <attribute name='endRegion' type='string' use='optional'/>
+   <attribute name='lookAhead' use='optional'>
+    <simpleType>
+     <restriction base='string'>
+      <enumeration value='true'/>
+      <enumeration value='false'/>
+      <enumeration value='TRUE'/>
+      <enumeration value='FALSE'/>
+      <enumeration value='0'/>
+      <enumeration value='1'/>
+     </restriction>
+    </simpleType>
+   </attribute>
+   <attribute name='firstNonSpace' use='optional'>
+    <simpleType>
+     <restriction base='string'>
+      <enumeration value='true'/>
+      <enumeration value='false'/>
+      <enumeration value='TRUE'/>
+      <enumeration value='FALSE'/>
+      <enumeration value='0'/>
+      <enumeration value='1'/>
+     </restriction>
+    </simpleType>
+   </attribute>
+   <attribute name='column' type='string' use='optional'/>
+  </complexType>
+ </element>
+
+ <element name='itemDatas'>
+  <complexType>
+   <sequence maxOccurs='unbounded'>
+    <element ref='t:itemData'/>
+   </sequence>
+  </complexType>
+ </element>
+
+ <element name='itemData'>
+  <complexType>
+   <attribute name='name' type='string' use='required'/>
+   <attribute name='defStyleNum' use='required'>
+    <simpleType>
+     <restriction base='string'>
+      <enumeration value='dsNormal'/>
+      <enumeration value='dsKeyword'/>
+      <enumeration value='dsDataType'/>
+      <enumeration value='dsDecVal'/>
+      <enumeration value='dsBaseN'/>
+      <enumeration value='dsFloat'/>
+      <enumeration value='dsChar'/>
+      <enumeration value='dsString'/>
+      <enumeration value='dsComment'/>
+      <enumeration value='dsOthers'/>
+      <enumeration value='dsAlert'/>
+      <enumeration value='dsFunction'/>
+      <enumeration value='dsRegionMarker'/>
+      <enumeration value='dsError'/>
+     </restriction>
+    </simpleType>
+   </attribute>
+   <attribute name='color' type='string' use='optional'/>
+   <attribute name='selColor' type='string' use='optional'/>
+   <attribute name='italic' use='optional'>
+    <simpleType>
+     <restriction base='string'>
+      <enumeration value='true'/>
+      <enumeration value='false'/>
+      <enumeration value='TRUE'/>
+      <enumeration value='FALSE'/>
+      <enumeration value='0'/>
+      <enumeration value='1'/>
+     </restriction>
+    </simpleType>
+   </attribute>
+   <attribute name='bold' use='optional'>
+    <simpleType>
+     <restriction base='string'>
+      <enumeration value='true'/>
+      <enumeration value='false'/>
+      <enumeration value='TRUE'/>
+      <enumeration value='FALSE'/>
+      <enumeration value='0'/>
+      <enumeration value='1'/>
+     </restriction>
+    </simpleType>
+   </attribute>
+   <attribute name='underline' use='optional'>
+    <simpleType>
+     <restriction base='string'>
+      <enumeration value='true'/>
+      <enumeration value='false'/>
+      <enumeration value='TRUE'/>
+      <enumeration value='FALSE'/>
+      <enumeration value='0'/>
+      <enumeration value='1'/>
+     </restriction>
+    </simpleType>
+   </attribute>
+   <attribute name='strikeOut' use='optional'>
+    <simpleType>
+     <restriction base='string'>
+      <enumeration value='true'/>
+      <enumeration value='false'/>
+      <enumeration value='TRUE'/>
+      <enumeration value='FALSE'/>
+      <enumeration value='0'/>
+      <enumeration value='1'/>
+     </restriction>
+    </simpleType>
+   </attribute>
+   <attribute name='backgroundColor' type='string' use='optional'/>
+   <attribute name='selBackgroundColor' type='string' use='optional'/>
+   <attribute name='spellChecking' use='optional'>
+    <simpleType>
+     <restriction base='string'>
+      <enumeration value='true'/>
+      <enumeration value='false'/>
+      <enumeration value='TRUE'/>
+      <enumeration value='FALSE'/>
+      <enumeration value='0'/>
+      <enumeration value='1'/>
+     </restriction>
+    </simpleType>
+   </attribute>
+  </complexType>
+ </element>
+
+ <element name='spellchecking'>
+  <complexType>
+   <sequence>
+    <element ref='t:configuration' minOccurs='0' maxOccurs='1'/>
+    <element ref='t:encodings' minOccurs='0' maxOccurs='1'/>
+   </sequence>
+  </complexType>
+ </element>
+
+ <element name='encodings'>
+  <complexType>
+   <sequence maxOccurs='unbounded'>
+    <element ref='t:encoding'/>
+   </sequence>
+  </complexType>
+ </element>
+
+ <element name='encoding'>
+  <complexType>
+   <attribute name='string' type='string' use='required'/>
+   <attribute name='char' type='string' use='optional'/>
+   <attribute name='ignored' use='optional'>
+    <simpleType>
+     <restriction base='string'>
+      <enumeration value='true'/>
+      <enumeration value='false'/>
+      <enumeration value='TRUE'/>
+      <enumeration value='FALSE'/>
+      <enumeration value='0'/>
+      <enumeration value='1'/>
+     </restriction>
+    </simpleType>
+   </attribute>
+  </complexType>
+ </element>
+
+ <element name='configuration'>
+  <complexType>
+   <attribute name='encodingReplacementPolicy' use='optional'>
+    <simpleType>
+     <restriction base='string'>
+      <enumeration value='EncodeAlways'/>
+      <enumeration value='EncodeWhenPresent'/>
+      <enumeration value='EncodeNever'/>
+     </restriction>
+    </simpleType>
+   </attribute>
+  </complexType>
+ </element>
+</schema>
