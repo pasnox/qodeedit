@@ -176,6 +176,7 @@ UIMain::~UIMain()
 void UIMain::appendDebugMessage( const QString& message )
 {
     ui->pteDebug->appendPlainText( message );
+    printf( "%s\n", qPrintable( message ) );
 }
 
 void UIMain::messageHandler( QtMsgType type, const char* msg )
