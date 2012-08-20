@@ -29,24 +29,25 @@ public:
     
     enum Rule {
         InvalidRule = -1,
-        AnyCharRule,
-        Detect2CharsRule,
-        DetectCharRule,
-        DetectIdentifierRule,
-        DetectSpacesRule,
-        FloatRule,
-        HlCCharRule,
-        HlCHexRule,
-        HlCOctRule,
-        HlCStringCharRule,
-        IncludeRule,
-        IntRule,
         KeywordRule,
-        LineContinueRule,
-        RangeDetectRule,
-        RegExprRule,
+        FloatRule,
+        HlCOctRule,
+        HlCHexRule,
+        HlCFloatRule,
+        IntRule,
+        DetectCharRule,
+        Detect2CharsRule,
+        AnyCharRule,
         StringDetectRule,
-        WordDetectRule
+        WordDetectRule,
+        RegExprRule,
+        LineContinueRule,
+        HlCStringCharRule,
+        RangeDetectRule,
+        HlCCharRule,
+        DetectSpacesRule,
+        DetectIdentifierRule,
+        IncludeRulesRule
     };
     
     enum Style {
