@@ -231,7 +231,7 @@ QHash<QString, Syntax::Document> Syntax::Document::open( const QStringList& file
         }
         
         if ( error ) {
-            *error = QString( "%1: Can't parse file %2" ).arg( Q_FUNC_INFO ).arg( filePath );
+            *error = QString( "%1: Can't parse file %2: %3" ).arg( Q_FUNC_INFO ).arg( filePath ).arg( xmlReader.errorHandler()->errorString() );
         }
         
 #if !defined( QT_NO_DEBUG )
