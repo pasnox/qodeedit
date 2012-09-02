@@ -1,5 +1,11 @@
 A source code component editor based on QPlainTextEdit/QTextDocument/QSyntaxHighlighter and Kate xml language definition files.
-License is LGPL3
+It could be considered an alternative/replacement of QScintilla library.
+
+Homepage:
+    https://github.com/pasnox/qodeedit
+    
+License:
+    LGPL3
 
 Contact:
     pasnox@gmail.com
