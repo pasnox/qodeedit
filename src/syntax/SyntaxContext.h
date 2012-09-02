@@ -20,24 +20,20 @@ private:
 public:
     typedef QHash<QString, Syntax::Context> Hash;
     
+    QE_DECL_SHARED_CLASS( Context );
+    
     // Required
-    SYNTAX_DECL_MEMBER( QString, attribute );
-    SYNTAX_DECL_MEMBER( QString, lineEndContext );
+    QE_DECL_MEMBER( QString, attribute );
+    QE_DECL_MEMBER( QString, lineEndContext );
     // Optional
-    SYNTAX_DECL_MEMBER( QString, name ); ///< Name of the context
-    SYNTAX_DECL_MEMBER( QString, lineBeginContext );
-    SYNTAX_DECL_MEMBER( bool, fallThrough );
-    SYNTAX_DECL_MEMBER( QString, fallThroughContext );
-    SYNTAX_DECL_MEMBER( bool, dynamic );
-    SYNTAX_DECL_MEMBER( bool, noIndentationBasedFolding );
+    QE_DECL_MEMBER( QString, name ); ///< Name of the context
+    QE_DECL_MEMBER( QString, lineBeginContext );
+    QE_DECL_MEMBER( bool, fallThrough );
+    QE_DECL_MEMBER( QString, fallThroughContext );
+    QE_DECL_MEMBER( bool, dynamic );
+    QE_DECL_MEMBER( bool, noIndentationBasedFolding );
     // Others
-    SYNTAX_DECL_MEMBER( Syntax::Rule::List, rules ); ///< Rules of the context
-    
-    Context();
-    Context( const Syntax::Context& other );
-    virtual ~Context();
-    
-    SYNTAX_DECL_OPERATORS( Context );
+    QE_DECL_MEMBER( Syntax::Rule::List, rules ); ///< Rules of the context
 };
 
 }; // Syntax

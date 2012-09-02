@@ -27,17 +27,17 @@ public:
     
     ItemDataData( const Syntax::ItemDataData& other )
         : QSharedData( other ),
-            SYNTAX_OTHER_INIT( name ),
-            SYNTAX_OTHER_INIT( defStyleNum ),
-            SYNTAX_OTHER_INIT( spellChecking ),
-            SYNTAX_OTHER_INIT( color ),
-            SYNTAX_OTHER_INIT( selColor ),
-            SYNTAX_OTHER_INIT( bold ),
-            SYNTAX_OTHER_INIT( italic ),
-            SYNTAX_OTHER_INIT( strikeOut ),
-            SYNTAX_OTHER_INIT( underline ),
-            SYNTAX_OTHER_INIT( backgroundColor ),
-            SYNTAX_OTHER_INIT( selBackgroundColor )
+            QE_OTHER_INIT( name ),
+            QE_OTHER_INIT( defStyleNum ),
+            QE_OTHER_INIT( spellChecking ),
+            QE_OTHER_INIT( color ),
+            QE_OTHER_INIT( selColor ),
+            QE_OTHER_INIT( bold ),
+            QE_OTHER_INIT( italic ),
+            QE_OTHER_INIT( strikeOut ),
+            QE_OTHER_INIT( underline ),
+            QE_OTHER_INIT( backgroundColor ),
+            QE_OTHER_INIT( selBackgroundColor )
     {
     }
     
@@ -45,29 +45,20 @@ public:
     }
 };
 
-Syntax::ItemData::ItemData()
-    : d( new Syntax::ItemDataData )
-{
-}
-
-Syntax::ItemData::ItemData( const Syntax::ItemData& other )
-    : d( other.d )
-{
-}
+QE_IMPL_SHARED_CLASS( ItemData )
 
 Syntax::ItemData::~ItemData()
 {
 }
 
-SYNTAX_IMPL_MEMBER( QString, name, ItemData )
-SYNTAX_IMPL_MEMBER( QString, defStyleNum, ItemData )
-SYNTAX_IMPL_MEMBER( bool, spellChecking, ItemData )
-SYNTAX_IMPL_MEMBER( QColor, color, ItemData )
-SYNTAX_IMPL_MEMBER( QColor, selColor, ItemData )
-SYNTAX_IMPL_MEMBER( bool, bold, ItemData )
-SYNTAX_IMPL_MEMBER( bool, italic, ItemData )
-SYNTAX_IMPL_MEMBER( bool, strikeOut, ItemData )
-SYNTAX_IMPL_MEMBER( bool, underline, ItemData )
-SYNTAX_IMPL_MEMBER( QColor, backgroundColor, ItemData )
-SYNTAX_IMPL_MEMBER( QColor, selBackgroundColor, ItemData )
-SYNTAX_IMPL_OPERATORS( ItemData )
+QE_IMPL_MEMBER( QString, name, ItemData )
+QE_IMPL_MEMBER( QString, defStyleNum, ItemData )
+QE_IMPL_MEMBER( bool, spellChecking, ItemData )
+QE_IMPL_MEMBER( QColor, color, ItemData )
+QE_IMPL_MEMBER( QColor, selColor, ItemData )
+QE_IMPL_MEMBER( bool, bold, ItemData )
+QE_IMPL_MEMBER( bool, italic, ItemData )
+QE_IMPL_MEMBER( bool, strikeOut, ItemData )
+QE_IMPL_MEMBER( bool, underline, ItemData )
+QE_IMPL_MEMBER( QColor, backgroundColor, ItemData )
+QE_IMPL_MEMBER( QColor, selBackgroundColor, ItemData )

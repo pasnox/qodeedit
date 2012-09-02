@@ -18,17 +18,15 @@ private:
     QExplicitlySharedDataPointer<Syntax::HighlightingData> d;
     
 public:
-    SYNTAX_DECL_MEMBER( Syntax::HashList, lists );
-    SYNTAX_DECL_MEMBER( Syntax::Context::Hash, contexts );
-    SYNTAX_DECL_MEMBER( Syntax::ItemData::Hash, itemDatas );
+    QE_DECL_SHARED_CLASS( Highlighting );
+    
+    // Required
+    // Optional
+    QE_DECL_MEMBER( Syntax::HashList, lists );
+    QE_DECL_MEMBER( Syntax::Context::Hash, contexts );
+    QE_DECL_MEMBER( Syntax::ItemData::Hash, itemDatas );
     // Others
-    SYNTAX_DECL_MEMBER( QString, defaultContext );
-    
-    Highlighting();
-    Highlighting( const Syntax::Highlighting& other );
-    virtual ~Highlighting();
-    
-    SYNTAX_DECL_OPERATORS( Highlighting );
+    QE_DECL_MEMBER( QString, defaultContext );
     
     Syntax::List list( const QString& name ) const;
 };

@@ -12,7 +12,7 @@ public:
     
     IndentationData( const Syntax::IndentationData& other )
         : QSharedData( other ),
-            SYNTAX_OTHER_INIT( mode )
+            QE_OTHER_INIT( mode )
     {
     }
     
@@ -20,19 +20,10 @@ public:
     }
 };
 
-Syntax::Indentation::Indentation()
-    : d( new Syntax::IndentationData )
-{
-}
-
-Syntax::Indentation::Indentation( const Syntax::Indentation& other )
-    : d( other.d )
-{
-}
+QE_IMPL_SHARED_CLASS( Indentation )
 
 Syntax::Indentation::~Indentation()
 {
 }
 
-SYNTAX_IMPL_MEMBER( QString, mode, Indentation )
-SYNTAX_IMPL_OPERATORS( Indentation )
+QE_IMPL_MEMBER( QString, mode, Indentation )

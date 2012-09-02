@@ -15,9 +15,9 @@ public:
     
     EncodingData( const Syntax::EncodingData& other )
         : QSharedData( other ),
-            SYNTAX_OTHER_INIT( char_ ),
-            SYNTAX_OTHER_INIT( string ),
-            SYNTAX_OTHER_INIT( ignored )
+            QE_OTHER_INIT( char_ ),
+            QE_OTHER_INIT( string ),
+            QE_OTHER_INIT( ignored )
     {
     }
     
@@ -25,21 +25,12 @@ public:
     }
 };
 
-Syntax::Encoding::Encoding()
-    : d( new Syntax::EncodingData )
-{
-}
-
-Syntax::Encoding::Encoding( const Syntax::Encoding& other )
-    : d( other.d )
-{
-}
+QE_IMPL_SHARED_CLASS( Encoding )
 
 Syntax::Encoding::~Encoding()
 {
 }
 
-SYNTAX_IMPL_MEMBER( QString, char_, Encoding )
-SYNTAX_IMPL_MEMBER( QString, string, Encoding )
-SYNTAX_IMPL_MEMBER( bool, ignored, Encoding )
-SYNTAX_IMPL_OPERATORS( Encoding )
+QE_IMPL_MEMBER( QString, char_, Encoding )
+QE_IMPL_MEMBER( QString, string, Encoding )
+QE_IMPL_MEMBER( bool, ignored, Encoding )

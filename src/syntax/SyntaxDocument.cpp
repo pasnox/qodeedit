@@ -45,26 +45,26 @@ public:
     
     DocumentData( const Syntax::DocumentData& other )
         : QSharedData( other ),
-            SYNTAX_OTHER_INIT( name ),
-            SYNTAX_OTHER_INIT( localizedName ),
-            SYNTAX_OTHER_INIT( section ),
-            SYNTAX_OTHER_INIT( extensions ),
-            SYNTAX_OTHER_INIT( version ),
-            SYNTAX_OTHER_INIT( kateVersion ),
-            SYNTAX_OTHER_INIT( indenter ),
-            SYNTAX_OTHER_INIT( mimeType ),
-            SYNTAX_OTHER_INIT( priority ),
-            SYNTAX_OTHER_INIT( hidden ),
-            SYNTAX_OTHER_INIT( style ),
-            SYNTAX_OTHER_INIT( author ),
-            SYNTAX_OTHER_INIT( license ),
-            SYNTAX_OTHER_INIT( caseSensitive ),
-            //SYNTAX_OTHER_INIT( identifier ),
-            SYNTAX_OTHER_INIT( defaultDeliminator ),
-            SYNTAX_OTHER_INIT( finalyzed ),
-            SYNTAX_OTHER_INIT( highlighting ),
-            SYNTAX_OTHER_INIT( general ),
-            SYNTAX_OTHER_INIT( spellChecking )
+            QE_OTHER_INIT( name ),
+            QE_OTHER_INIT( localizedName ),
+            QE_OTHER_INIT( section ),
+            QE_OTHER_INIT( extensions ),
+            QE_OTHER_INIT( version ),
+            QE_OTHER_INIT( kateVersion ),
+            QE_OTHER_INIT( indenter ),
+            QE_OTHER_INIT( mimeType ),
+            QE_OTHER_INIT( priority ),
+            QE_OTHER_INIT( hidden ),
+            QE_OTHER_INIT( style ),
+            QE_OTHER_INIT( author ),
+            QE_OTHER_INIT( license ),
+            QE_OTHER_INIT( caseSensitive ),
+            //QE_OTHER_INIT( identifier ),
+            QE_OTHER_INIT( defaultDeliminator ),
+            QE_OTHER_INIT( finalyzed ),
+            QE_OTHER_INIT( highlighting ),
+            QE_OTHER_INIT( general ),
+            QE_OTHER_INIT( spellChecking )
     {
     }
     
@@ -75,41 +75,11 @@ public:
 QString Syntax::DocumentData::globalDefaultDeliminator( ".():!+,-<=>%&*/;?[]^{|}~\\ \t" );
 
 
-Syntax::Document::Document()
-    : d( new Syntax::DocumentData )
-{
-}
-
-Syntax::Document::Document( const Syntax::Document& other )
-    : d( other.d )
-{
-}
+QE_IMPL_SHARED_CLASS( Document )
 
 Syntax::Document::~Document()
 {
 }
-
-SYNTAX_IMPL_MEMBER( QString, name, Document )
-SYNTAX_IMPL_MEMBER( QString, localizedName, Document )
-SYNTAX_IMPL_MEMBER( QString, section, Document )
-SYNTAX_IMPL_MEMBER( Syntax::List, extensions, Document )
-SYNTAX_IMPL_MEMBER( QString, version, Document )
-SYNTAX_IMPL_MEMBER( QString, kateVersion, Document )
-SYNTAX_IMPL_MEMBER( QString, indenter, Document )
-SYNTAX_IMPL_MEMBER( Syntax::List, mimeType, Document )
-SYNTAX_IMPL_MEMBER( int, priority, Document )
-SYNTAX_IMPL_MEMBER( bool, hidden, Document )
-SYNTAX_IMPL_MEMBER( QString, style, Document )
-SYNTAX_IMPL_MEMBER( QString, author, Document )
-SYNTAX_IMPL_MEMBER( QString, license, Document )
-SYNTAX_IMPL_MEMBER( bool, caseSensitive, Document )
-//SYNTAX_IMPL_MEMBER( QString, identifier, Document )
-SYNTAX_IMPL_MEMBER( QString, defaultDeliminator, Document )
-SYNTAX_IMPL_MEMBER( bool, finalyzed, Document )
-SYNTAX_IMPL_MEMBER( Syntax::Highlighting, highlighting, Document )
-SYNTAX_IMPL_MEMBER( Syntax::General, general, Document )
-SYNTAX_IMPL_MEMBER( Syntax::SpellChecking, spellChecking, Document )
-SYNTAX_IMPL_OPERATORS( Document )
 
 bool Syntax::Document::operator<( const Syntax::Document& other ) const
 {
@@ -119,6 +89,27 @@ bool Syntax::Document::operator<( const Syntax::Document& other ) const
         other.d->localizedName.isEmpty() ? other.d->name : other.d->localizedName
     );
 }
+
+QE_IMPL_MEMBER( QString, name, Document )
+QE_IMPL_MEMBER( QString, localizedName, Document )
+QE_IMPL_MEMBER( QString, section, Document )
+QE_IMPL_MEMBER( Syntax::List, extensions, Document )
+QE_IMPL_MEMBER( QString, version, Document )
+QE_IMPL_MEMBER( QString, kateVersion, Document )
+QE_IMPL_MEMBER( QString, indenter, Document )
+QE_IMPL_MEMBER( Syntax::List, mimeType, Document )
+QE_IMPL_MEMBER( int, priority, Document )
+QE_IMPL_MEMBER( bool, hidden, Document )
+QE_IMPL_MEMBER( QString, style, Document )
+QE_IMPL_MEMBER( QString, author, Document )
+QE_IMPL_MEMBER( QString, license, Document )
+QE_IMPL_MEMBER( bool, caseSensitive, Document )
+//QE_IMPL_MEMBER( QString, identifier, Document )
+QE_IMPL_MEMBER( QString, defaultDeliminator, Document )
+QE_IMPL_MEMBER( bool, finalyzed, Document )
+QE_IMPL_MEMBER( Syntax::Highlighting, highlighting, Document )
+QE_IMPL_MEMBER( Syntax::General, general, Document )
+QE_IMPL_MEMBER( Syntax::SpellChecking, spellChecking, Document )
 
 bool Syntax::Document::open( const QString& filePath, QString* error )
 {

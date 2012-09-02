@@ -31,7 +31,7 @@ DEPENDPATH *= $${INCLUDEPATH}
 
 greaterThan( QT_MAJOR_VERSION, 4 ) {
 } else:greaterThan( QT_MAJOR_VERSION, 3 ) {
-    MIMETYPES_QT4_ROOT = mimetypes-qt4.git
+    MIMETYPES_QT4_ROOT = ../mimetypes-qt4.git
 
     exists( $${MIMETYPES_QT4_ROOT} ) {
         SOURCES_PATHS = $$getFolders( $${MIMETYPES_QT4_ROOT} )
@@ -52,7 +52,7 @@ greaterThan( QT_MAJOR_VERSION, 4 ) {
             SOURCES *= $${MIMETYPES_QT4_ROOT}/io/*_win.c*
         }
     } else {
-        error( Qt 4 build need dependency project mimetypes-qt4 uncompressed in current folder as $${MIMETYPES_QT4_ROOT}. You can get it here https://github.com/pasnox/mimetypes-qt4 )
+        error( Qt 4 build need dependency project mimetypes-qt4 uncompressed in $${MIMETYPES_QT4_ROOT} folder. You can get it here https://github.com/pasnox/mimetypes-qt4 )
     }
 }
 

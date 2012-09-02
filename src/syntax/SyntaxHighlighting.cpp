@@ -15,10 +15,10 @@ public:
     
     HighlightingData( const Syntax::HighlightingData& other )
         : QSharedData( other ),
-            SYNTAX_OTHER_INIT( defaultContext ),
-            SYNTAX_OTHER_INIT( lists ),
-            SYNTAX_OTHER_INIT( contexts ),
-            SYNTAX_OTHER_INIT( itemDatas )
+            QE_OTHER_INIT( defaultContext ),
+            QE_OTHER_INIT( lists ),
+            QE_OTHER_INIT( contexts ),
+            QE_OTHER_INIT( itemDatas )
     {
     }
     
@@ -26,25 +26,16 @@ public:
     }
 };
 
-Syntax::Highlighting::Highlighting()
-    : d( new Syntax::HighlightingData )
-{
-}
-
-Syntax::Highlighting::Highlighting( const Syntax::Highlighting& other )
-    : d( other.d )
-{
-}
+QE_IMPL_SHARED_CLASS( Highlighting )
 
 Syntax::Highlighting::~Highlighting()
 {
 }
 
-SYNTAX_IMPL_MEMBER( QString, defaultContext, Highlighting )
-SYNTAX_IMPL_MEMBER( Syntax::HashList, lists, Highlighting )
-SYNTAX_IMPL_MEMBER( Syntax::Context::Hash, contexts, Highlighting )
-SYNTAX_IMPL_MEMBER( Syntax::ItemData::Hash, itemDatas, Highlighting )
-SYNTAX_IMPL_OPERATORS( Highlighting )
+QE_IMPL_MEMBER( QString, defaultContext, Highlighting )
+QE_IMPL_MEMBER( Syntax::HashList, lists, Highlighting )
+QE_IMPL_MEMBER( Syntax::Context::Hash, contexts, Highlighting )
+QE_IMPL_MEMBER( Syntax::ItemData::Hash, itemDatas, Highlighting )
 
 Syntax::List Syntax::Highlighting::list( const QString& name ) const
 {

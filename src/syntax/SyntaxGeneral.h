@@ -20,17 +20,13 @@ private:
     QExplicitlySharedDataPointer<Syntax::GeneralData> d;
     
 public:
-    SYNTAX_DECL_MEMBER( Syntax::Folding, folding );
-    SYNTAX_DECL_MEMBER( Syntax::Comment::List, comments );
-    SYNTAX_DECL_MEMBER( Syntax::Keywords, keywords );
-    SYNTAX_DECL_MEMBER( Syntax::Indentation, indentation );
-    SYNTAX_DECL_MEMBER( Syntax::EmptyLine::List, emptyLines );
+    QE_DECL_SHARED_CLASS( General );
     
-    General();
-    General( const Syntax::General& other );
-    virtual ~General();
-    
-    SYNTAX_DECL_OPERATORS( General );
+    QE_DECL_MEMBER( Syntax::Folding, folding );
+    QE_DECL_MEMBER( Syntax::Comment::List, comments );
+    QE_DECL_MEMBER( Syntax::Keywords, keywords );
+    QE_DECL_MEMBER( Syntax::Indentation, indentation );
+    QE_DECL_MEMBER( Syntax::EmptyLine::List, emptyLines );
 };
 
 }; // Syntax

@@ -16,18 +16,14 @@ private:
     QExplicitlySharedDataPointer<Syntax::KeywordsData> d;
     
 public:
+    QE_DECL_SHARED_CLASS( Keywords );
+    
     // Required
     // Optional
-    SYNTAX_DECL_MEMBER( bool, caseSensitive );
-    SYNTAX_DECL_MEMBER( QString, weakDeliminator );
-    SYNTAX_DECL_MEMBER( QString, additionalDeliminator );
-    SYNTAX_DECL_MEMBER( QString, wordWrapDeliminator );
-    
-    Keywords();
-    Keywords( const Syntax::Keywords& other );
-    virtual ~Keywords();
-    
-    SYNTAX_DECL_OPERATORS( Keywords );
+    QE_DECL_MEMBER( bool, caseSensitive );
+    QE_DECL_MEMBER( QString, weakDeliminator );
+    QE_DECL_MEMBER( QString, additionalDeliminator );
+    QE_DECL_MEMBER( QString, wordWrapDeliminator );
 };
 
 }; // Syntax

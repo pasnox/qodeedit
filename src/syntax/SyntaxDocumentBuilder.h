@@ -17,13 +17,9 @@ private:
     QExplicitlySharedDataPointer<Syntax::DocumentBuilderData> d;
     
 public:
-    DocumentBuilder( const QHash<QString, Syntax::Document>& documents );
-    DocumentBuilder( const Syntax::DocumentBuilder& other );
-    virtual ~DocumentBuilder();
+    QE_DECL_SHARED_CLASS( DocumentBuilder );
     
-    SYNTAX_DECL_OPERATORS( DocumentBuilder );
-    
-    void buildDocuments();
+    void buildDocuments( const QHash<QString, Syntax::Document>& documents );
 };
 
 }; //Syntax

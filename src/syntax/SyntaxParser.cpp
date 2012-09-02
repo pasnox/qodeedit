@@ -58,6 +58,7 @@ public:
                 << "float" // Float
                 
                 << "hlcchar" // HlCChar
+                << "hlcfloat" // HlCFloat
                 << "hlchex" // HlCHex
                 << "hlcoct" // HlCOct
                 << "hlcstringchar" // HlCStringChar
@@ -181,8 +182,7 @@ bool Syntax::Parser::startElement( const QString& namespaceURI, const QString& l
     
     for ( int i = 0; i < atts.count(); i++ ) {
         d->debug[ name ][ atts.qName( i ).trimmed().toLower() ] << atts.value( i ).trimmed().toLower();
-        const QString name = atts.qName( i );
-        
+        //const QString name = atts.qName( i );
     }
 #endif
     
@@ -326,64 +326,44 @@ bool Syntax::Parser::startElement( const QString& namespaceURI, const QString& l
     }
     else if ( d->ruleNames.contains( qName.toLower() ) ) {
         Q_ASSERT( !d->contextName.isEmpty() );
+        const QodeEdit::Rule type = QodeEdit::stringToRule( qName );
         Syntax::Context& context = d->document->highlighting().contexts()[ d->contextName ];
-        Syntax::Rule rule;
+        QHash<QString, QVariant> data;
+        static QSet<QString> knownAttributes;
         
-        rule.name() = qName;
+        if ( knownAttributes.isEmpty() ) {
+            knownAttributes
+                << "attribute"
+                << "context"
+                << "string"
+                << "beginregion"
+                << "firstnonspace"
+                << "char"
+                << "lookahead"
+                << "endregion"
+                << "insensitive"
+                << "char1"
+                << "column"
+                << "dynamic"
+                << "minimal"
+                << "includeattrib"
+                << "region"
+                << "lineendcontext"
+                << "weakdelimiter"
+            ;
+        }
         
         for ( int i = 0; i < atts.count(); i++ ) {
-            const QString name = atts.qName( i );
+            QString name = atts.qName( i ).toLower();
             
-            if ( QodeEdit::stringEquals( name, "attribute" ) ) {
-                rule.attribute() = atts.value( i ).toLower();
+            // fucking ruby file
+            if ( name == "contex" ) {
+                qWarning( "%s: Invalid attribute (%s) meet in %s", Q_FUNC_INFO, qPrintable( name ), qPrintable( qName ) );
+                name = "context";
             }
-            else if ( QodeEdit::stringEquals( name, "context" ) || QodeEdit::stringEquals( name, "contex" ) ) { // fucking bad ruby xml file
-                rule.context() = atts.value( i ).toLower();
-            }
-            else if ( QodeEdit::stringEquals( name, "string" ) ) {
-                rule.string() = atts.value( i ).toLower();
-            }
-            else if ( QodeEdit::stringEquals( name, "beginRegion" ) ) {
-                rule.beginRegion() = atts.value( i );
-            }
-            else if ( QodeEdit::stringEquals( name, "firstNonSpace" ) ) {
-                rule.firstNonSpace() = QVariant( atts.value( i ) ).toBool();
-            }
-            else if ( QodeEdit::stringEquals( name, "char" ) ) {
-                rule.char_() = atts.value( i );
-            }
-            else if ( QodeEdit::stringEquals( name, "lookAhead" ) ) {
-                rule.lookAhead() = QVariant( atts.value( i ) ).toBool();
-            }
-            else if ( QodeEdit::stringEquals( name, "endRegion" ) ) {
-                rule.endRegion() = atts.value( i );
-            }
-            else if ( QodeEdit::stringEquals( name, "insensitive" ) ) {
-                rule.insensitive() = QVariant( atts.value( i ) ).toBool();
-            }
-            else if ( QodeEdit::stringEquals( name, "char1" ) ) {
-                rule.char1() = atts.value( i );
-            }
-            else if ( QodeEdit::stringEquals( name, "column" ) ) {
-                rule.column() = atts.value( i ).toInt();
-            }
-            else if ( QodeEdit::stringEquals( name, "dynamic" ) ) {
-                rule.dynamic() = QVariant( atts.value( i ) ).toBool();
-            }
-            else if ( QodeEdit::stringEquals( name, "minimal" ) ) {
-                rule.minimal() = QVariant( atts.value( i ) ).toBool();
-            }
-            else if ( QodeEdit::stringEquals( name, "includeAttrib" ) ) {
-                rule.includeAttrib() = QVariant( atts.value( i ) ).toBool();
-            }
-            else if ( QodeEdit::stringEquals( name, "region" ) ) {
-                rule.region() = atts.value( i );
-            }
-            else if ( QodeEdit::stringEquals( name, "lineEndContext" ) ) {
-                rule.lineEndContext() = atts.value( i ).toLower();
-            }
-            else if ( QodeEdit::stringEquals( name, "weakDelimiter" ) ) {
-                rule.weakDelimiter() = atts.value( i );
+            
+            if ( knownAttributes.contains( name ) ) {
+                data[ name ] = atts.value( i );
             }
             else {
                 d->error = QString( "%1: Unhandled rule attribute: %2" ).arg( Q_FUNC_INFO ).arg( name );
@@ -393,11 +373,26 @@ bool Syntax::Parser::startElement( const QString& namespaceURI, const QString& l
         
         // add to context rules
         if ( d->nodesName.top().toLower() == "context" ) {
-            context.rules() << rule;
+            context.rules() << Syntax::Rule::create( type, data );
         }
-        // add to last context rule' rule
+        // add to last context rules' rule
         else {
-            context.rules().last().rules() << rule;
+            Syntax::Rule& lastRule = context.rules().last();
+            const QodeEdit::Rule lastType = lastRule.type();
+            
+            switch ( lastType ) {
+                case QodeEdit::FloatRule:
+                    lastRule.toFloat().rules() << Syntax::Rule::create( type, data );
+                    break;
+                case QodeEdit::IntRule:
+                    lastRule.toInt().rules() << Syntax::Rule::create( type, data );
+                    break;
+                default:
+                    qWarning( "%s: Type not Float nor Int '%i'", Q_FUNC_INFO, type );
+                    Q_ASSERT( 0 );
+            }
+            
+            Q_ASSERT( context.rules().last() == lastRule );
         }
     }
     else if ( QodeEdit::stringEquals( qName, "itemDatas" ) ) {

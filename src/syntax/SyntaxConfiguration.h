@@ -16,15 +16,11 @@ private:
     QExplicitlySharedDataPointer<Syntax::ConfigurationData> d;
     
 public:
+    QE_DECL_SHARED_CLASS( Configuration );
+    
     // Required
     // Optional
-    SYNTAX_DECL_MEMBER( QString, encodingReplacementPolicy ); // enum: EncodeAlways, EncodeWhenPresent, EncodeNever,
-    
-    Configuration();
-    Configuration( const Syntax::Configuration& other );
-    virtual ~Configuration();
-    
-    SYNTAX_DECL_OPERATORS( Configuration );
+    QE_DECL_MEMBER( QString, encodingReplacementPolicy ); // enum: EncodeAlways, EncodeWhenPresent, EncodeNever,
 };
 
 }; // Syntax

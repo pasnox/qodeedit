@@ -13,8 +13,8 @@ public:
     
     SpellCheckingData( const Syntax::SpellCheckingData& other )
         : QSharedData( other ),
-            SYNTAX_OTHER_INIT( configuration ),
-            SYNTAX_OTHER_INIT( encodings )
+            QE_OTHER_INIT( configuration ),
+            QE_OTHER_INIT( encodings )
     {
     }
     
@@ -22,20 +22,11 @@ public:
     }
 };
 
-Syntax::SpellChecking::SpellChecking()
-    : d( new Syntax::SpellCheckingData )
-{
-}
-
-Syntax::SpellChecking::SpellChecking( const Syntax::SpellChecking& other )
-    : d( other.d )
-{
-}
+QE_IMPL_SHARED_CLASS( SpellChecking )
 
 Syntax::SpellChecking::~SpellChecking()
 {
 }
 
-SYNTAX_IMPL_MEMBER( Syntax::Configuration, configuration, SpellChecking )
-SYNTAX_IMPL_MEMBER( Syntax::Encoding::List, encodings, SpellChecking )
-SYNTAX_IMPL_OPERATORS( SpellChecking )
+QE_IMPL_MEMBER( Syntax::Configuration, configuration, SpellChecking )
+QE_IMPL_MEMBER( Syntax::Encoding::List, encodings, SpellChecking )

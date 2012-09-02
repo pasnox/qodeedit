@@ -19,17 +19,13 @@ private:
 public:
     typedef QList<Syntax::Encoding> List;
     
+    QE_DECL_SHARED_CLASS( Encoding );
+    
     // Required
-    SYNTAX_DECL_MEMBER( QString, string );
+    QE_DECL_MEMBER( QString, string );
     // Optional
-    SYNTAX_DECL_MEMBER( QString, char_ );
-    SYNTAX_DECL_MEMBER( bool, ignored );
-    
-    Encoding();
-    Encoding( const Syntax::Encoding& other );
-    virtual ~Encoding();
-    
-    SYNTAX_DECL_OPERATORS( Encoding );
+    QE_DECL_MEMBER( QString, char_ );
+    QE_DECL_MEMBER( bool, ignored );
 };
 
 }; // Syntax

@@ -14,8 +14,8 @@ public:
     
     EmptyLineData( const Syntax::EmptyLineData& other )
         : QSharedData( other ),
-            SYNTAX_OTHER_INIT( regExpr ),
-            SYNTAX_OTHER_INIT( caseSensitive )
+            QE_OTHER_INIT( regExpr ),
+            QE_OTHER_INIT( caseSensitive )
     {
     }
     
@@ -23,20 +23,11 @@ public:
     }
 };
 
-Syntax::EmptyLine::EmptyLine()
-    : d( new Syntax::EmptyLineData )
-{
-}
-
-Syntax::EmptyLine::EmptyLine( const Syntax::EmptyLine& other )
-    : d( other.d )
-{
-}
+QE_IMPL_SHARED_CLASS( EmptyLine )
 
 Syntax::EmptyLine::~EmptyLine()
 {
 }
 
-SYNTAX_IMPL_MEMBER( QString, regExpr, EmptyLine )
-SYNTAX_IMPL_MEMBER( bool, caseSensitive, EmptyLine )
-SYNTAX_IMPL_OPERATORS( EmptyLine )
+QE_IMPL_MEMBER( QString, regExpr, EmptyLine )
+QE_IMPL_MEMBER( bool, caseSensitive, EmptyLine )

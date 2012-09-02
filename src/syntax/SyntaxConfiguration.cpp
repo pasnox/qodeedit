@@ -12,7 +12,7 @@ public:
     
     ConfigurationData( const Syntax::ConfigurationData& other )
         : QSharedData( other ),
-            SYNTAX_OTHER_INIT( encodingReplacementPolicy )
+            QE_OTHER_INIT( encodingReplacementPolicy )
     {
     }
     
@@ -20,19 +20,10 @@ public:
     }
 };
 
-Syntax::Configuration::Configuration()
-    : d( new Syntax::ConfigurationData )
-{
-}
-
-Syntax::Configuration::Configuration( const Syntax::Configuration& other )
-    : d( other.d )
-{
-}
+QE_IMPL_SHARED_CLASS( Configuration )
 
 Syntax::Configuration::~Configuration()
 {
 }
 
-SYNTAX_IMPL_MEMBER( QString, encodingReplacementPolicy, Configuration )
-SYNTAX_IMPL_OPERATORS( Configuration )
+QE_IMPL_MEMBER( QString, encodingReplacementPolicy, Configuration )

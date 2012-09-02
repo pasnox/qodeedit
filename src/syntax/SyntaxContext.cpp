@@ -27,15 +27,15 @@ public:
     
     ContextData( const Syntax::ContextData& other )
         : QSharedData( other ),
-            SYNTAX_OTHER_INIT( name ),
-            SYNTAX_OTHER_INIT( attribute ),
-            SYNTAX_OTHER_INIT( lineBeginContext ),
-            SYNTAX_OTHER_INIT( lineEndContext ),
-            SYNTAX_OTHER_INIT( fallThrough ),
-            SYNTAX_OTHER_INIT( fallThroughContext ),
-            SYNTAX_OTHER_INIT( dynamic ),
-            SYNTAX_OTHER_INIT( noIndentationBasedFolding ),
-            SYNTAX_OTHER_INIT( rules )
+            QE_OTHER_INIT( name ),
+            QE_OTHER_INIT( attribute ),
+            QE_OTHER_INIT( lineBeginContext ),
+            QE_OTHER_INIT( lineEndContext ),
+            QE_OTHER_INIT( fallThrough ),
+            QE_OTHER_INIT( fallThroughContext ),
+            QE_OTHER_INIT( dynamic ),
+            QE_OTHER_INIT( noIndentationBasedFolding ),
+            QE_OTHER_INIT( rules )
     {
     }
     
@@ -43,27 +43,18 @@ public:
     }
 };
 
-Syntax::Context::Context()
-    : d( new Syntax::ContextData )
-{
-}
-
-Syntax::Context::Context( const Syntax::Context& other )
-    : d( other.d )
-{
-}
+QE_IMPL_SHARED_CLASS( Context )
 
 Syntax::Context::~Context()
 {
 }
 
-SYNTAX_IMPL_MEMBER( QString, name, Context )
-SYNTAX_IMPL_MEMBER( QString, attribute, Context )
-SYNTAX_IMPL_MEMBER( QString, lineBeginContext, Context )
-SYNTAX_IMPL_MEMBER( QString, lineEndContext, Context )
-SYNTAX_IMPL_MEMBER( bool, fallThrough, Context )
-SYNTAX_IMPL_MEMBER( QString, fallThroughContext, Context )
-SYNTAX_IMPL_MEMBER( bool, dynamic, Context )
-SYNTAX_IMPL_MEMBER( bool, noIndentationBasedFolding, Context )
-SYNTAX_IMPL_MEMBER( Syntax::Rule::List, rules, Context )
-SYNTAX_IMPL_OPERATORS( Context )
+QE_IMPL_MEMBER( QString, name, Context )
+QE_IMPL_MEMBER( QString, attribute, Context )
+QE_IMPL_MEMBER( QString, lineBeginContext, Context )
+QE_IMPL_MEMBER( QString, lineEndContext, Context )
+QE_IMPL_MEMBER( bool, fallThrough, Context )
+QE_IMPL_MEMBER( QString, fallThroughContext, Context )
+QE_IMPL_MEMBER( bool, dynamic, Context )
+QE_IMPL_MEMBER( bool, noIndentationBasedFolding, Context )
+QE_IMPL_MEMBER( Syntax::Rule::List, rules, Context )

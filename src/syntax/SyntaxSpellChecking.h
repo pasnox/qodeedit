@@ -17,14 +17,12 @@ private:
     QExplicitlySharedDataPointer<Syntax::SpellCheckingData> d;
     
 public:
-    SYNTAX_DECL_MEMBER( Syntax::Configuration, configuration );
-    SYNTAX_DECL_MEMBER( Syntax::Encoding::List, encodings );
+    QE_DECL_SHARED_CLASS( SpellChecking );
     
-    SpellChecking();
-    SpellChecking( const Syntax::SpellChecking& other );
-    virtual ~SpellChecking();
-    
-    SYNTAX_DECL_OPERATORS( SpellChecking );
+    // Required
+    // Optional
+    QE_DECL_MEMBER( Syntax::Configuration, configuration );
+    QE_DECL_MEMBER( Syntax::Encoding::List, encodings );
 };
 
 }; // Syntax

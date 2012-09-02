@@ -1,6 +1,8 @@
 #include "SyntaxDocumentBuilder.h"
 #include "SyntaxDocument.h"
 
+#include <QDebug>
+
 class Syntax::DocumentBuilderData : public QSharedData
 {
 public:
@@ -13,14 +15,15 @@ public:
     
     DocumentBuilderData( const Syntax::DocumentBuilderData& other )
         : QSharedData( other ),
-            SYNTAX_OTHER_INIT( documents )
+            QE_OTHER_INIT( documents )
     {
     }
     
     virtual ~DocumentBuilderData() {
     }
     
-    void mergeRules( Syntax::Document& document, Syntax::Context& context, Syntax::Rule& rule ) {
+    void mergeRules( Syntax::Document& document, Syntax::Context& context, Syntax::Rule& _rule ) {
+        Syntax::IncludeRulesRule rule = _rule.toIncludeRules();
         QString srcContextName = rule.context();
         QString srcSyntaxName = document.name();
         
@@ -76,13 +79,13 @@ public:
     }
     
     void buildRuleRule( Syntax::Document& document, Syntax::Context& context, Syntax::Rule& rule ) {
-        Q_ASSERT( !rule.name().isEmpty() );
+        Q_ASSERT( rule.type() != QodeEdit::InvalidRule );
         
-        if ( rule.type() == QodeEdit::IncludeRule ) {
+        if ( rule.type() == QodeEdit::IncludeRulesRule ) {
             mergeRules( document, context, rule );
         }
         else {
-            Syntax::Rule::List& rules = rule.rules();
+            Syntax::Rule::List rules = rule.rules();
             
             for ( int i = rules.count() -1; i >= 0; i-- ) {
                 buildRuleRule( document, context, rules[ i ] );
@@ -91,13 +94,13 @@ public:
     }
     
     void buildContextRule( Syntax::Document& document, Syntax::Context& context, Syntax::Rule& rule ) {
-        Q_ASSERT( !rule.name().isEmpty() );
+        Q_ASSERT( rule.type() != QodeEdit::InvalidRule );
         
-        if ( rule.type() == QodeEdit::IncludeRule ) {
+        if ( rule.type() == QodeEdit::IncludeRulesRule ) {
             mergeRules( document, context, rule );
         }
         else {
-            Syntax::Rule::List& rules = rule.rules();
+            Syntax::Rule::List rules = rule.rules();
             
             for ( int i = rules.count() -1; i >= 0; i-- ) {
                 buildRuleRule( document, context, rules[ i ] );
@@ -131,31 +134,22 @@ public:
         document.finalyzed() = true;
     }
     
-    void buildDocuments() {
+    void buildDocuments( const QHash<QString, Syntax::Document>& _documents ) {
+        documents = _documents;
+        
         foreach ( const QString& syntaxName, documents.keys() ) {
             buildDocument( documents[ syntaxName ] );
         }
     }
 };
 
-Syntax::DocumentBuilder::DocumentBuilder( const QHash<QString, Syntax::Document>& documents )
-    : d( new Syntax::DocumentBuilderData )
-{
-    d->documents = documents;
-}
-
-Syntax::DocumentBuilder::DocumentBuilder( const Syntax::DocumentBuilder& other )
-    : d( other.d )
-{
-}
+QE_IMPL_SHARED_CLASS( DocumentBuilder )
 
 Syntax::DocumentBuilder::~DocumentBuilder()
 {
 }
 
-SYNTAX_IMPL_OPERATORS( DocumentBuilder )
-
-void Syntax::DocumentBuilder::buildDocuments()
+void Syntax::DocumentBuilder::buildDocuments( const QHash<QString, Syntax::Document>& documents )
 {
-    d->buildDocuments();
+    d->buildDocuments( documents );
 }

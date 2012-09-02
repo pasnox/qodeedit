@@ -16,15 +16,11 @@ private:
     QExplicitlySharedDataPointer<Syntax::FoldingData> d;
     
 public:
+    QE_DECL_SHARED_CLASS( Folding );
+    
     // Required
     // optional
-    SYNTAX_DECL_MEMBER( bool, indentationSensitive );
-    
-    Folding();
-    Folding( const Syntax::Folding& other );
-    virtual ~Folding();
-    
-    SYNTAX_DECL_OPERATORS( Folding );
+    QE_DECL_MEMBER( bool, indentationSensitive );
 };
 
 }; // Syntax

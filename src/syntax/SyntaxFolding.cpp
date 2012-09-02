@@ -13,7 +13,7 @@ public:
     
     FoldingData( const Syntax::FoldingData& other )
         : QSharedData( other ),
-            SYNTAX_OTHER_INIT( indentationSensitive )
+            QE_OTHER_INIT( indentationSensitive )
     {
     }
     
@@ -21,19 +21,10 @@ public:
     }
 };
 
-Syntax::Folding::Folding()
-    : d( new Syntax::FoldingData )
-{
-}
-
-Syntax::Folding::Folding( const Syntax::Folding& other )
-    : d( other.d )
-{
-}
+QE_IMPL_SHARED_CLASS( Folding )
 
 Syntax::Folding::~Folding()
 {
 }
 
-SYNTAX_IMPL_MEMBER( bool, indentationSensitive, Folding )
-SYNTAX_IMPL_OPERATORS( Folding )
+QE_IMPL_MEMBER( bool, indentationSensitive, Folding )

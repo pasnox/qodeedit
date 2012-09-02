@@ -76,8 +76,8 @@ bool Syntax::Factory::load( QString* _error )
     if ( error.isEmpty() ) {
         Syntax::Factory::mDocuments = documents;
         
-        Syntax::DocumentBuilder builder( Syntax::Factory::mDocuments );
-        builder.buildDocuments();
+        Syntax::DocumentBuilder builder;
+        builder.buildDocuments( Syntax::Factory::mDocuments );
         
 #if !defined( QT_NO_DEBUG )
         qWarning( "%s: Build files in %f seconds", Q_FUNC_INFO , time.elapsed() /1000.0 );

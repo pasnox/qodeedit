@@ -20,25 +20,21 @@ private:
 public:
     typedef QHash<QString, Syntax::ItemData> Hash;
     
+    QE_DECL_SHARED_CLASS( ItemData );
+    
     // Required
-    SYNTAX_DECL_MEMBER( QString, name ); ///< Name of the item data
-    SYNTAX_DECL_MEMBER( QString, defStyleNum );
+    QE_DECL_MEMBER( QString, name ); ///< Name of the item data
+    QE_DECL_MEMBER( QString, defStyleNum );
     // optional
-    SYNTAX_DECL_MEMBER( QColor, color );
-    SYNTAX_DECL_MEMBER( QColor, selColor );
-    SYNTAX_DECL_MEMBER( bool, italic );
-    SYNTAX_DECL_MEMBER( bool, bold );
-    SYNTAX_DECL_MEMBER( bool, underline );
-    SYNTAX_DECL_MEMBER( bool, strikeOut );
-    SYNTAX_DECL_MEMBER( QColor, backgroundColor );
-    SYNTAX_DECL_MEMBER( QColor, selBackgroundColor );
-    SYNTAX_DECL_MEMBER( bool, spellChecking );
-    
-    ItemData();
-    ItemData( const Syntax::ItemData& other );
-    virtual ~ItemData();
-    
-    SYNTAX_DECL_OPERATORS( ItemData );
+    QE_DECL_MEMBER( QColor, color );
+    QE_DECL_MEMBER( QColor, selColor );
+    QE_DECL_MEMBER( bool, italic );
+    QE_DECL_MEMBER( bool, bold );
+    QE_DECL_MEMBER( bool, underline );
+    QE_DECL_MEMBER( bool, strikeOut );
+    QE_DECL_MEMBER( QColor, backgroundColor );
+    QE_DECL_MEMBER( QColor, selBackgroundColor );
+    QE_DECL_MEMBER( bool, spellChecking );
 };
 
 }; // Syntax

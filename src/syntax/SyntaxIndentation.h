@@ -16,15 +16,11 @@ private:
     QExplicitlySharedDataPointer<Syntax::IndentationData> d;
     
 public:
+    QE_DECL_SHARED_CLASS( Indentation );
+    
     // Required
     // Optional
-    SYNTAX_DECL_MEMBER( QString, mode );
-    
-    Indentation();
-    Indentation( const Syntax::Indentation& other );
-    virtual ~Indentation();
-    
-    SYNTAX_DECL_OPERATORS( Indentation );
+    QE_DECL_MEMBER( QString, mode );
 };
 
 }; // Syntax

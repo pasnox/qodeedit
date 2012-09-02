@@ -26,11 +26,7 @@ private:
 public:
     typedef QList<Syntax::Theme> List;
     
-    Theme( const QString& filePath = QString::null );
-    Theme( const Syntax::Theme& other );
-    virtual ~Theme();
-    
-    SYNTAX_DECL_OPERATORS( Theme );
+    QE_DECL_SHARED_CLASS( Theme );
     
     QString name() const;
     

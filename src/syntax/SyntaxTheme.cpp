@@ -12,12 +12,13 @@ public:
         : QSharedData(),
             name( "default" )
     {
+        initToDefault();
     }
     
     ThemeData( const Syntax::ThemeData& other )
         : QSharedData( other ),
-            SYNTAX_OTHER_INIT( styles ),
-            SYNTAX_OTHER_INIT( name )
+            QE_OTHER_INIT( styles ),
+            QE_OTHER_INIT( name )
     {
     }
     
@@ -56,24 +57,11 @@ public:
     }
 };
 
-Syntax::Theme::Theme( const QString& filePath )
-    : d( new Syntax::ThemeData )
-{
-    if ( !QFile::exists( filePath ) ) {
-        d->initToDefault();
-    }
-}
-
-Syntax::Theme::Theme( const Syntax::Theme& other )
-    : d( other.d )
-{
-}
+QE_IMPL_SHARED_CLASS( Theme )
 
 Syntax::Theme::~Theme()
 {
 }
-
-SYNTAX_IMPL_OPERATORS( Theme )
 
 QString Syntax::Theme::name() const
 {

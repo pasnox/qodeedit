@@ -18,16 +18,12 @@ private:
 public:
     typedef QList<Syntax::EmptyLine> List;
     
+    QE_DECL_SHARED_CLASS( EmptyLine );
+    
     // Required
-    SYNTAX_DECL_MEMBER( QString, regExpr );
+    QE_DECL_MEMBER( QString, regExpr );
     // Optional
-    SYNTAX_DECL_MEMBER( bool, caseSensitive );
-    
-    EmptyLine();
-    EmptyLine( const Syntax::EmptyLine& other );
-    virtual ~EmptyLine();
-    
-    SYNTAX_DECL_OPERATORS( EmptyLine );
+    QE_DECL_MEMBER( bool, caseSensitive );
 };
 
 }; // Syntax
