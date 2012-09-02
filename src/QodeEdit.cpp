@@ -1,5 +1,5 @@
 #include "QodeEdit.h"
-#include "main.h"
+#include "QodeEditConfig.h"
 
 #include <QStringList>
 #include <QDir>

@@ -13,16 +13,9 @@
 ##  WARRANTY OF DESIGN, MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE.
 ##
 ###########################################################################################
-
-XUP.QT_VERSION = Qt System (4.8.1)
-XUP.OTHERS_PLATFORM_TARGET_DEFAULT = bin/Linux/qodeedit_debug
-XUP.MAC_PLATFORM_TARGET_DEFAULT = bin/Darwin/qodeedit_debug.app
-
-ABSOLUTE_DATA_DIR = $$PWD/share
-
 include( config.pri )
-initializeProject( app, $${BUILD_TARGET}, $${BUILD_MODE}, $${BUILD_PATH}/$${TARGET_NAME}, $${BUILD_TARGET_PATH}, "", "0.1.0" )
-autoGenerateFile( "main.h.in", "src/main.h" )
+initializeProject( lib, $${BUILD_TARGET}, $${BUILD_MODE}, $${BUILD_PATH}/$${TARGET_NAME}, $${BUILD_TARGET_PATH}, $${BUILD_TYPE}, $${BUILD_VERSION} )
+autoGenerateFile( "QodeEditConfig.h.in", "src/QodeEditConfig.h" )
 
 QT *= xml
 
@@ -56,11 +49,9 @@ greaterThan( QT_MAJOR_VERSION, 4 ) {
     }
 }
 
-FORMS *=  \
-    src/example/UIMain.ui
+FORMS *= 
 
-HEADERS *=  \
-    src/example/UIMain.h \
+HEADERS *= \
     src/QodeEdit.h \
     src/editor/CodeEditor.h \
     src/document/TextDocument.h \
@@ -96,8 +87,7 @@ HEADERS *=  \
     src/syntax/SyntaxDocumentBuilder.h \
     src/syntax/SyntaxTheme.h
 
-SOURCES *= src/main.cpp \
-    src/example/UIMain.cpp \
+SOURCES *= \
     src/QodeEdit.cpp \
     src/editor/CodeEditor.cpp \
     src/document/TextDocument.cpp \

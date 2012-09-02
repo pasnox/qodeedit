@@ -3,7 +3,7 @@
 # include qmake-extensions
 include( qmake-extensions.pri )
 
-BUILD_TARGET = qodeedit
+BUILD_TARGET = QodeEdit
 BUILD_RAMDISK = /media/ramdisk
 exists( $${BUILD_RAMDISK} ):BUILD_PATH = $${BUILD_RAMDISK}/build
 else:BUILD_PATH = build
@@ -11,6 +11,8 @@ BUILD_PATH = $${BUILD_PATH}/$${BUILD_TARGET}
 BUILD_TARGET_PATH = bin/$${Q_TARGET}
 BUILD_MODE = debug
 BUILD_TYPE = shared
+BUILD_VERSION = 0.1.0
+ABSOLUTE_DATA_DIR = $$PWD/share
 
 # Initialize a project
 # $$1 = template (app or lib)
@@ -52,7 +54,7 @@ defineTest( initializeProject ) {
     # version
     q_version = $${7}
 
-    CONFIG -= release debug debug_and_release warn_on warn_off ppc x86 x86_64
+    CONFIG -= release debug debug_and_release warn_on warn_off ppc ppc64 x86 x86_64
     CONFIG *= warn_on thread x11 windows qt $${q_mode} $${q_type}
     isEqual( q_mode, debug ):CONFIG *= console
     VERSION = $${q_version}
