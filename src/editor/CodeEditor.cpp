@@ -43,7 +43,7 @@ public:
     }
     
     QRect caretLineRect() const {
-        QRect rect = editor->cursorRect().adjusted( 0, -1, 0, 1 );
+        QRect rect = editor->cursorRect()/*.adjusted( 0, -1, 0, 1 )*/;
         rect.setX( 0 );
         rect.setWidth( editor->viewport()->width() );
         return rect;

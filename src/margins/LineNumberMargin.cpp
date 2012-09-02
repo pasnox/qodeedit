@@ -101,6 +101,7 @@ void LineNumberMargin::paintEvent( QPaintEvent* event )
     const int firstLine = firstVisibleLine( event->rect() );
     const int lastLine = lastVisibleLine( event->rect() );
     const int flags = Qt::AlignVCenter | Qt::AlignRight;
+    const int defaultPointSize = editor()->textDocument()->defaultFont().pointSize();
     const QFont painterFont = painter.font();
     const QColor color = palette().color( QPalette::WindowText );
     const QColor lightColor = QColor( color.red(), color.green(), color.blue(), 120 );
@@ -121,6 +122,7 @@ void LineNumberMargin::paintEvent( QPaintEvent* event )
         }
         
         font.setBold( isCurrentLine || isHoveredLine );
+        font.setPointSize( qMin( font.pointSize(), qMax( block.blockFormat().property( QTextFormat::FontPointSize ).toInt(), defaultPointSize ) ) );
         
         painter.setFont( font );
         painter.setPen( isCurrentLine ? color : lightColor );
