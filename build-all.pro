@@ -15,6 +15,7 @@
 ###########################################################################################
 XUP.QT_VERSION = Qt System (4.8.1)
 XUP.OTHERS_PLATFORM_TARGET_DEFAULT = bin/Linux/QodeEdit_debug
+XUP.MAC_PLATFORM_TARGET_DEFAULT = bin/Darwin/QodeEdit_debug.app
 
 include( config.pri )
 
