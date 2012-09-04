@@ -15,11 +15,23 @@
 ****************************************************************************/
 #include <QtGui>
 
+#include "QodeEditExampleConfig.h"
 #include "UIMain.h"
 
 int main( int argc, char** argv )
 {
     QApplication app( argc, argv );
+    
+#if defined( Q_OS_MAC ) || defined( Q_OS_WIN )
+    const QFileInfo themes( QString::fromUtf8( QICON_THEMES_PATH ) );
+    
+    if ( themes.exists() ) {
+        QStringList paths = QIcon::themeSearchPaths();
+        paths << themes.absoluteFilePath();
+        QIcon::setThemeSearchPaths( paths );
+        QIcon::setThemeName( "oxygen" );
+    }
+#endif
     
     QRect rect = QRect( QPoint(), QSize( 640, 480 ) );
     rect.moveCenter( QApplication::desktop()->availableGeometry().center() );
@@ -27,6 +39,7 @@ int main( int argc, char** argv )
     UIMain window;
     window.setGeometry( rect );
     window.showMaximized();
+    window.raise();
     
     return app.exec();
 }

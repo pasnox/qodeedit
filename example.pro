@@ -13,8 +13,17 @@
 ##  WARRANTY OF DESIGN, MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE.
 ##
 ###########################################################################################
+win32|macx {
+    OXYGEN_THEME_PATH = $$PWD/../oxygen-icons-png.git
+    
+    exists( $${OXYGEN_THEME_PATH} ) {
+        QICON_THEMES_PATH = $${OXYGEN_THEME_PATH}
+    }
+}
+
 include( config.pri )
 initializeProject( app, $${BUILD_TARGET}, $${BUILD_MODE}, $${BUILD_PATH}/$${TARGET_NAME}, $${BUILD_TARGET_PATH} )
+autoGenerateFile( "QodeEditExampleConfig.h.in", "example/QodeEditExampleConfig.h" )
 
 INCLUDEPATH *= $$getFolders( example ) $$getFolders( src )
 DEPENDPATH *= $${INCLUDEPATH}
