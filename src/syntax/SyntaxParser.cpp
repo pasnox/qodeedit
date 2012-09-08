@@ -21,7 +21,7 @@
 #include <QVariant>
 #include <QDebug>
 
-QHash<QString, QodeEdit::Style> initializedStyleMapping()
+/*QHash<QString, QodeEdit::Style> initializedStyleMapping()
 {
     QHash<QString, QodeEdit::Style> hash;
     hash[ "alert" ] = QodeEdit::AlertStyle;
@@ -42,7 +42,7 @@ QHash<QString, QodeEdit::Style> initializedStyleMapping()
     return hash;
 }
 
-static QHash<QString, QodeEdit::Style> globalStyleMapping( initializedStyleMapping() );
+static QHash<QString, QodeEdit::Style> globalStyleMapping( initializedStyleMapping() );*/
 
 // ParserPrivate
 
@@ -56,9 +56,9 @@ public:
     QString text;
     QStack<QString> nodesName;
     QMap<QString, int> counts;
-    
 #if !defined( QT_NO_DEBUG )
-    Syntax::Parser::Debug debug;
+    typedef QHash<QString, QHash<QString, QSet<QString> > > Debug;
+    Syntax::ParserPrivate::Debug debug;
 #endif
     
     ParserPrivate( Syntax::Parser* _parser )

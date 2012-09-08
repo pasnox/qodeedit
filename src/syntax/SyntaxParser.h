@@ -35,10 +35,6 @@ class Parser : public QXmlDefaultHandler
     friend class Syntax::Reader;
     
 public:
-#if !defined( QT_NO_DEBUG )
-    typedef QHash<QString, QHash<QString, QSet<QString> > > Debug;
-#endif
-
     Parser();
     virtual ~Parser();
     
