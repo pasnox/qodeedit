@@ -16,7 +16,7 @@
 #include "TextDocument.h"
 #include "PlainTextDocumentLayout.h"
 #include "TextBlockUserData.h"
-#include "SyntaxHighlighter.h"
+#include "syntax/Highlighter.h"
 
 #include <QTextBlock>
 #include <QDebug>

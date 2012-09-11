@@ -3,7 +3,7 @@
 **         Created using Monkey Studio IDE v1.9.0.1 (1.9.0.1)
 ** Authors   : Filipe Azevedo aka Nox P@sNox <pasnox@gmail.com> and The QodeEdit development team
 ** Project   : QodeEdit
-** FileName  : SyntaxItemData.h
+** FileName  : ItemData.h
 ** Date      : 2012-09-02T23:04:46
 ** License   : LGPL3
 ** Comment   : A source code component editor based on QPlainTextEdit/QTextDocument/QSyntaxHighlighter and Kate xml language definition files.
@@ -13,15 +13,15 @@
 ** WARRANTY OF DESIGN, MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE.
 **
 ****************************************************************************/
-#ifndef SYNTAXITEMDATA_H
-#define SYNTAXITEMDATA_H
+#ifndef ITEMDATA_H
+#define ITEMDATA_H
 
 #include <QExplicitlySharedDataPointer>
 #include <QHash>
 #include <QString>
 #include <QColor>
 
-#include "SyntaxHelpers.h"
+#include "Helpers.h"
 
 namespace Syntax {
 
@@ -54,4 +54,4 @@ public:
 
 }; // Syntax
 
-#endif // SYNTAXITEMDATA_H
+#endif // ITEMDATA_H

@@ -14,8 +14,8 @@
 **
 ****************************************************************************/
 #include "LineRevisionMargin.h"
-#include "CodeEditor.h"
-#include "TextDocument.h"
+#include "editor/CodeEditor.h"
+#include "document/TextDocument.h"
 
 #include <QPainter>
 #include <QTextBlock>

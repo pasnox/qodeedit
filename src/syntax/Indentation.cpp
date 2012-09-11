@@ -3,7 +3,7 @@
 **         Created using Monkey Studio IDE v1.9.0.1 (1.9.0.1)
 ** Authors   : Filipe Azevedo aka Nox P@sNox <pasnox@gmail.com> and The QodeEdit development team
 ** Project   : QodeEdit
-** FileName  : SyntaxIndentation.cpp
+** FileName  : Indentation.cpp
 ** Date      : 2012-09-02T23:04:46
 ** License   : LGPL3
 ** Comment   : A source code component editor based on QPlainTextEdit/QTextDocument/QSyntaxHighlighter and Kate xml language definition files.
@@ -13,7 +13,7 @@
 ** WARRANTY OF DESIGN, MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE.
 **
 ****************************************************************************/
-#include "SyntaxIndentation.h"
+#include "Indentation.h"
 
 class Syntax::IndentationData : public QSharedData
 {

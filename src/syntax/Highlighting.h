@@ -3,7 +3,7 @@
 **         Created using Monkey Studio IDE v1.9.0.1 (1.9.0.1)
 ** Authors   : Filipe Azevedo aka Nox P@sNox <pasnox@gmail.com> and The QodeEdit development team
 ** Project   : QodeEdit
-** FileName  : SyntaxHighlighting.h
+** FileName  : Highlighting.h
 ** Date      : 2012-09-02T23:04:46
 ** License   : LGPL3
 ** Comment   : A source code component editor based on QPlainTextEdit/QTextDocument/QSyntaxHighlighter and Kate xml language definition files.
@@ -13,15 +13,15 @@
 ** WARRANTY OF DESIGN, MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE.
 **
 ****************************************************************************/
-#ifndef SYNTAXHIGHLIGHTING_H
-#define SYNTAXHIGHLIGHTING_H
+#ifndef HIGHLIGHTING_H
+#define HIGHLIGHTING_H
 
 #include <QExplicitlySharedDataPointer>
 
-#include "SyntaxHelpers.h"
-#include "SyntaxList.h"
-#include "SyntaxContext.h"
-#include "SyntaxItemData.h"
+#include "Helpers.h"
+#include "List.h"
+#include "Context.h"
+#include "ItemData.h"
 
 namespace Syntax {
 
@@ -48,4 +48,4 @@ public:
 
 }; // Syntax
 
-#endif // SYNTAXHIGHLIGHTING_H
+#endif // HIGHLIGHTING_H

@@ -3,7 +3,7 @@
 **         Created using Monkey Studio IDE v1.9.0.1 (1.9.0.1)
 ** Authors   : Filipe Azevedo aka Nox P@sNox <pasnox@gmail.com> and The QodeEdit development team
 ** Project   : QodeEdit
-** FileName  : SyntaxParser.cpp
+** FileName  : Parser.cpp
 ** Date      : 2012-09-02T23:04:46
 ** License   : LGPL3
 ** Comment   : A source code component editor based on QPlainTextEdit/QTextDocument/QSyntaxHighlighter and Kate xml language definition files.
@@ -13,9 +13,9 @@
 ** WARRANTY OF DESIGN, MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE.
 **
 ****************************************************************************/
-#include "SyntaxParser.h"
-#include "SyntaxDocument.h"
-#include "QodeEdit.h"
+#include "Parser.h"
+#include "Document.h"
+#include "Tools.h"
 
 #include <QStack>
 #include <QVariant>
@@ -201,47 +201,47 @@ bool Syntax::Parser::startElement( const QString& namespaceURI, const QString& l
     }
 #endif
     
-    if ( QodeEdit::stringEquals( qName, "language" ) ) {
+    if ( QodeEdit::Tools::stringEquals( qName, "language" ) ) {
         for ( int i = 0; i < atts.count(); i++ ) {
             const QString name = atts.qName( i );
             
-            if ( QodeEdit::stringEquals( name, "name" ) ) {
+            if ( QodeEdit::Tools::stringEquals( name, "name" ) ) {
                 d->document->name() = atts.value( i ).toLower();
             }
-            else if ( QodeEdit::stringEquals( name, "section" ) ) {
+            else if ( QodeEdit::Tools::stringEquals( name, "section" ) ) {
                 d->document->section() = atts.value( i );
             }
-            else if ( QodeEdit::stringEquals( name, "version" ) ) {
+            else if ( QodeEdit::Tools::stringEquals( name, "version" ) ) {
                 d->document->version() = atts.value( i );
             }
-            else if ( QodeEdit::stringEquals( name, "kateVersion" ) ) {
+            else if ( QodeEdit::Tools::stringEquals( name, "kateVersion" ) ) {
                 d->document->kateVersion() = atts.value( i );
             }
-            else if ( QodeEdit::stringEquals( name, "indenter" ) ) {
+            else if ( QodeEdit::Tools::stringEquals( name, "indenter" ) ) {
                 d->document->indenter() = atts.value( i );
             }
-            else if ( QodeEdit::stringEquals( name, "mimeType" ) ) {
+            else if ( QodeEdit::Tools::stringEquals( name, "mimeType" ) ) {
                 d->document->mimeType() = atts.value( i ).split( ";", QString::SkipEmptyParts ).toSet();
             }
-            else if ( QodeEdit::stringEquals( name, "extensions" ) ) {
+            else if ( QodeEdit::Tools::stringEquals( name, "extensions" ) ) {
                 d->document->extensions() = atts.value( i ).split( ";", QString::SkipEmptyParts ).toSet();
             }
-            else if ( QodeEdit::stringEquals( name, "priority" ) ) {
+            else if ( QodeEdit::Tools::stringEquals( name, "priority" ) ) {
                 d->document->priority() = atts.value( i ).toInt();
             }
-            else if ( QodeEdit::stringEquals( name, "author" ) ) {
+            else if ( QodeEdit::Tools::stringEquals( name, "author" ) ) {
                 d->document->author() = atts.value( i );
             }
-            else if ( QodeEdit::stringEquals( name, "license" ) ) {
+            else if ( QodeEdit::Tools::stringEquals( name, "license" ) ) {
                 d->document->license() = atts.value( i );
             }
-            else if ( QodeEdit::stringEquals( name, "caseSensitive" ) ) {
+            else if ( QodeEdit::Tools::stringEquals( name, "caseSensitive" ) ) {
                 d->document->caseSensitive() = QVariant( atts.value( i ) ).toBool();
             }
-            else if ( QodeEdit::stringEquals( name, "hidden" ) ) {
+            else if ( QodeEdit::Tools::stringEquals( name, "hidden" ) ) {
                 d->document->hidden() = QVariant( atts.value( i ) ).toBool();
             }
-            else if ( QodeEdit::stringEquals( name, "style" ) ) {
+            else if ( QodeEdit::Tools::stringEquals( name, "style" ) ) {
                 d->document->style() = atts.value( i );
             }
             else {
@@ -250,7 +250,7 @@ bool Syntax::Parser::startElement( const QString& namespaceURI, const QString& l
             }
         }
     }
-    else if ( QodeEdit::stringEquals( qName, "highlighting" ) ) {
+    else if ( QodeEdit::Tools::stringEquals( qName, "highlighting" ) ) {
         for ( int i = 0; i < atts.count(); i++ ) {
             const QString name = atts.qName( i );
             
@@ -258,11 +258,11 @@ bool Syntax::Parser::startElement( const QString& namespaceURI, const QString& l
             return false;
         }
     }
-    else if ( QodeEdit::stringEquals( qName, "list" ) ) {
+    else if ( QodeEdit::Tools::stringEquals( qName, "list" ) ) {
         for ( int i = 0; i < atts.count(); i++ ) {
             const QString name = atts.qName( i );
             
-            if ( QodeEdit::stringEquals( name, "name" ) ) {
+            if ( QodeEdit::Tools::stringEquals( name, "name" ) ) {
                 d->listName = atts.value( i ).toLower();
             }
             else {
@@ -271,7 +271,7 @@ bool Syntax::Parser::startElement( const QString& namespaceURI, const QString& l
             }
         }
     }
-    else if ( QodeEdit::stringEquals( qName, "item" ) ) {
+    else if ( QodeEdit::Tools::stringEquals( qName, "item" ) ) {
         for ( int i = 0; i < atts.count(); i++ ) {
             const QString name = atts.qName( i );
             
@@ -279,7 +279,7 @@ bool Syntax::Parser::startElement( const QString& namespaceURI, const QString& l
             return false;
         }
     }
-    else if ( QodeEdit::stringEquals( qName, "contexts" ) ) {
+    else if ( QodeEdit::Tools::stringEquals( qName, "contexts" ) ) {
         for ( int i = 0; i < atts.count(); i++ ) {
             const QString name = atts.qName( i );
             
@@ -287,38 +287,38 @@ bool Syntax::Parser::startElement( const QString& namespaceURI, const QString& l
             return false;
         }
     }
-    else if ( QodeEdit::stringEquals( qName, "context" ) ) {
+    else if ( QodeEdit::Tools::stringEquals( qName, "context" ) ) {
         Syntax::Context context;
         
         for ( int i = 0; i < atts.count(); i++ ) {
             const QString name = atts.qName( i );
             
-            if ( QodeEdit::stringEquals( name, "name" ) ) {
+            if ( QodeEdit::Tools::stringEquals( name, "name" ) ) {
                 d->contextName = atts.value( i ).toLower();
                 context.name() = d->contextName;
             }
-            else if ( QodeEdit::stringEquals( name, "lineBeginContext" ) ) {
+            else if ( QodeEdit::Tools::stringEquals( name, "lineBeginContext" ) ) {
                 context.lineBeginContext() = atts.value( i ).toLower();
             }
-            else if ( QodeEdit::stringEquals( name, "lineEndContext" ) ) {
+            else if ( QodeEdit::Tools::stringEquals( name, "lineEndContext" ) ) {
                 context.lineEndContext() = atts.value( i ).toLower();
             }
-            else if ( QodeEdit::stringEquals( name, "attribute" ) ) {
+            else if ( QodeEdit::Tools::stringEquals( name, "attribute" ) ) {
                 context.attribute() = atts.value( i ).toLower();
             }
-            else if ( QodeEdit::stringEquals( name, "fallThrough" ) ) {
+            else if ( QodeEdit::Tools::stringEquals( name, "fallThrough" ) ) {
                 context.fallThrough() = QVariant( atts.value( i ) ).toBool();
             }
-            else if ( QodeEdit::stringEquals( name, "fallThroughContext" ) ) {
+            else if ( QodeEdit::Tools::stringEquals( name, "fallThroughContext" ) ) {
                 context.fallThroughContext() = atts.value( i ).toLower();
             }
-            else if ( QodeEdit::stringEquals( name, "dynamic" ) ) {
+            else if ( QodeEdit::Tools::stringEquals( name, "dynamic" ) ) {
                 context.dynamic() = QVariant( atts.value( i ) ).toBool();
             }
-            else if ( QodeEdit::stringEquals( name, "noIndentationBasedFolding" ) ) {
+            else if ( QodeEdit::Tools::stringEquals( name, "noIndentationBasedFolding" ) ) {
                 context.noIndentationBasedFolding() = QVariant( atts.value( i ) ).toBool();
             }
-            else if ( QodeEdit::stringEquals( name, "caseSensitive" ) ) {
+            else if ( QodeEdit::Tools::stringEquals( name, "caseSensitive" ) ) {
                 qWarning( "%s: Invalid attribute (%s) meet in %s", Q_FUNC_INFO, qPrintable( name ), qPrintable( qName ) );
             }
             else {
@@ -341,7 +341,7 @@ bool Syntax::Parser::startElement( const QString& namespaceURI, const QString& l
     }
     else if ( d->ruleNames.contains( qName.toLower() ) ) {
         Q_ASSERT( !d->contextName.isEmpty() );
-        const QodeEdit::Rule type = QodeEdit::stringToRule( qName );
+        const QodeEdit::Rule type = QodeEdit::Tools::stringToRule( qName );
         Syntax::Context& context = d->document->highlighting().contexts()[ d->contextName ];
         QHash<QString, QVariant> data;
         static QSet<QString> knownAttributes;
@@ -410,7 +410,7 @@ bool Syntax::Parser::startElement( const QString& namespaceURI, const QString& l
             Q_ASSERT( context.rules().last() == lastRule );
         }
     }
-    else if ( QodeEdit::stringEquals( qName, "itemDatas" ) ) {
+    else if ( QodeEdit::Tools::stringEquals( qName, "itemDatas" ) ) {
         for ( int i = 0; i < atts.count(); i++ ) {
             const QString name = atts.qName( i );
             
@@ -418,48 +418,48 @@ bool Syntax::Parser::startElement( const QString& namespaceURI, const QString& l
             return false;
         }
     }
-    else if ( QodeEdit::stringEquals( qName, "itemData" ) ) {
+    else if ( QodeEdit::Tools::stringEquals( qName, "itemData" ) ) {
         Syntax::ItemData itemData;
         
         for ( int i = 0; i < atts.count(); i++ ) {
             const QString name = atts.qName( i );
             
-            if ( QodeEdit::stringEquals( name, "name" ) ) {
+            if ( QodeEdit::Tools::stringEquals( name, "name" ) ) {
                 itemData.name() = atts.value( i ).toLower();
             }
-            else if ( QodeEdit::stringEquals( name, "defStyleNum" ) ) {
+            else if ( QodeEdit::Tools::stringEquals( name, "defStyleNum" ) ) {
                 itemData.defStyleNum() = atts.value( i );
                 
-                if ( QodeEdit::stringToStyle( itemData.defStyleNum() ) == -1 ) {
+                if ( QodeEdit::Tools::stringToStyle( itemData.defStyleNum() ) == -1 ) {
                     qWarning( "%s: Fixed invalid style to dsNormal in %s", Q_FUNC_INFO, qPrintable( d->document->name() ) );
                     itemData.defStyleNum() = "dsNormal";
                 }
             }
-            else if ( QodeEdit::stringEquals( name, "spellChecking" ) ) {
+            else if ( QodeEdit::Tools::stringEquals( name, "spellChecking" ) ) {
                 itemData.spellChecking() = QVariant( atts.value( i ) ).toBool();
             }
-            else if ( QodeEdit::stringEquals( name, "color" ) ) {
+            else if ( QodeEdit::Tools::stringEquals( name, "color" ) ) {
                 itemData.color() = QColor( atts.value( i ) );
             }
-            else if ( QodeEdit::stringEquals( name, "selColor" ) ) {
+            else if ( QodeEdit::Tools::stringEquals( name, "selColor" ) ) {
                 itemData.selColor() = QColor( atts.value( i ) );
             }
-            else if ( QodeEdit::stringEquals( name, "bold" ) ) {
+            else if ( QodeEdit::Tools::stringEquals( name, "bold" ) ) {
                 itemData.bold() = QVariant( atts.value( i ) ).toBool();
             }
-            else if ( QodeEdit::stringEquals( name, "italic" ) ) {
+            else if ( QodeEdit::Tools::stringEquals( name, "italic" ) ) {
                 itemData.italic() = QVariant( atts.value( i ) ).toBool();
             }
-            else if ( QodeEdit::stringEquals( name, "strikeOut" ) ) {
+            else if ( QodeEdit::Tools::stringEquals( name, "strikeOut" ) ) {
                 itemData.strikeOut() = QVariant( atts.value( i ) ).toBool();
             }
-            else if ( QodeEdit::stringEquals( name, "underline" ) ) {
+            else if ( QodeEdit::Tools::stringEquals( name, "underline" ) ) {
                 itemData.underline() = QVariant( atts.value( i ) ).toBool();
             }
-            else if ( QodeEdit::stringEquals( name, "backgroundColor" ) ) {
+            else if ( QodeEdit::Tools::stringEquals( name, "backgroundColor" ) ) {
                 itemData.backgroundColor() = QColor( atts.value( i ) );
             }
-            else if ( QodeEdit::stringEquals( name, "selBackgroundColor" ) ) {
+            else if ( QodeEdit::Tools::stringEquals( name, "selBackgroundColor" ) ) {
                 itemData.selBackgroundColor() = QColor( atts.value( i ) );
             }
             else {
@@ -470,7 +470,7 @@ bool Syntax::Parser::startElement( const QString& namespaceURI, const QString& l
         
         d->document->highlighting().itemDatas()[ itemData.name() ] = itemData;
     }
-    else if ( QodeEdit::stringEquals( qName, "general" ) ) {
+    else if ( QodeEdit::Tools::stringEquals( qName, "general" ) ) {
         for ( int i = 0; i < atts.count(); i++ ) {
             const QString name = atts.qName( i );
             
@@ -478,7 +478,7 @@ bool Syntax::Parser::startElement( const QString& namespaceURI, const QString& l
             return false;
         }
     }
-    else if ( QodeEdit::stringEquals( qName, "comments" ) ) {
+    else if ( QodeEdit::Tools::stringEquals( qName, "comments" ) ) {
         for ( int i = 0; i < atts.count(); i++ ) {
             const QString name = atts.qName( i );
             
@@ -486,28 +486,28 @@ bool Syntax::Parser::startElement( const QString& namespaceURI, const QString& l
             return false;
         }
     }
-    else if ( QodeEdit::stringEquals( qName, "comment" ) ) {
+    else if ( QodeEdit::Tools::stringEquals( qName, "comment" ) ) {
         Syntax::Comment comment;
         
         for ( int i = 0; i < atts.count(); i++ ) {
             const QString name = atts.qName( i );
             
-            if ( QodeEdit::stringEquals( name, "name" ) ) {
+            if ( QodeEdit::Tools::stringEquals( name, "name" ) ) {
                 comment.name() = atts.value( i ).toLower();
             }
-            else if ( QodeEdit::stringEquals( name, "start" ) ) {
+            else if ( QodeEdit::Tools::stringEquals( name, "start" ) ) {
                 comment.start() = atts.value( i );
             }
-            else if ( QodeEdit::stringEquals( name, "end" ) ) {
+            else if ( QodeEdit::Tools::stringEquals( name, "end" ) ) {
                 comment.end() = atts.value( i );
             }
-            else if ( QodeEdit::stringEquals( name, "region" ) ) {
+            else if ( QodeEdit::Tools::stringEquals( name, "region" ) ) {
                 comment.region() = atts.value( i );
             }
-            else if ( QodeEdit::stringEquals( name, "position" ) ) {
+            else if ( QodeEdit::Tools::stringEquals( name, "position" ) ) {
                 comment.position() = atts.value( i );
             }
-            else if ( QodeEdit::stringEquals( name, "weakDeliminator" ) ) {
+            else if ( QodeEdit::Tools::stringEquals( name, "weakDeliminator" ) ) {
                 qWarning( "%s: Invalid attribute (%s) meet in %s", Q_FUNC_INFO, qPrintable( name ), qPrintable( qName ) );
             }
             else {
@@ -518,22 +518,22 @@ bool Syntax::Parser::startElement( const QString& namespaceURI, const QString& l
         
         d->document->general().comments() << comment;
     }
-    else if ( QodeEdit::stringEquals( qName, "keywords" ) ) {
+    else if ( QodeEdit::Tools::stringEquals( qName, "keywords" ) ) {
         Syntax::Keywords& keywords = d->document->general().keywords();
         
         for ( int i = 0; i < atts.count(); i++ ) {
             const QString name = atts.qName( i );
             
-            if ( QodeEdit::stringEquals( name, "caseSensitive" ) ) {
+            if ( QodeEdit::Tools::stringEquals( name, "caseSensitive" ) ) {
                 keywords.caseSensitive() = QVariant( atts.value( i ) ).toBool();
             }
-            else if ( QodeEdit::stringEquals( name, "weakDeliminator" ) ) {
+            else if ( QodeEdit::Tools::stringEquals( name, "weakDeliminator" ) ) {
                 keywords.weakDeliminator() = atts.value( i );
             }
-            else if ( QodeEdit::stringEquals( name, "additionalDeliminator" ) ) {
+            else if ( QodeEdit::Tools::stringEquals( name, "additionalDeliminator" ) ) {
                 keywords.additionalDeliminator() = atts.value( i );
             }
-            else if ( QodeEdit::stringEquals( name, "wordWrapDeliminator" ) ) {
+            else if ( QodeEdit::Tools::stringEquals( name, "wordWrapDeliminator" ) ) {
                 keywords.wordWrapDeliminator() = atts.value( i );
             }
             else {
@@ -542,13 +542,13 @@ bool Syntax::Parser::startElement( const QString& namespaceURI, const QString& l
             }
         }
     }
-    else if ( QodeEdit::stringEquals( qName, "folding" ) ) {
+    else if ( QodeEdit::Tools::stringEquals( qName, "folding" ) ) {
         Syntax::Folding& folding = d->document->general().folding();
         
         for ( int i = 0; i < atts.count(); i++ ) {
             const QString name = atts.qName( i );
             
-            if ( QodeEdit::stringEquals( name, "indentationSensitive" ) ) {
+            if ( QodeEdit::Tools::stringEquals( name, "indentationSensitive" ) ) {
                 folding.indentationSensitive() = QVariant( atts.value( i ) ).toBool();
             }
             else {
@@ -557,13 +557,13 @@ bool Syntax::Parser::startElement( const QString& namespaceURI, const QString& l
             }
         }
     }
-    else if ( QodeEdit::stringEquals( qName, "indentation" ) ) {
+    else if ( QodeEdit::Tools::stringEquals( qName, "indentation" ) ) {
         Syntax::Indentation& indentation = d->document->general().indentation();
         
         for ( int i = 0; i < atts.count(); i++ ) {
             const QString name = atts.qName( i );
             
-            if ( QodeEdit::stringEquals( name, "mode" ) ) {
+            if ( QodeEdit::Tools::stringEquals( name, "mode" ) ) {
                 indentation.mode() = atts.value( i );
             }
             else {
@@ -572,7 +572,7 @@ bool Syntax::Parser::startElement( const QString& namespaceURI, const QString& l
             }
         }
     }
-    else if ( QodeEdit::stringEquals( qName, "emptyLines" ) ) {
+    else if ( QodeEdit::Tools::stringEquals( qName, "emptyLines" ) ) {
         for ( int i = 0; i < atts.count(); i++ ) {
             const QString name = atts.qName( i );
             
@@ -580,16 +580,16 @@ bool Syntax::Parser::startElement( const QString& namespaceURI, const QString& l
             return false;
         }
     }
-    else if ( QodeEdit::stringEquals( qName, "emptyLine" ) ) {
+    else if ( QodeEdit::Tools::stringEquals( qName, "emptyLine" ) ) {
         Syntax::EmptyLine emptyLine;
         
         for ( int i = 0; i < atts.count(); i++ ) {
             const QString name = atts.qName( i );
             
-            if ( QodeEdit::stringEquals( name, "regExpr" ) ) {
+            if ( QodeEdit::Tools::stringEquals( name, "regExpr" ) ) {
                 emptyLine.regExpr() = atts.value( i );
             }
-            else if ( QodeEdit::stringEquals( name, "caseSensitive" ) ) {
+            else if ( QodeEdit::Tools::stringEquals( name, "caseSensitive" ) ) {
                 emptyLine.caseSensitive() = QVariant( atts.value( i ) ).toBool();
             }
             else {
@@ -600,7 +600,7 @@ bool Syntax::Parser::startElement( const QString& namespaceURI, const QString& l
         
         d->document->general().emptyLines() << emptyLine;
     }
-    else if ( QodeEdit::stringEquals( qName, "spellChecking" ) ) {
+    else if ( QodeEdit::Tools::stringEquals( qName, "spellChecking" ) ) {
         for ( int i = 0; i < atts.count(); i++ ) {
             const QString name = atts.qName( i );
             
@@ -608,13 +608,13 @@ bool Syntax::Parser::startElement( const QString& namespaceURI, const QString& l
             return false;
         }
     }
-    else if ( QodeEdit::stringEquals( qName, "configuration" ) ) {
+    else if ( QodeEdit::Tools::stringEquals( qName, "configuration" ) ) {
         Syntax::Configuration& configuration = d->document->spellChecking().configuration();
         
         for ( int i = 0; i < atts.count(); i++ ) {
             const QString name = atts.qName( i );
             
-            if ( QodeEdit::stringEquals( name, "encodingReplacementPolicy" ) ) {
+            if ( QodeEdit::Tools::stringEquals( name, "encodingReplacementPolicy" ) ) {
                 configuration.encodingReplacementPolicy() = atts.value( i );
             }
             else {
@@ -623,7 +623,7 @@ bool Syntax::Parser::startElement( const QString& namespaceURI, const QString& l
             }
         }
     }
-    else if ( QodeEdit::stringEquals( qName, "encodings" ) ) {
+    else if ( QodeEdit::Tools::stringEquals( qName, "encodings" ) ) {
         for ( int i = 0; i < atts.count(); i++ ) {
             const QString name = atts.qName( i );
             
@@ -631,19 +631,19 @@ bool Syntax::Parser::startElement( const QString& namespaceURI, const QString& l
             return false;
         }
     }
-    else if ( QodeEdit::stringEquals( qName, "encoding" ) ) {
+    else if ( QodeEdit::Tools::stringEquals( qName, "encoding" ) ) {
         Syntax::Encoding encoding;
         
         for ( int i = 0; i < atts.count(); i++ ) {
             const QString name = atts.qName( i );
             
-            if ( QodeEdit::stringEquals( name, "char" ) ) {
+            if ( QodeEdit::Tools::stringEquals( name, "char" ) ) {
                 encoding.char_() = atts.value( i );
             }
-            else if ( QodeEdit::stringEquals( name, "string" ) ) {
+            else if ( QodeEdit::Tools::stringEquals( name, "string" ) ) {
                 encoding.string() = atts.value( i );
             }
-            else if ( QodeEdit::stringEquals( name, "ignored" ) ) {
+            else if ( QodeEdit::Tools::stringEquals( name, "ignored" ) ) {
                 encoding.ignored() = QVariant( atts.value( i ) ).toBool();
             }
             else {
@@ -666,52 +666,52 @@ bool Syntax::Parser::startElement( const QString& namespaceURI, const QString& l
 
 bool Syntax::Parser::endElement( const QString& namespaceURI, const QString& localName, const QString& qName )
 {
-    if ( QodeEdit::stringEquals( qName, "item" ) ) {
+    if ( QodeEdit::Tools::stringEquals( qName, "item" ) ) {
         Q_ASSERT( !d->listName.isEmpty() );
         d->document->highlighting().lists()[ d->listName ] << ( d->document->caseSensitive() ? d->text.trimmed() : d->text.trimmed().toLower() );
         d->text.clear();
     }
-    else if ( QodeEdit::stringEquals( qName, "list" ) ) {
+    else if ( QodeEdit::Tools::stringEquals( qName, "list" ) ) {
         d->listName.clear();
     }
     else if ( d->ruleNames.contains( qName.toLower() ) ) {
     }
-    else if ( QodeEdit::stringEquals( qName, "context" ) ) {
+    else if ( QodeEdit::Tools::stringEquals( qName, "context" ) ) {
         d->contextName.clear();
     }
-    else if ( QodeEdit::stringEquals( qName, "contexts" ) ) {
+    else if ( QodeEdit::Tools::stringEquals( qName, "contexts" ) ) {
     }
-    else if ( QodeEdit::stringEquals( qName, "itemData" ) ) {
+    else if ( QodeEdit::Tools::stringEquals( qName, "itemData" ) ) {
     }
-    else if ( QodeEdit::stringEquals( qName, "itemDatas" ) ) {
+    else if ( QodeEdit::Tools::stringEquals( qName, "itemDatas" ) ) {
     }
-    else if ( QodeEdit::stringEquals( qName, "highlighting" ) ) {
+    else if ( QodeEdit::Tools::stringEquals( qName, "highlighting" ) ) {
     }
-    else if ( QodeEdit::stringEquals( qName, "comment" ) ) {
+    else if ( QodeEdit::Tools::stringEquals( qName, "comment" ) ) {
     }
-    else if ( QodeEdit::stringEquals( qName, "comments" ) ) {
+    else if ( QodeEdit::Tools::stringEquals( qName, "comments" ) ) {
     }
-    else if ( QodeEdit::stringEquals( qName, "keywords" ) ) {
+    else if ( QodeEdit::Tools::stringEquals( qName, "keywords" ) ) {
     }
-    else if ( QodeEdit::stringEquals( qName, "folding" ) ) {
+    else if ( QodeEdit::Tools::stringEquals( qName, "folding" ) ) {
     }
-    else if ( QodeEdit::stringEquals( qName, "indentation" ) ) {
+    else if ( QodeEdit::Tools::stringEquals( qName, "indentation" ) ) {
     }
-    else if ( QodeEdit::stringEquals( qName, "emptyLine" ) ) {
+    else if ( QodeEdit::Tools::stringEquals( qName, "emptyLine" ) ) {
     }
-    else if ( QodeEdit::stringEquals( qName, "emptyLines" ) ) {
+    else if ( QodeEdit::Tools::stringEquals( qName, "emptyLines" ) ) {
     }
-    else if ( QodeEdit::stringEquals( qName, "general" ) ) {
+    else if ( QodeEdit::Tools::stringEquals( qName, "general" ) ) {
     }
-    else if ( QodeEdit::stringEquals( qName, "configuration" ) ) {
+    else if ( QodeEdit::Tools::stringEquals( qName, "configuration" ) ) {
     }
-    else if ( QodeEdit::stringEquals( qName, "encoding" ) ) {
+    else if ( QodeEdit::Tools::stringEquals( qName, "encoding" ) ) {
     }
-    else if ( QodeEdit::stringEquals( qName, "encodings" ) ) {
+    else if ( QodeEdit::Tools::stringEquals( qName, "encodings" ) ) {
     }
-    else if ( QodeEdit::stringEquals( qName, "spellChecking" ) ) {
+    else if ( QodeEdit::Tools::stringEquals( qName, "spellChecking" ) ) {
     }
-    else if ( QodeEdit::stringEquals( qName, "language" ) ) {
+    else if ( QodeEdit::Tools::stringEquals( qName, "language" ) ) {
     }
     else {
         d->error = QString( "%1: Unhandled ending qName element: %2" ).arg( Q_FUNC_INFO ).arg( qName );

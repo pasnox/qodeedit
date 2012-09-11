@@ -3,7 +3,7 @@
 **         Created using Monkey Studio IDE v1.9.0.1 (1.9.0.1)
 ** Authors   : Filipe Azevedo aka Nox P@sNox <pasnox@gmail.com> and The QodeEdit development team
 ** Project   : QodeEdit
-** FileName  : SyntaxSpellChecking.h
+** FileName  : SpellChecking.h
 ** Date      : 2012-09-02T23:04:46
 ** License   : LGPL3
 ** Comment   : A source code component editor based on QPlainTextEdit/QTextDocument/QSyntaxHighlighter and Kate xml language definition files.
@@ -13,14 +13,14 @@
 ** WARRANTY OF DESIGN, MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE.
 **
 ****************************************************************************/
-#ifndef SYNTAXSPELLCHECKING_H
-#define SYNTAXSPELLCHECKING_H
+#ifndef SPELLCHECKING_H
+#define SPELLCHECKING_H
 
 #include <QExplicitlySharedDataPointer>
 
-#include "SyntaxHelpers.h"
-#include "SyntaxConfiguration.h"
-#include "SyntaxEncoding.h"
+#include "Helpers.h"
+#include "Configuration.h"
+#include "Encoding.h"
 
 namespace Syntax {
 
@@ -42,4 +42,4 @@ public:
 
 }; // Syntax
 
-#endif // SYNTAXSPELLCHECKING_H
+#endif // SPELLCHECKING_H

@@ -15,12 +15,12 @@
 ****************************************************************************/
 #include "UIMain.h"
 #include "ui_UIMain.h"
-#include "CodeEditor.h"
-#include "MarginStacker.h"
-#include "SyntaxFactory.h"
+#include "editor/CodeEditor.h"
+#include "margin/MarginStacker.h"
+#include "syntax/Factory.h"
 #include "QodeEdit.h"
-#include "SyntaxHighlighter.h"
-#include "TextDocument.h"
+#include "syntax/Highlighter.h"
+#include "document/TextDocument.h"
 
 #include <QUrl>
 
@@ -96,11 +96,13 @@ UIMain::UIMain( QWidget* parent )
     
     qInstallMsgHandler( UIMain::messageHandler );
     
+    return;
+    
     QString error;
     
-    if ( Syntax::Factory::load( &error ) ) {
+    /*if ( Syntax::Factory::load( &error ) ) {
         qWarning() << Q_FUNC_INFO << "Syntaxes loaded correctly";
-    }
+    }*/
     
     //qWarning() << Syntax::Factory::availableSyntaxes();
     
@@ -129,7 +131,7 @@ UIMain::UIMain( QWidget* parent )
     "Vera", "Verilog", "VHDL", "VRML", "Wesnoth Markup Language", "WINE Config", "x.org Configuration",
     "xHarbour", "XML", "XML (Debug)", "xslt", "XUL", "yacas", "Yacc/Bison", "YAML", "Zonnon", "Zsh"*/
     
-    QDir dir( QodeEdit::sharedDataFilePath( "/samples" ) );
+    QDir dir( QodeEdit::Manager::sharedDataFilePath( "/samples" ) );
     const QFileInfoList files = dir.entryInfoList( QDir::Files | QDir::NoDotAndDotDot );
     
     foreach ( const QFileInfo& file, files ) {

@@ -15,10 +15,10 @@
 ****************************************************************************/
 #include "AbstractMargin.h"
 #include "MarginStacker.h"
-#include "CodeEditor.h"
-#include "TextDocument.h"
-#include "PlainTextDocumentLayout.h"
-#include "TextBlockUserData.h"
+#include "editor/CodeEditor.h"
+#include "document/TextDocument.h"
+#include "document/PlainTextDocumentLayout.h"
+#include "document/TextBlockUserData.h"
 
 #include <QScrollBar>
 #include <QApplication>

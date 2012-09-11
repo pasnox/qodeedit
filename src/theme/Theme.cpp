@@ -13,7 +13,7 @@
 ** WARRANTY OF DESIGN, MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE.
 **
 ****************************************************************************/
-#include "SyntaxTheme.h"
+#include "Theme.h"
 
 #include <QFile>
 

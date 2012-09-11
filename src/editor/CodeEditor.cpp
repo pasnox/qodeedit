@@ -14,10 +14,10 @@
 **
 ****************************************************************************/
 #include "CodeEditor.h"
-#include "TextDocument.h"
-#include "MarginStacker.h"
-#include "TextBlockUserData.h"
-#include "AbstractMargin.h"
+#include "document/TextDocument.h"
+#include "document/TextBlockUserData.h"
+#include "margin/MarginStacker.h"
+#include "margin/AbstractMargin.h"
 
 #include <QStyleOptionFrameV3>
 #include <QTextBlock>

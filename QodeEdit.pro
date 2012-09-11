@@ -19,8 +19,8 @@ autoGenerateFile( "QodeEditConfig.h.in", "src/QodeEditConfig.h" )
 
 QT *= xml
 
-INCLUDEPATH *= $$getFolders( . )
-DEPENDPATH *= $${INCLUDEPATH}
+INCLUDEPATH *= src
+DEPENDPATH *= $$getFolders( . )
 
 greaterThan( QT_MAJOR_VERSION, 4 ) {
 } else:greaterThan( QT_MAJOR_VERSION, 3 ) {
@@ -51,72 +51,74 @@ greaterThan( QT_MAJOR_VERSION, 4 ) {
 
 FORMS *= 
 
-HEADERS *= \
+HEADERS *=  \
     src/QodeEdit.h \
+    src/Tools.h \
     src/editor/CodeEditor.h \
     src/document/TextDocument.h \
     src/document/PlainTextDocumentLayout.h \
     src/document/TextBlockUserData.h \
-    src/margins/MarginStacker.h \
-    src/margins/AbstractMargin.h \
-    src/margins/LineBookmarkMargin.h \
-    src/margins/LineNumberMargin.h \
-    src/margins/LineRevisionMargin.h \
-    src/margins/LineSpacingMargin.h \
-    src/syntax/SyntaxHelpers.h \
-    src/syntax/SyntaxItemData.h \
-    src/syntax/SyntaxRule.h \
-    src/syntax/SyntaxComment.h \
-    src/syntax/SyntaxKeywords.h \
-    src/syntax/SyntaxHighlighting.h \
-    src/syntax/SyntaxContext.h \
-    src/syntax/SyntaxGeneral.h \
-    src/syntax/SyntaxDocument.h \
-    src/syntax/SyntaxParser.h \
-    src/syntax/SyntaxList.h \
-    src/syntax/SyntaxFolding.h \
-    src/syntax/SyntaxEmptyLine.h \
-    src/syntax/SyntaxIndentation.h \
-    src/syntax/SyntaxSpellChecking.h \
-    src/syntax/SyntaxConfiguration.h \
-    src/syntax/SyntaxEncoding.h \
-    src/syntax/SyntaxFactory.h \
-    src/syntax/SyntaxModel.h \
-    src/syntax/SyntaxHighlighter.h \
-    src/syntax/SyntaxComboBox.h \
-    src/syntax/SyntaxDocumentBuilder.h \
-    src/syntax/SyntaxTheme.h
+    src/margin/MarginStacker.h \
+    src/margin/AbstractMargin.h \
+    src/margin/LineBookmarkMargin.h \
+    src/margin/LineNumberMargin.h \
+    src/margin/LineRevisionMargin.h \
+    src/margin/LineSpacingMargin.h \
+    src/syntax/Helpers.h \
+    src/syntax/List.h \
+    src/syntax/Document.h \
+    src/syntax/ItemData.h \
+    src/syntax/Rule.h \
+    src/syntax/Comment.h \
+    src/syntax/Keywords.h \
+    src/syntax/Highlighting.h \
+    src/syntax/Context.h \
+    src/syntax/General.h \
+    src/syntax/Folding.h \
+    src/syntax/EmptyLine.h \
+    src/syntax/Indentation.h \
+    src/syntax/SpellChecking.h \
+    src/syntax/Configuration.h \
+    src/syntax/Encoding.h \
+    src/syntax/Parser.h \
+    src/syntax/DocumentBuilder.h \
+    src/syntax/Factory.h \
+    src/syntax/Model.h \
+    src/syntax/Highlighter.h \
+    src/syntax/ComboBox.h \
+    src/theme/Theme.h
 
-SOURCES *= \
+SOURCES *=  \
     src/QodeEdit.cpp \
+    src/Tools.cpp \
     src/editor/CodeEditor.cpp \
     src/document/TextDocument.cpp \
     src/document/PlainTextDocumentLayout.cpp \
     src/document/TextBlockUserData.cpp \
-    src/margins/MarginStacker.cpp \
-    src/margins/AbstractMargin.cpp \
-    src/margins/LineBookmarkMargin.cpp \
-    src/margins/LineNumberMargin.cpp \
-    src/margins/LineRevisionMargin.cpp \
-    src/margins/LineSpacingMargin.cpp \
-    src/syntax/SyntaxRule.cpp \
-    src/syntax/SyntaxContext.cpp \
-    src/syntax/SyntaxComment.cpp \
-    src/syntax/SyntaxDocument.cpp \
-    src/syntax/SyntaxGeneral.cpp \
-    src/syntax/SyntaxKeywords.cpp \
-    src/syntax/SyntaxHighlighting.cpp \
-    src/syntax/SyntaxItemData.cpp \
-    src/syntax/SyntaxParser.cpp \
-    src/syntax/SyntaxFolding.cpp \
-    src/syntax/SyntaxEmptyLine.cpp \
-    src/syntax/SyntaxIndentation.cpp \
-    src/syntax/SyntaxSpellChecking.cpp \
-    src/syntax/SyntaxConfiguration.cpp \
-    src/syntax/SyntaxEncoding.cpp \
-    src/syntax/SyntaxFactory.cpp \
-    src/syntax/SyntaxModel.cpp \
-    src/syntax/SyntaxHighlighter.cpp \
-    src/syntax/SyntaxComboBox.cpp \
-    src/syntax/SyntaxDocumentBuilder.cpp \
-    src/syntax/SyntaxTheme.cpp
+    src/margin/MarginStacker.cpp \
+    src/margin/AbstractMargin.cpp \
+    src/margin/LineBookmarkMargin.cpp \
+    src/margin/LineNumberMargin.cpp \
+    src/margin/LineRevisionMargin.cpp \
+    src/margin/LineSpacingMargin.cpp \
+    src/syntax/Document.cpp \
+    src/syntax/ItemData.cpp \
+    src/syntax/Rule.cpp \
+    src/syntax/Comment.cpp \
+    src/syntax/Keywords.cpp \
+    src/syntax/Highlighting.cpp \
+    src/syntax/Context.cpp \
+    src/syntax/General.cpp \
+    src/syntax/Folding.cpp \
+    src/syntax/EmptyLine.cpp \
+    src/syntax/Indentation.cpp \
+    src/syntax/SpellChecking.cpp \
+    src/syntax/Configuration.cpp \
+    src/syntax/Encoding.cpp \
+    src/syntax/Parser.cpp \
+    src/syntax/DocumentBuilder.cpp \
+    src/syntax/Factory.cpp \
+    src/syntax/Model.cpp \
+    src/syntax/Highlighter.cpp \
+    src/syntax/ComboBox.cpp \
+    src/theme/Theme.cpp

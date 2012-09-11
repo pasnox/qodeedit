@@ -14,7 +14,7 @@
 **
 ****************************************************************************/
 #include "LineSpacingMargin.h"
-#include "CodeEditor.h"
+#include "editor/CodeEditor.h"
 
 #include <QPainter>
 

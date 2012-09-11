@@ -3,7 +3,7 @@
 **         Created using Monkey Studio IDE v1.9.0.1 (1.9.0.1)
 ** Authors   : Filipe Azevedo aka Nox P@sNox <pasnox@gmail.com> and The QodeEdit development team
 ** Project   : QodeEdit
-** FileName  : SyntaxFactory.cpp
+** FileName  : Factory.cpp
 ** Date      : 2012-09-02T23:04:46
 ** License   : LGPL3
 ** Comment   : A source code component editor based on QPlainTextEdit/QTextDocument/QSyntaxHighlighter and Kate xml language definition files.
@@ -13,14 +13,14 @@
 ** WARRANTY OF DESIGN, MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE.
 **
 ****************************************************************************/
-#include "SyntaxFactory.h"
-#include "SyntaxDocument.h"
-#include "SyntaxTheme.h"
-#include "SyntaxDocumentBuilder.h"
-#include "SyntaxHighlighter.h"
-#include "SyntaxModel.h"
-#include "TextDocument.h"
-#include "QodeEdit.h"
+#include "Factory.h"
+#include "Document.h"
+#include "DocumentBuilder.h"
+#include "Highlighter.h"
+#include "Model.h"
+#include "theme/Theme.h"
+#include "document/TextDocument.h"
+#include "Tools.h"
 
 #include <QStringList>
 #include <QDir>
@@ -55,7 +55,7 @@ namespace Syntax {
 };
 
 bool Syntax::Factory::load( QString* _error )
-{
+{/*
 #if !defined( QT_NO_DEBUG )
     QTime time;
     time.start();
@@ -106,7 +106,7 @@ bool Syntax::Factory::load( QString* _error )
     
 #if !defined( QT_NO_DEBUG )
     qWarning( "%s: Fails in %f seconds", Q_FUNC_INFO , time.elapsed() /1000.0 );
-#endif
+#endif*/
 
     return false;
 }
@@ -119,7 +119,7 @@ void Syntax::Factory::free()
 QStringList Syntax::Factory::availableSyntaxes()
 {
     QStringList syntaxes = Syntax::Factory::mDocuments.keys();
-    qSort( syntaxes.begin(), syntaxes.end(), QodeEdit::localeAwareStringLessThan );
+    qSort( syntaxes.begin(), syntaxes.end(), QodeEdit::Tools::localeAwareStringLessThan );
     return syntaxes;
 }
 

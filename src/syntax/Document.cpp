@@ -3,7 +3,7 @@
 **         Created using Monkey Studio IDE v1.9.0.1 (1.9.0.1)
 ** Authors   : Filipe Azevedo aka Nox P@sNox <pasnox@gmail.com> and The QodeEdit development team
 ** Project   : QodeEdit
-** FileName  : SyntaxDocument.cpp
+** FileName  : Document.cpp
 ** Date      : 2012-09-02T23:04:46
 ** License   : LGPL3
 ** Comment   : A source code component editor based on QPlainTextEdit/QTextDocument/QSyntaxHighlighter and Kate xml language definition files.
@@ -13,10 +13,10 @@
 ** WARRANTY OF DESIGN, MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE.
 **
 ****************************************************************************/
-#include "SyntaxDocument.h"
-#include "SyntaxParser.h"
-#include "SyntaxTheme.h"
-#include "QodeEdit.h"
+#include "Document.h"
+#include "Parser.h"
+#include "Tools.h"
+#include "theme/Theme.h"
 
 #include <QXmlInputSource>
 #include <QFileInfo>
@@ -99,7 +99,7 @@ Syntax::Document::~Document()
 bool Syntax::Document::operator<( const Syntax::Document& other ) const
 {
     // HINT: compare priority too ?
-    return QodeEdit::localeAwareStringLessThan(
+    return QodeEdit::Tools::localeAwareStringLessThan(
         d->localizedName.isEmpty() ? d->name : d->localizedName,
         other.d->localizedName.isEmpty() ? other.d->name : other.d->localizedName
     );
@@ -229,7 +229,7 @@ QHash<QString, Syntax::Document> Syntax::Document::open( const QStringList& file
             
             Syntax::Document& currentDocument = documents[ document.name() ];
             
-            if ( QodeEdit::versionStringLessThan( currentDocument.version(), document.version() ) ) {
+            if ( QodeEdit::Tools::versionStringLessThan( currentDocument.version(), document.version() ) ) {
                 currentDocument = document;
             }
             

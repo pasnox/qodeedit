@@ -3,7 +3,7 @@
 **         Created using Monkey Studio IDE v1.9.0.1 (1.9.0.1)
 ** Authors   : Filipe Azevedo aka Nox P@sNox <pasnox@gmail.com> and The QodeEdit development team
 ** Project   : QodeEdit
-** FileName  : SyntaxModel.h
+** FileName  : Model.h
 ** Date      : 2012-09-02T23:04:46
 ** License   : LGPL3
 ** Comment   : A source code component editor based on QPlainTextEdit/QTextDocument/QSyntaxHighlighter and Kate xml language definition files.
@@ -13,8 +13,8 @@
 ** WARRANTY OF DESIGN, MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE.
 **
 ****************************************************************************/
-#ifndef SYNTAXMODEL_H
-#define SYNTAXMODEL_H
+#ifndef MODEL_H
+#define MODEL_H
 
 #include <QAbstractListModel>
 
@@ -48,4 +48,4 @@ private:
 
 }; //Syntax
 
-#endif // SYNTAXMODEL_H
+#endif // MODEL_H

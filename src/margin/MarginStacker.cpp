@@ -14,7 +14,7 @@
 **
 ****************************************************************************/
 #include "MarginStacker.h"
-#include "CodeEditor.h"
+#include "editor/CodeEditor.h"
 #include "AbstractMargin.h"
 #include "LineBookmarkMargin.h"
 #include "LineNumberMargin.h"

@@ -3,7 +3,7 @@
 **         Created using Monkey Studio IDE v1.9.0.1 (1.9.0.1)
 ** Authors   : Filipe Azevedo aka Nox P@sNox <pasnox@gmail.com> and The QodeEdit development team
 ** Project   : QodeEdit
-** FileName  : SyntaxDocument.h
+** FileName  : Document.h
 ** Date      : 2012-09-02T23:04:46
 ** License   : LGPL3
 ** Comment   : A source code component editor based on QPlainTextEdit/QTextDocument/QSyntaxHighlighter and Kate xml language definition files.
@@ -13,16 +13,14 @@
 ** WARRANTY OF DESIGN, MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE.
 **
 ****************************************************************************/
-#ifndef SYNTAXDOCUMENT_H
-#define SYNTAXDOCUMENT_H
+#ifndef DOCUMENT_H
+#define DOCUMENT_H
 
-#include <QExplicitlySharedDataPointer>
-
-#include "SyntaxHelpers.h"
-#include "SyntaxList.h"
-#include "SyntaxHighlighting.h"
-#include "SyntaxGeneral.h"
-#include "SyntaxSpellChecking.h"
+#include "Helpers.h"
+#include "List.h"
+#include "Highlighting.h"
+#include "General.h"
+#include "SpellChecking.h"
 
 namespace Syntax {
 
@@ -72,4 +70,4 @@ public:
 
 }; // Syntax
 
-#endif // SYNTAXDOCUMENT_H
+#endif // DOCUMENT_H

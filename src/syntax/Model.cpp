@@ -3,7 +3,7 @@
 **         Created using Monkey Studio IDE v1.9.0.1 (1.9.0.1)
 ** Authors   : Filipe Azevedo aka Nox P@sNox <pasnox@gmail.com> and The QodeEdit development team
 ** Project   : QodeEdit
-** FileName  : SyntaxModel.cpp
+** FileName  : Model.cpp
 ** Date      : 2012-09-02T23:04:46
 ** License   : LGPL3
 ** Comment   : A source code component editor based on QPlainTextEdit/QTextDocument/QSyntaxHighlighter and Kate xml language definition files.
@@ -13,9 +13,9 @@
 ** WARRANTY OF DESIGN, MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE.
 **
 ****************************************************************************/
-#include "SyntaxModel.h"
-#include "SyntaxDocument.h"
-#include "QodeEdit.h"
+#include "Model.h"
+#include "Document.h"
+#include "Tools.h"
 
 #include <QStringList>
 #include <QIcon>
@@ -79,7 +79,7 @@ public:
             newSyntaxes << ( document.localizedName().isEmpty() ? document.name() : document.localizedName() );
         }
         
-        qSort( newSyntaxes.begin(), newSyntaxes.end(), QodeEdit::localeAwareStringLessThan );
+        qSort( newSyntaxes.begin(), newSyntaxes.end(), QodeEdit::Tools::localeAwareStringLessThan );
         
         if ( oldSyntaxes == newSyntaxes ) {
             return;

@@ -3,7 +3,7 @@
 **         Created using Monkey Studio IDE v1.9.0.1 (1.9.0.1)
 ** Authors   : Filipe Azevedo aka Nox P@sNox <pasnox@gmail.com> and The QodeEdit development team
 ** Project   : QodeEdit
-** FileName  : SyntaxHelpers.h
+** FileName  : Helpers.h
 ** Date      : 2012-09-02T23:04:46
 ** License   : LGPL3
 ** Comment   : A source code component editor based on QPlainTextEdit/QTextDocument/QSyntaxHighlighter and Kate xml language definition files.
@@ -13,8 +13,10 @@
 ** WARRANTY OF DESIGN, MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE.
 **
 ****************************************************************************/
-#ifndef SYNTAXHELPERS_H
-#define SYNTAXHELPERS_H
+#ifndef HELPERS_H
+#define HELPERS_H
+
+#include <QExplicitlySharedDataPointer>
 
 #define QE_DECL_SHARED_CLASS( className ) \
     className(); \
@@ -69,4 +71,4 @@
 
 #define QE_OTHER_INIT( name ) name( other.name )
 
-#endif // SYNTAXHELPERS_H
+#endif // HELPERS_H
