@@ -14,12 +14,11 @@
 **
 ****************************************************************************/
 #include "Factory.h"
-#include "Document.h"
-#include "DocumentBuilder.h"
-#include "Highlighter.h"
-#include "Model.h"
+#include "syntax/DocumentBuilder.h"
+#include "syntax/Highlighter.h"
+#include "syntax/Model.h"
 #include "theme/Theme.h"
-#include "document/TextDocument.h"
+#include "editor/TextDocument.h"
 #include "Tools.h"
 
 #include <QStringList>

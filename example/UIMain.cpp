@@ -16,11 +16,11 @@
 #include "UIMain.h"
 #include "ui_UIMain.h"
 #include "editor/CodeEditor.h"
+#include "editor/TextDocument.h"
 #include "margin/MarginStacker.h"
-#include "syntax/Factory.h"
-#include "QodeEdit.h"
 #include "syntax/Highlighter.h"
-#include "document/TextDocument.h"
+#include "Factory.h"
+#include "QodeEdit.h"
 
 #include <QUrl>
 

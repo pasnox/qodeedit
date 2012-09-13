@@ -16,7 +16,7 @@
 #include "Highlighter.h"
 #include "Document.h"
 #include "theme/Theme.h"
-#include "document/TextDocument.h"
+#include "editor/TextDocument.h"
 
 // HighlighterPrivate
 

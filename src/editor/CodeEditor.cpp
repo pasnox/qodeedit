@@ -14,8 +14,8 @@
 **
 ****************************************************************************/
 #include "CodeEditor.h"
-#include "document/TextDocument.h"
-#include "document/TextBlockUserData.h"
+#include "TextDocument.h"
+#include "TextBlockUserData.h"
 #include "margin/MarginStacker.h"
 #include "margin/AbstractMargin.h"
 

@@ -16,9 +16,9 @@
 #include "AbstractMargin.h"
 #include "MarginStacker.h"
 #include "editor/CodeEditor.h"
-#include "document/TextDocument.h"
-#include "document/PlainTextDocumentLayout.h"
-#include "document/TextBlockUserData.h"
+#include "editor/TextDocument.h"
+#include "editor/PlainTextDocumentLayout.h"
+#include "editor/TextBlockUserData.h"
 
 #include <QScrollBar>
 #include <QApplication>

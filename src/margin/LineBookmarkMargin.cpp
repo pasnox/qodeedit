@@ -15,8 +15,8 @@
 ****************************************************************************/
 #include "LineBookmarkMargin.h"
 #include "editor/CodeEditor.h"
-#include "document/TextDocument.h"
-#include "document/TextBlockUserData.h"
+#include "editor/TextDocument.h"
+#include "editor/TextBlockUserData.h"
 
 #include <QPainter>
 #include <QTextBlock>

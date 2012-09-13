@@ -15,7 +15,7 @@
 ****************************************************************************/
 #include "LineNumberMargin.h"
 #include "editor/CodeEditor.h"
-#include "document/TextDocument.h"
+#include "editor/TextDocument.h"
 
 #include <QPainter>
 #include <QTextBlock>

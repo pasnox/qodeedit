@@ -16,7 +16,7 @@
 #ifndef FACTORY_H
 #define FACTORY_H
 
-#include "Document.h"
+#include "syntax/Document.h"
 
 #include <QString>
 

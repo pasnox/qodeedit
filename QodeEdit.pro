@@ -54,10 +54,11 @@ FORMS *=
 HEADERS *=  \
     src/QodeEdit.h \
     src/Tools.h \
+    src/Factory.h \
     src/editor/CodeEditor.h \
-    src/document/TextDocument.h \
-    src/document/PlainTextDocumentLayout.h \
-    src/document/TextBlockUserData.h \
+    src/editor/TextDocument.h \
+    src/editor/PlainTextDocumentLayout.h \
+    src/editor/TextBlockUserData.h \
     src/margin/MarginStacker.h \
     src/margin/AbstractMargin.h \
     src/margin/LineBookmarkMargin.h \
@@ -82,7 +83,6 @@ HEADERS *=  \
     src/syntax/Encoding.h \
     src/syntax/Parser.h \
     src/syntax/DocumentBuilder.h \
-    src/syntax/Factory.h \
     src/syntax/Model.h \
     src/syntax/Highlighter.h \
     src/syntax/ComboBox.h \
@@ -91,10 +91,11 @@ HEADERS *=  \
 SOURCES *=  \
     src/QodeEdit.cpp \
     src/Tools.cpp \
+    src/Factory.cpp \
     src/editor/CodeEditor.cpp \
-    src/document/TextDocument.cpp \
-    src/document/PlainTextDocumentLayout.cpp \
-    src/document/TextBlockUserData.cpp \
+    src/editor/TextDocument.cpp \
+    src/editor/PlainTextDocumentLayout.cpp \
+    src/editor/TextBlockUserData.cpp \
     src/margin/MarginStacker.cpp \
     src/margin/AbstractMargin.cpp \
     src/margin/LineBookmarkMargin.cpp \
@@ -117,7 +118,6 @@ SOURCES *=  \
     src/syntax/Encoding.cpp \
     src/syntax/Parser.cpp \
     src/syntax/DocumentBuilder.cpp \
-    src/syntax/Factory.cpp \
     src/syntax/Model.cpp \
     src/syntax/Highlighter.cpp \
     src/syntax/ComboBox.cpp \
