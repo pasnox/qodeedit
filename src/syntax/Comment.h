@@ -34,7 +34,7 @@ private:
 public:
     typedef QList<Syntax::Comment> List;
     
-    QE_DECL_SHARED_CLASS( Comment );
+    QE_DECL_SHARED_CLASS( Comment, Syntax );
     
     // Required
     QE_DECL_MEMBER( QString, name ); ///< Name of the item data

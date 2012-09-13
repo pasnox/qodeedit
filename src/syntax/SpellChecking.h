@@ -32,7 +32,7 @@ private:
     QExplicitlySharedDataPointer<Syntax::SpellCheckingData> d;
     
 public:
-    QE_DECL_SHARED_CLASS( SpellChecking );
+    QE_DECL_SHARED_CLASS( SpellChecking, Syntax );
     
     // Required
     // Optional

@@ -14,13 +14,12 @@
 **
 ****************************************************************************/
 #include "ComboBox.h"
-#include "Factory.h"
 #include "Model.h"
 
 Syntax::ComboBox::ComboBox( QWidget* parent )
     : QComboBox( parent )
 {
-    setModel( Syntax::Factory::model( this ) );
+    //setModel( Syntax::Factory::model( this ) );
 }
 
 Syntax::ComboBox::~ComboBox()

@@ -19,7 +19,6 @@
 #include "editor/TextDocument.h"
 #include "margin/MarginStacker.h"
 #include "syntax/Highlighter.h"
-#include "Factory.h"
 #include "QodeEdit.h"
 
 #include <QUrl>
@@ -131,7 +130,7 @@ UIMain::UIMain( QWidget* parent )
     "Vera", "Verilog", "VHDL", "VRML", "Wesnoth Markup Language", "WINE Config", "x.org Configuration",
     "xHarbour", "XML", "XML (Debug)", "xslt", "XUL", "yacas", "Yacc/Bison", "YAML", "Zonnon", "Zsh"*/
     
-    QDir dir( QodeEdit::Manager::sharedDataFilePath( "/samples" ) );
+    /*QDir dir( QodeEdit::Manager::sharedDataFilePath( "/samples" ) );
     const QFileInfoList files = dir.entryInfoList( QDir::Files | QDir::NoDotAndDotDot );
     
     foreach ( const QFileInfo& file, files ) {
@@ -151,7 +150,7 @@ UIMain::UIMain( QWidget* parent )
         else {
             qWarning( "%s: Can't create highlighter for '%s'", Q_FUNC_INFO, qPrintable( filePath ) );
         }
-    }
+    }*/
     
     statusBar()->showMessage( error );
     
@@ -187,7 +186,7 @@ UIMain::~UIMain()
     }
     
     delete ui;
-    Syntax::Factory::free();
+    //Syntax::Factory::free();
 }
 
 void UIMain::appendDebugMessage( const QString& message )
@@ -240,5 +239,5 @@ void UIMain::on_swEditors_currentChanged( int row )
         ui->lwEditors->setCurrentRow( row );
     }
     
-    ui->cbSyntax->setCurrentSyntax( editor( row )->textDocument()->syntaxHighlighter()->syntaxDocument().name() );
+    //ui->cbSyntax->setCurrentSyntax( editor( row )->textDocument()->syntaxHighlighter()->syntaxDocument().name() );
 }

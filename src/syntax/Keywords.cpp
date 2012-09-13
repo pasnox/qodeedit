@@ -42,13 +42,13 @@ public:
     }
 };
 
-QE_IMPL_SHARED_CLASS( Keywords )
+QE_IMPL_SHARED_CLASS( Keywords, Syntax );
 
 Syntax::Keywords::~Keywords()
 {
 }
 
-QE_IMPL_MEMBER( bool, caseSensitive, Keywords )
-QE_IMPL_MEMBER( QString, weakDeliminator, Keywords )
-QE_IMPL_MEMBER( QString, additionalDeliminator, Keywords )
-QE_IMPL_MEMBER( QString, wordWrapDeliminator, Keywords )
+QE_IMPL_MEMBER( bool, caseSensitive, Keywords, Syntax );
+QE_IMPL_MEMBER( QString, weakDeliminator, Keywords, Syntax );
+QE_IMPL_MEMBER( QString, additionalDeliminator, Keywords, Syntax );
+QE_IMPL_MEMBER( QString, wordWrapDeliminator, Keywords, Syntax );

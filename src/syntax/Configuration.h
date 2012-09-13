@@ -31,7 +31,7 @@ private:
     QExplicitlySharedDataPointer<Syntax::ConfigurationData> d;
     
 public:
-    QE_DECL_SHARED_CLASS( Configuration );
+    QE_DECL_SHARED_CLASS( Configuration, Syntax );
     
     // Required
     // Optional

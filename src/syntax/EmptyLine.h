@@ -33,7 +33,7 @@ private:
 public:
     typedef QList<Syntax::EmptyLine> List;
     
-    QE_DECL_SHARED_CLASS( EmptyLine );
+    QE_DECL_SHARED_CLASS( EmptyLine, Syntax );
     
     // Required
     QE_DECL_MEMBER( QString, regExpr );

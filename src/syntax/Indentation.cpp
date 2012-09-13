@@ -35,10 +35,10 @@ public:
     }
 };
 
-QE_IMPL_SHARED_CLASS( Indentation )
+QE_IMPL_SHARED_CLASS( Indentation, Syntax );
 
 Syntax::Indentation::~Indentation()
 {
 }
 
-QE_IMPL_MEMBER( QString, mode, Indentation )
+QE_IMPL_MEMBER( QString, mode, Indentation, Syntax );

@@ -33,7 +33,7 @@ private:
     QExplicitlySharedDataPointer<Syntax::HighlightingData> d;
     
 public:
-    QE_DECL_SHARED_CLASS( Highlighting );
+    QE_DECL_SHARED_CLASS( Highlighting, Syntax );
     
     // Required
     // Optional

@@ -31,7 +31,7 @@ private:
     QExplicitlySharedDataPointer<Syntax::KeywordsData> d;
     
 public:
-    QE_DECL_SHARED_CLASS( Keywords );
+    QE_DECL_SHARED_CLASS( Keywords, Syntax );
     
     // Required
     // Optional

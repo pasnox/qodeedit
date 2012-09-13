@@ -23,35 +23,35 @@
 #include "syntax/Helpers.h"
 #include "QodeEdit.h"
 
-namespace Syntax {
+namespace Theme {
 
-class ThemeData;
+class SchemaData;
 
-class ThemeStyle : public QTextCharFormat
+class Style : public QTextCharFormat
 {
 };
 
-class Theme
+class Schema
 {
     Q_ENUMS( DefaultStyle )
     
 private:
-    QExplicitlySharedDataPointer<Syntax::ThemeData> d;
+    QExplicitlySharedDataPointer<Theme::SchemaData> d;
     
 public:
-    typedef QList<Syntax::Theme> List;
+    typedef QList<Theme::Style> List;
     
-    QE_DECL_SHARED_CLASS( Theme );
+    QE_DECL_SHARED_CLASS( Schema, Theme );
     
     QString name() const;
     
-    Syntax::ThemeStyle style( QodeEdit::Style type ) const;
-    void setStyle( QodeEdit::Style type, const Syntax::ThemeStyle& style );
+    Theme::Style style( QodeEdit::Style type ) const;
+    void setStyle( QodeEdit::Style type, const Theme::Style& style );
 
 protected:
     void setName( const QString& name );
 };
 
-}; // Syntax
+}; // Theme
 
 #endif // THEME_H

@@ -35,10 +35,10 @@ public:
     }
 };
 
-QE_IMPL_SHARED_CLASS( Configuration )
+QE_IMPL_SHARED_CLASS( Configuration, Syntax );
 
 Syntax::Configuration::~Configuration()
 {
 }
 
-QE_IMPL_MEMBER( QString, encodingReplacementPolicy, Configuration )
+QE_IMPL_MEMBER( QString, encodingReplacementPolicy, Configuration, Syntax );

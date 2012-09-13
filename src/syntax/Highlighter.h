@@ -20,16 +20,19 @@
 
 class TextDocument;
 
+namespace Theme {
+    class Schema;
+}; // Theme
+
 namespace Syntax {
 
 class HighlighterPrivate;
 class Document;
-class Theme;
 
 class Highlighter : public QSyntaxHighlighter
 {
 public:
-    Highlighter( const Syntax::Document& syntaxDocument, const Syntax::Theme& syntaxTheme, TextDocument* textDocument );
+    Highlighter( const Syntax::Document& syntaxDocument, const Theme::Schema& themeSchema, TextDocument* textDocument );
     Highlighter( TextDocument* textDocument );
     virtual ~Highlighter();
     
@@ -38,8 +41,8 @@ public:
     Syntax::Document syntaxDocument() const;
     void setSyntaxDocument( const Syntax::Document& syntaxDocument );
     
-    Syntax::Theme syntaxTheme() const;
-    void setSyntaxTheme( const Syntax::Theme& syntaxTheme );
+    Theme::Schema themeSchema() const;
+    void setSyntaxTheme( const Theme::Schema& themeSchema );
 
 protected:
     virtual void highlightBlock( const QString& text );

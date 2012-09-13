@@ -35,7 +35,7 @@ private:
 public:
     typedef QHash<QString, Syntax::ItemData> Hash;
     
-    QE_DECL_SHARED_CLASS( ItemData );
+    QE_DECL_SHARED_CLASS( ItemData, Syntax );
     
     // Required
     QE_DECL_MEMBER( QString, name ); ///< Name of the item data

@@ -58,18 +58,18 @@ public:
     }
 };
 
-QE_IMPL_SHARED_CLASS( Context )
+QE_IMPL_SHARED_CLASS( Context, Syntax );
 
 Syntax::Context::~Context()
 {
 }
 
-QE_IMPL_MEMBER( QString, name, Context )
-QE_IMPL_MEMBER( QString, attribute, Context )
-QE_IMPL_MEMBER( QString, lineBeginContext, Context )
-QE_IMPL_MEMBER( QString, lineEndContext, Context )
-QE_IMPL_MEMBER( bool, fallThrough, Context )
-QE_IMPL_MEMBER( QString, fallThroughContext, Context )
-QE_IMPL_MEMBER( bool, dynamic, Context )
-QE_IMPL_MEMBER( bool, noIndentationBasedFolding, Context )
-QE_IMPL_MEMBER( Syntax::Rule::List, rules, Context )
+QE_IMPL_MEMBER( QString, name, Context, Syntax );
+QE_IMPL_MEMBER( QString, attribute, Context, Syntax );
+QE_IMPL_MEMBER( QString, lineBeginContext, Context, Syntax );
+QE_IMPL_MEMBER( QString, lineEndContext, Context, Syntax );
+QE_IMPL_MEMBER( bool, fallThrough, Context, Syntax );
+QE_IMPL_MEMBER( QString, fallThroughContext, Context, Syntax );
+QE_IMPL_MEMBER( bool, dynamic, Context, Syntax );
+QE_IMPL_MEMBER( bool, noIndentationBasedFolding, Context, Syntax );
+QE_IMPL_MEMBER( Syntax::Rule::List, rules, Context, Syntax );

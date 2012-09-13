@@ -34,7 +34,7 @@ private:
 public:
     typedef QHash<QString, Syntax::Context> Hash;
     
-    QE_DECL_SHARED_CLASS( Context );
+    QE_DECL_SHARED_CLASS( Context, Syntax );
     
     // Required
     QE_DECL_MEMBER( QString, attribute );

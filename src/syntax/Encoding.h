@@ -34,7 +34,7 @@ private:
 public:
     typedef QList<Syntax::Encoding> List;
     
-    QE_DECL_SHARED_CLASS( Encoding );
+    QE_DECL_SHARED_CLASS( Encoding, Syntax );
     
     // Required
     QE_DECL_MEMBER( QString, string );

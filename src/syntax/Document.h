@@ -34,7 +34,7 @@ private:
 public:
     typedef QList<Syntax::Document> List;
     
-    QE_DECL_SHARED_CLASS( Document );
+    QE_DECL_SHARED_CLASS( Document, Syntax );
     virtual bool operator<( const Syntax::Document& other ) const;
     
     // Required

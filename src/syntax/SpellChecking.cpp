@@ -37,11 +37,11 @@ public:
     }
 };
 
-QE_IMPL_SHARED_CLASS( SpellChecking )
+QE_IMPL_SHARED_CLASS( SpellChecking, Syntax );
 
 Syntax::SpellChecking::~SpellChecking()
 {
 }
 
-QE_IMPL_MEMBER( Syntax::Configuration, configuration, SpellChecking )
-QE_IMPL_MEMBER( Syntax::Encoding::List, encodings, SpellChecking )
+QE_IMPL_MEMBER( Syntax::Configuration, configuration, SpellChecking, Syntax )
+QE_IMPL_MEMBER( Syntax::Encoding::List, encodings, SpellChecking, Syntax )

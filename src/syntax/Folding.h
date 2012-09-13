@@ -31,7 +31,7 @@ private:
     QExplicitlySharedDataPointer<Syntax::FoldingData> d;
     
 public:
-    QE_DECL_SHARED_CLASS( Folding );
+    QE_DECL_SHARED_CLASS( Folding, Syntax );
     
     // Required
     // optional

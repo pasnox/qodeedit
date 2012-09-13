@@ -41,16 +41,16 @@ public:
     }
 };
 
-QE_IMPL_SHARED_CLASS( Highlighting )
+QE_IMPL_SHARED_CLASS( Highlighting, Syntax );
 
 Syntax::Highlighting::~Highlighting()
 {
 }
 
-QE_IMPL_MEMBER( QString, defaultContext, Highlighting )
-QE_IMPL_MEMBER( Syntax::HashList, lists, Highlighting )
-QE_IMPL_MEMBER( Syntax::Context::Hash, contexts, Highlighting )
-QE_IMPL_MEMBER( Syntax::ItemData::Hash, itemDatas, Highlighting )
+QE_IMPL_MEMBER( QString, defaultContext, Highlighting, Syntax );
+QE_IMPL_MEMBER( Syntax::HashList, lists, Highlighting, Syntax );
+QE_IMPL_MEMBER( Syntax::Context::Hash, contexts, Highlighting, Syntax );
+QE_IMPL_MEMBER( Syntax::ItemData::Hash, itemDatas, Highlighting, Syntax );
 
 Syntax::List Syntax::Highlighting::list( const QString& name ) const
 {

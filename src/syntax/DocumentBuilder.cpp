@@ -158,7 +158,7 @@ public:
     }
 };
 
-QE_IMPL_SHARED_CLASS( DocumentBuilder )
+QE_IMPL_SHARED_CLASS( DocumentBuilder, Syntax );
 
 Syntax::DocumentBuilder::~DocumentBuilder()
 {

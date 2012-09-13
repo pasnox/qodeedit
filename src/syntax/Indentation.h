@@ -31,7 +31,7 @@ private:
     QExplicitlySharedDataPointer<Syntax::IndentationData> d;
     
 public:
-    QE_DECL_SHARED_CLASS( Indentation );
+    QE_DECL_SHARED_CLASS( Indentation, Syntax );
     
     // Required
     // Optional

@@ -81,7 +81,7 @@ protected:
 public:
     typedef QList<Syntax::Rule> List;
     
-    QE_DECL_SHARED_CLASS( Rule );
+    QE_DECL_SHARED_CLASS( Rule, Syntax );
     
     QE_DECL_MEMBER( QodeEdit::Rule, type );
     
@@ -116,7 +116,7 @@ public:
 class CommonRule : public Syntax::Rule
 {
 public:
-    QE_DECL_SHARED_CLASS( CommonRule );
+    QE_DECL_SHARED_CLASS( CommonRule, Syntax );
     
     QE_DECL_MEMBER( QString, attribute );
     QE_DECL_MEMBER( QString, context );
@@ -130,7 +130,7 @@ public:
 class CommonRulesRule : public Syntax::CommonRule
 {
 public:
-    QE_DECL_SHARED_CLASS( CommonRulesRule );
+    QE_DECL_SHARED_CLASS( CommonRulesRule, Syntax );
     
     QE_DECL_MEMBER( Syntax::Rule::List, rules );
 };
@@ -138,7 +138,7 @@ public:
 class KeywordRule : public Syntax::CommonRule
 {
 public:
-    QE_DECL_SHARED_CLASS( KeywordRule );
+    QE_DECL_SHARED_CLASS( KeywordRule, Syntax );
     
     QE_DECL_MEMBER( bool, insensitive );
     QE_DECL_MEMBER( QString, string );
@@ -148,37 +148,37 @@ public:
 class FloatRule : public Syntax::CommonRulesRule
 {
 public:
-    QE_DECL_SHARED_CLASS( FloatRule );
+    QE_DECL_SHARED_CLASS( FloatRule, Syntax );
 };
 
 class HlCOctRule : public Syntax::CommonRule
 {
 public:
-    QE_DECL_SHARED_CLASS( HlCOctRule );
+    QE_DECL_SHARED_CLASS( HlCOctRule, Syntax );
 };
 
 class HlCHexRule : public Syntax::CommonRule
 {
 public:
-    QE_DECL_SHARED_CLASS( HlCHexRule );
+    QE_DECL_SHARED_CLASS( HlCHexRule, Syntax );
 };
 
 class HlCFloatRule : public Syntax::CommonRule
 {
 public:
-    QE_DECL_SHARED_CLASS( HlCFloatRule );
+    QE_DECL_SHARED_CLASS( HlCFloatRule, Syntax );
 };
 
 class IntRule : public Syntax::CommonRulesRule
 {
 public:
-    QE_DECL_SHARED_CLASS( IntRule );
+    QE_DECL_SHARED_CLASS( IntRule, Syntax );
 };
 
 class DetectCharRule : public Syntax::CommonRule
 {
 public:
-    QE_DECL_SHARED_CLASS( DetectCharRule );
+    QE_DECL_SHARED_CLASS( DetectCharRule, Syntax );
     
     QE_DECL_MEMBER( QChar, char_ );
     QE_DECL_MEMBER( bool, dynamic );
@@ -187,7 +187,7 @@ public:
 class Detect2CharsRule : public Syntax::DetectCharRule
 {
 public:
-    QE_DECL_SHARED_CLASS( Detect2CharsRule );
+    QE_DECL_SHARED_CLASS( Detect2CharsRule, Syntax );
     
     QE_DECL_MEMBER( QChar, char1 );
 };
@@ -195,7 +195,7 @@ public:
 class AnyCharRule : public Syntax::CommonRule
 {
 public:
-    QE_DECL_SHARED_CLASS( AnyCharRule );
+    QE_DECL_SHARED_CLASS( AnyCharRule, Syntax );
     
     QE_DECL_MEMBER( QString, string );
 };
@@ -203,7 +203,7 @@ public:
 class StringDetectRule : public Syntax::CommonRule
 {
 public:
-    QE_DECL_SHARED_CLASS( StringDetectRule );
+    QE_DECL_SHARED_CLASS( StringDetectRule, Syntax );
     
     QE_DECL_MEMBER( QString, string );
     QE_DECL_MEMBER( bool, insensitive );
@@ -213,7 +213,7 @@ public:
 class WordDetectRule : public Syntax::StringDetectRule
 {
 public:
-    QE_DECL_SHARED_CLASS( WordDetectRule );
+    QE_DECL_SHARED_CLASS( WordDetectRule, Syntax );
     
     QE_DECL_MEMBER( QString, string );
     QE_DECL_MEMBER( bool, insensitive );
@@ -223,7 +223,7 @@ public:
 class RegExprRule : public Syntax::StringDetectRule
 {
 public:
-    QE_DECL_SHARED_CLASS( RegExprRule );
+    QE_DECL_SHARED_CLASS( RegExprRule, Syntax );
     
     QE_DECL_MEMBER( bool, minimal );
 };
@@ -231,19 +231,19 @@ public:
 class LineContinueRule : public Syntax::CommonRule
 {
 public:
-    QE_DECL_SHARED_CLASS( LineContinueRule );
+    QE_DECL_SHARED_CLASS( LineContinueRule, Syntax );
 };
 
 class HlCStringCharRule : public Syntax::CommonRule
 {
 public:
-    QE_DECL_SHARED_CLASS( HlCStringCharRule );
+    QE_DECL_SHARED_CLASS( HlCStringCharRule, Syntax );
 };
 
 class RangeDetectRule : public Syntax::CommonRule
 {
 public:
-    QE_DECL_SHARED_CLASS( RangeDetectRule );
+    QE_DECL_SHARED_CLASS( RangeDetectRule, Syntax );
     
     QE_DECL_MEMBER( QChar, char_ );
     QE_DECL_MEMBER( QChar, char1 );
@@ -252,25 +252,25 @@ public:
 class HlCCharRule : public Syntax::CommonRule
 {
 public:
-    QE_DECL_SHARED_CLASS( HlCCharRule );
+    QE_DECL_SHARED_CLASS( HlCCharRule, Syntax );
 };
 
 class DetectSpacesRule : public Syntax::CommonRule
 {
 public:
-    QE_DECL_SHARED_CLASS( DetectSpacesRule );
+    QE_DECL_SHARED_CLASS( DetectSpacesRule, Syntax );
 };
 
 class DetectIdentifierRule : public Syntax::CommonRule
 {
 public:
-    QE_DECL_SHARED_CLASS( DetectIdentifierRule );
+    QE_DECL_SHARED_CLASS( DetectIdentifierRule, Syntax );
 };
 
 class IncludeRulesRule : public Syntax::Rule
 {
 public:
-    QE_DECL_SHARED_CLASS( IncludeRulesRule );
+    QE_DECL_SHARED_CLASS( IncludeRulesRule, Syntax );
     
     QE_DECL_MEMBER( QString, context );
     QE_DECL_MEMBER( bool, includeAttrib );

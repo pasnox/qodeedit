@@ -36,10 +36,10 @@ public:
     }
 };
 
-QE_IMPL_SHARED_CLASS( Folding )
+QE_IMPL_SHARED_CLASS( Folding, Syntax );
 
 Syntax::Folding::~Folding()
 {
 }
 
-QE_IMPL_MEMBER( bool, indentationSensitive, Folding )
+QE_IMPL_MEMBER( bool, indentationSensitive, Folding, Syntax );

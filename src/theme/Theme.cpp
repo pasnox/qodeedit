@@ -17,31 +17,31 @@
 
 #include <QFile>
 
-class Syntax::ThemeData : public QSharedData
+class Theme::SchemaData : public QSharedData
 {
 public:
-    QHash<QodeEdit::Style, Syntax::ThemeStyle> styles;
+    QHash<QodeEdit::Style, Theme::Style> styles;
     QString name;
     
-    ThemeData()
+    SchemaData()
         : QSharedData(),
             name( "default" )
     {
         initToDefault();
     }
     
-    ThemeData( const Syntax::ThemeData& other )
+    SchemaData( const Theme::SchemaData& other )
         : QSharedData( other ),
             QE_OTHER_INIT( styles ),
             QE_OTHER_INIT( name )
     {
     }
     
-    virtual ~ThemeData() {
+    virtual ~SchemaData() {
     }
     
     void initToDefault() {
-        //styles[ QodeEdit::Normal ].;
+        //styles[ QodeEdit::NormalStyle ].;
         
         styles[ QodeEdit::KeywordStyle ].setFontWeight( QFont::Bold );
         
@@ -72,28 +72,28 @@ public:
     }
 };
 
-QE_IMPL_SHARED_CLASS( Theme )
+QE_IMPL_SHARED_CLASS( Schema, Theme )
 
-Syntax::Theme::~Theme()
+Theme::Schema::~Schema()
 {
 }
 
-QString Syntax::Theme::name() const
+QString Theme::Schema::name() const
 {
     return d->name;
 }
 
-void Syntax::Theme::setName( const QString& name )
+void Theme::Schema::setName( const QString& name )
 {
     d->name = name;
 }
 
-Syntax::ThemeStyle Syntax::Theme::style( QodeEdit::Style type ) const
+Theme::Style Theme::Schema::style( QodeEdit::Style type ) const
 {
     return d->styles.value( type );
 }
 
-void Syntax::Theme::setStyle( QodeEdit::Style type, const Syntax::ThemeStyle& style )
+void Theme::Schema::setStyle( QodeEdit::Style type, const Theme::Style& style )
 {
     d->styles[ type ] = style;
 }

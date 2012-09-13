@@ -54,7 +54,6 @@ FORMS *=
 HEADERS *=  \
     src/QodeEdit.h \
     src/Tools.h \
-    src/Factory.h \
     src/editor/CodeEditor.h \
     src/editor/TextDocument.h \
     src/editor/PlainTextDocumentLayout.h \
@@ -91,7 +90,6 @@ HEADERS *=  \
 SOURCES *=  \
     src/QodeEdit.cpp \
     src/Tools.cpp \
-    src/Factory.cpp \
     src/editor/CodeEditor.cpp \
     src/editor/TextDocument.cpp \
     src/editor/PlainTextDocumentLayout.cpp \

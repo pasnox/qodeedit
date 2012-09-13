@@ -40,12 +40,12 @@ public:
     }
 };
 
-QE_IMPL_SHARED_CLASS( Encoding )
+QE_IMPL_SHARED_CLASS( Encoding, Syntax );
 
 Syntax::Encoding::~Encoding()
 {
 }
 
-QE_IMPL_MEMBER( QString, char_, Encoding )
-QE_IMPL_MEMBER( QString, string, Encoding )
-QE_IMPL_MEMBER( bool, ignored, Encoding )
+QE_IMPL_MEMBER( QString, char_, Encoding, Syntax );
+QE_IMPL_MEMBER( QString, string, Encoding, Syntax );
+QE_IMPL_MEMBER( bool, ignored, Encoding, Syntax );

@@ -43,14 +43,14 @@ public:
     }
 };
 
-QE_IMPL_SHARED_CLASS( General )
+QE_IMPL_SHARED_CLASS( General, Syntax );
 
 Syntax::General::~General()
 {
 }
 
-QE_IMPL_MEMBER( Syntax::Comment::List, comments, General )
-QE_IMPL_MEMBER( Syntax::Keywords, keywords, General )
-QE_IMPL_MEMBER( Syntax::Folding, folding, General )
-QE_IMPL_MEMBER( Syntax::Indentation, indentation, General )
-QE_IMPL_MEMBER( Syntax::EmptyLine::List, emptyLines, General )
+QE_IMPL_MEMBER( Syntax::Comment::List, comments, General, Syntax );
+QE_IMPL_MEMBER( Syntax::Keywords, keywords, General, Syntax );
+QE_IMPL_MEMBER( Syntax::Folding, folding, General, Syntax );
+QE_IMPL_MEMBER( Syntax::Indentation, indentation, General, Syntax );
+QE_IMPL_MEMBER( Syntax::EmptyLine::List, emptyLines, General, Syntax );

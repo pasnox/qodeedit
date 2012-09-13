@@ -19,6 +19,17 @@
 #include <QObject>
 
 class QStringList;
+class QFileInfo;
+class QIODevice;
+class QUrl;
+
+class TextDocument;
+
+namespace Syntax {
+    class Document;
+    class Highlighter;
+    class Model;
+};
 
 namespace QodeEdit {
 
@@ -93,14 +104,48 @@ public:
     Manager( QObject* parent = 0 );
     virtual ~Manager();
     
-    QString userSharedDataFilePath( const QString& extended = QString::null );
+    QString userSharedDataFilePath( const QString& extended = QString::null ) const;
     void setUserSharedDataFilePath( const QString& filePath );
     
-    QString userSchemaDefinitionFilePath();
-    QString userSyntaxDefinitionFilePath();
+    QString userSchemaDefinitionFilePath() const;
+    QString userSyntaxDefinitionFilePath() const;
     
-    QStringList schemaDefinitionFilePaths();
-    QStringList syntaxDefinitionFilePaths();
+    QStringList schemaDefinitionFilePaths() const;
+    QStringList syntaxDefinitionFilePaths() const;
+    
+    QString mimeTypeForFile( const QString& fileName ) const;
+    QString mimeTypeForFile( const QFileInfo& fileInfo ) const;
+    QString mimeTypeForData( const QByteArray& data ) const;
+    QString mimeTypeForData( QIODevice* device ) const;
+    QString mimeTypeForFileNameAndData( const QString& fileName, QIODevice* device ) const;
+    QString mimeTypeForFileNameAndData( const QString& fileName, const QByteArray& data ) const;
+    QString mimeTypeForUrl( const QUrl& url ) const;
+    QStringList mimeTypesForFileName( const QString& fileName ) const;
+    
+    QStringList availableSyntaxes() const;
+    
+    Syntax::Highlighter* highlighter( const QString& syntaxName, const QString& syntaxThemeName = QString::null, TextDocument* textDocument = 0 ) const;
+    Syntax::Highlighter* highlighterForFilePath( const QString& filePath, TextDocument* textDocument = 0 ) const;
+    Syntax::Highlighter* highlighterForMimeType( const QString& mimeType, TextDocument* textDocument = 0 ) const;
+    
+    ////
+    bool load( QString* error = 0 );
+    void free();
+    
+    
+    
+    
+    
+    Syntax::Document document( const QString& syntaxName );
+    
+    
+    
+    Syntax::Model* model( QObject* parent = 0 );
+    ////
+    
+    
+    
+    
     
     static QString sharedDataFilePath( const QString& extended = QString::null );
     static QString schemaDefinitionFilePath();

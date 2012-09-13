@@ -38,11 +38,11 @@ public:
     }
 };
 
-QE_IMPL_SHARED_CLASS( EmptyLine )
+QE_IMPL_SHARED_CLASS( EmptyLine, Syntax );
 
 Syntax::EmptyLine::~EmptyLine()
 {
 }
 
-QE_IMPL_MEMBER( QString, regExpr, EmptyLine )
-QE_IMPL_MEMBER( bool, caseSensitive, EmptyLine )
+QE_IMPL_MEMBER( QString, regExpr, EmptyLine, Syntax );
+QE_IMPL_MEMBER( bool, caseSensitive, EmptyLine, Syntax );

@@ -32,7 +32,7 @@ private:
     QExplicitlySharedDataPointer<Syntax::DocumentBuilderData> d;
     
 public:
-    QE_DECL_SHARED_CLASS( DocumentBuilder );
+    QE_DECL_SHARED_CLASS( DocumentBuilder, Syntax );
     
     void buildDocuments( const QHash<QString, Syntax::Document>& documents );
 };

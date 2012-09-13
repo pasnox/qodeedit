@@ -23,7 +23,7 @@
 class Syntax::HighlighterPrivate {
 public:
     Syntax::Document syntaxDocument;
-    Syntax::Theme syntaxTheme;
+    Theme::Schema themeSchema;
     
     HighlighterPrivate( Syntax::Highlighter* _highlighter )
         : highlighter( _highlighter )
@@ -45,12 +45,12 @@ private:
 
 // Highlighter
 
-Syntax::Highlighter::Highlighter( const Syntax::Document& syntaxDocument, const Syntax::Theme& syntaxTheme, TextDocument* textDocument )
+Syntax::Highlighter::Highlighter( const Syntax::Document& syntaxDocument, const Theme::Schema& themeSchema, TextDocument* textDocument )
     : QSyntaxHighlighter( textDocument ),
         d( new Syntax::HighlighterPrivate( this ) )
 {
     d->syntaxDocument = syntaxDocument;
-    d->syntaxTheme = syntaxTheme;
+    d->themeSchema = themeSchema;
 }
 
 Syntax::Highlighter::Highlighter( TextDocument* textDocument )
@@ -80,14 +80,14 @@ void Syntax::Highlighter::setSyntaxDocument( const Syntax::Document& syntaxDocum
     rehighlight();
 }
 
-Syntax::Theme Syntax::Highlighter::syntaxTheme() const
+Theme::Schema Syntax::Highlighter::themeSchema() const
 {
-    return d->syntaxTheme;
+    return d->themeSchema;
 }
 
-void Syntax::Highlighter::setSyntaxTheme( const Syntax::Theme& syntaxTheme )
+void Syntax::Highlighter::setSyntaxTheme( const Theme::Schema& themeSchema )
 {
-    d->syntaxTheme = syntaxTheme;
+    d->themeSchema = themeSchema;
     rehighlight();
 }
 
