@@ -17,6 +17,7 @@
 #define QODEEDIT_H
 
 #include <QObject>
+#include <QHash>
 
 class QStringList;
 class QFileInfo;
@@ -124,6 +125,11 @@ public:
     
     QStringList availableSyntaxes() const;
     
+    QHash<QString, Syntax::Document> availableDocuments() const;
+    Syntax::Document document( const QString& name );
+    
+    Syntax::Model* model( QObject* parent = 0 );
+    
     Syntax::Highlighter* highlighter( const QString& syntaxName, const QString& syntaxThemeName = QString::null, TextDocument* textDocument = 0 ) const;
     Syntax::Highlighter* highlighterForFilePath( const QString& filePath, TextDocument* textDocument = 0 ) const;
     Syntax::Highlighter* highlighterForMimeType( const QString& mimeType, TextDocument* textDocument = 0 ) const;
@@ -131,21 +137,7 @@ public:
     ////
     bool load( QString* error = 0 );
     void free();
-    
-    
-    
-    
-    
-    Syntax::Document document( const QString& syntaxName );
-    
-    
-    
-    Syntax::Model* model( QObject* parent = 0 );
     ////
-    
-    
-    
-    
     
     static QString sharedDataFilePath( const QString& extended = QString::null );
     static QString schemaDefinitionFilePath();
@@ -153,6 +145,10 @@ public:
     
     static const char* version();
     static QString versionString();
+
+signals:
+    void syntaxesChanged();
+    void themesChanged();
 }; // Manager
 
 }; // QodeEdit

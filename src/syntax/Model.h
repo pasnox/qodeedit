@@ -18,10 +18,13 @@
 
 #include <QAbstractListModel>
 
+namespace QodeEdit {
+    class Manager;
+};
+
 namespace Syntax {
 
 class ModelPrivate;
-class Document;
 
 class Model : public QAbstractListModel
 {
@@ -30,17 +33,15 @@ class Model : public QAbstractListModel
     
 public:
     enum ExtendedRole {
-        InternalName = Qt::UserRole
+        InternalName = Qt::UserRole,
+        DisplayName
     };
     
-    Model( const QHash<QString, Syntax::Document>* syntaxes, QObject* parent = 0 );
+    Model( QodeEdit::Manager* manager, QObject* parent = 0 );
     virtual ~Model();
     
     virtual int rowCount( const QModelIndex& parent = QModelIndex() ) const;
     virtual QVariant data( const QModelIndex& index, int role = Qt::DisplayRole ) const;
-
-public slots:
-    void update();
 
 private:
     Syntax::ModelPrivate* d;

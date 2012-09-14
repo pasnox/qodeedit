@@ -15,31 +15,48 @@
 ****************************************************************************/
 #include "Model.h"
 #include "Document.h"
+#include "QodeEdit.h"
 #include "Tools.h"
 
 #include <QStringList>
 #include <QIcon>
+#include <QApplication>
 #include <QDebug>
 
 // ModelPrivate
 
-class Syntax::ModelPrivate {
+class Syntax::ModelPrivate : public QObject {
+    Q_OBJECT
+    
 public:
-    const QHash<QString, Syntax::Document>* constSyntaxes;
+    Syntax::Model* model;
+    QodeEdit::Manager* manager;
     QStringList syntaxes;
     QHash<QString, QIcon> icons; // name, icon
+    bool updatingIcons;
     
-    ModelPrivate( Syntax::Model* _model, const QHash<QString, Syntax::Document>* _syntaxes )
-        : constSyntaxes( _syntaxes ),
-            model( _model )
+    ModelPrivate( Syntax::Model* _model, QodeEdit::Manager* _manager )
+        : model( _model ),
+            manager( _manager ),
+            updatingIcons( false )
     {
         Q_ASSERT( model );
-        Q_ASSERT( constSyntaxes );
+        Q_ASSERT( manager );
+        updateSyntaxes();
+        connect( manager, SIGNAL( syntaxesChanged() ), this, SLOT( updateSyntaxes() ) );
     }
     
+public slots:
     void updateIcons() {
+        if ( updatingIcons ) {
+            return;
+        }
+        
+        updatingIcons = true;
+        const QHash<QString, Syntax::Document> availableDocuments = manager->availableDocuments();
+        
         foreach ( const QString& syntax, syntaxes ) {
-            const Syntax::Document& document = (*constSyntaxes)[ syntax ];
+            const Syntax::Document& document = availableDocuments[ syntax ];
             
             if ( icons.contains( document.name() ) ) {
                 continue;
@@ -68,14 +85,19 @@ public:
                 icon = QIcon::fromTheme( iconName );
                 icons[ document.name() ] = icon;
             }
+            
+            //QApplication::processEvents(); // avoid possible freeze/lag
         }
+        
+        updatingIcons = false;
     }
     
-    void update() {
-        const QStringList oldSyntaxes;
+    void updateSyntaxes() {
+        const QHash<QString, Syntax::Document> availableDocuments = manager->availableDocuments();
+        const QStringList oldSyntaxes = syntaxes;
         QStringList newSyntaxes;
         
-        foreach ( const Syntax::Document& document, constSyntaxes->values() ) {
+        foreach ( const Syntax::Document& document, availableDocuments.values() ) {
             newSyntaxes << ( document.localizedName().isEmpty() ? document.name() : document.localizedName() );
         }
         
@@ -92,15 +114,14 @@ public:
         emit model->layoutAboutToBeChanged();
         
         syntaxes = newSyntaxes;
-        updateIcons();
         
         for ( int i = 0; i < newSyntaxes.count(); i++ ) {
-            const Syntax::Document& document = (*constSyntaxes)[ newSyntaxes[ i ] ];
+            const Syntax::Document& document = availableDocuments[ newSyntaxes[ i ] ];
             newPositions[ document.name() ] = i;
         }
         
         for ( int i = 0; i < oldSyntaxes.count(); i++ ) {
-            const Syntax::Document& document = (*constSyntaxes)[ oldSyntaxes[ i ] ];
+            const Syntax::Document& document = availableDocuments[ oldSyntaxes[ i ] ];
             const int row = newPositions.value( document.name(), -1 );
             
             if ( row == -1 ) {
@@ -113,24 +134,22 @@ public:
         
         model->changePersistentIndexList( oldIndexes, newIndexes );
         
+        updateIcons();
+        
         emit model->layoutChanged();
     }
-
-private:
-    Syntax::Model* model;
 };
 
 // Model
 
-Syntax::Model::Model( const QHash<QString, Syntax::Document>* syntaxes, QObject* parent )
+Syntax::Model::Model( QodeEdit::Manager* manager, QObject* parent )
     : QAbstractListModel( parent ),
-        d( new Syntax::ModelPrivate( this, syntaxes ) )
+        d( new Syntax::ModelPrivate( this, manager ) )
 {
 }
 
 Syntax::Model::~Model()
 {
-    delete d;
 }
 
 int Syntax::Model::rowCount( const QModelIndex& parent ) const
@@ -144,14 +163,15 @@ QVariant Syntax::Model::data( const QModelIndex& index, int role ) const
         return QVariant();
     }
     
-    const Syntax::Document& document = (*d->constSyntaxes)[ d->syntaxes[ index.row() ] ];
+    const Syntax::Document document = d->manager->document( d->syntaxes.at( index.row() ) );
     
     switch ( role ) {
         case Qt::DecorationRole:
             return d->icons.value( document.name() );
         case Qt::DisplayRole:
         case Qt::ToolTipRole:
-            return document.localizedName().isEmpty() ? document.name() : document.localizedName();
+        case Syntax::Model::DisplayName:
+            return document.localizedName().isEmpty() ? document.name() : document.localizedName();    
         case Syntax::Model::InternalName:
             return document.name();
     }
@@ -159,7 +179,4 @@ QVariant Syntax::Model::data( const QModelIndex& index, int role ) const
     return QVariant();
 }
 
-void Syntax::Model::update()
-{
-    d->update();
-}
+#include "Model.moc"

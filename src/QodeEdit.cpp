@@ -17,6 +17,7 @@
 #include "QodeEditConfig.h"
 #include "Tools.h"
 #include "syntax/Document.h"
+#include "syntax/Model.h"
 #include "syntax/Highlighter.h"
 #include "theme/Theme.h"
 
@@ -29,7 +30,7 @@
 
 /*#include "syntax/DocumentBuilder.h"
 #include "syntax/Highlighter.h"
-#include "syntax/Model.h"
+
 #include "theme/Theme.h"
 #include "editor/TextDocument.h"
 #include "Tools.h"
@@ -176,6 +177,21 @@ QStringList QodeEdit::Manager::availableSyntaxes() const
     return syntaxes;
 }
 
+QHash<QString, Syntax::Document> QodeEdit::Manager::availableDocuments() const
+{
+    return d->mDocuments;
+}
+
+Syntax::Document QodeEdit::Manager::document( const QString& name )
+{
+    return d->mDocuments.value( name );
+}
+
+Syntax::Model* QodeEdit::Manager::model( QObject* parent )
+{
+    return new Syntax::Model( this, parent );
+}
+
 Syntax::Highlighter* QodeEdit::Manager::highlighter( const QString& syntaxName, const QString& syntaxThemeName, TextDocument* textDocument ) const
 {
     Q_UNUSED( syntaxThemeName );
@@ -220,15 +236,6 @@ Syntax::Highlighter* QodeEdit::Manager::highlighterForMimeType( const QString& m
     
     return QodeEdit::Manager::highlighter( ( documents.end() -1 ).value()->name(), QString::null, textDocument );
 }
-
-
-
-
-
-
-
-
-
 
 /*bool QodeEdit::Manager::load( QString* _error )
 {
@@ -290,23 +297,6 @@ Syntax::Highlighter* QodeEdit::Manager::highlighterForMimeType( const QString& m
 void QodeEdit::Manager::free()
 {
     d->mDocuments.clear();
-}
-
-
-
-
-
-Syntax::Document QodeEdit::Manager::document( const QString& name )
-{
-    return d->mDocuments.value( name );
-}
-
-
-
-Syntax::Model* QodeEdit::Manager::model( QObject* parent )
-{
-    d->mModels << new Syntax::Model( &d->mDocuments, parent );
-    return d->mModels.last();
 }*/
 
 const char* QodeEdit::Manager::version()
