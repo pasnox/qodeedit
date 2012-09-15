@@ -22,6 +22,10 @@
 
 class Ui_UIMain;
 
+namespace QodeEdit {
+    class Manager;
+};
+
 class QodeEditor : public CodeEditor
 {
     Q_OBJECT
@@ -45,20 +49,24 @@ public:
     UIMain( QWidget* parent = 0 );
     virtual ~UIMain();
     
-    void appendDebugMessage( const QString& message );
-    
     static void messageHandler( QtMsgType type, const char* msg );
-    static UIMain* qMain;
+    
+public slots:
+    void appendDebugMessage( const QString& message );
     
 protected:
     Ui_UIMain* ui;
+    QodeEdit::Manager* mManager;
     QHash<QString, QodeEditor*> mEditors;
     
     QodeEditor* editor( int row ) const;
     
+    void debug();
+    
 protected slots:
     void on_lwEditors_currentRowChanged( int row );
     void on_swEditors_currentChanged( int row );
+    void manager_updated();
 };
 
 #endif // UIMAIN_H

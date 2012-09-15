@@ -19,11 +19,16 @@
 #include "editor/TextDocument.h"
 #include "margin/MarginStacker.h"
 #include "syntax/Highlighter.h"
+#include "syntax/Model.h"
+#include "syntax/Document.h"
 #include "QodeEdit.h"
+#include "Manager.h"
+#include "Tools.h"
 
 #include <QUrl>
 
-UIMain* UIMain::qMain = 0;
+static QMutex qMutex;
+static UIMain* qMain = 0;
 
 // QodeEditor
 
@@ -83,25 +88,135 @@ public:
 // UIMain
 
 UIMain::UIMain( QWidget* parent )
-    : QMainWindow( parent ), ui( new Ui_UIMain )
+    : QMainWindow( parent ),
+        ui( new Ui_UIMain ),
+        mManager( new QodeEdit::Manager( this ) )
 {
-    if ( !UIMain::qMain ) {
-        UIMain::qMain = this;
+    {
+        QMutexLocker locker( &qMutex );
+        
+        if ( !qMain ) {
+            qMain = this;
+        }
     }
     
     ui->setupUi( this );
+    ui->cbSyntax->setModel( mManager->model() );
     ui->toolBar->addWidget( new SpacerWidget( this ) );
     ui->toolBar->addWidget( ui->cbSyntax );
     
     qInstallMsgHandler( UIMain::messageHandler );
+    connect( mManager, SIGNAL( updated() ), this, SLOT( manager_updated() ) );
     
-    return;
+    mManager->initialize();
+}
+
+UIMain::~UIMain()
+{
+    {
+        QMutexLocker locker( &qMutex );
+        
+        if ( qMain == this ) {
+            qMain = 0;
+        }
+    }
     
-    QString error;
+    delete ui;
+}
+
+void UIMain::messageHandler( QtMsgType type, const char* msg )
+{
+    QMutexLocker locker( &qMutex );
+    QString string;
     
-    /*if ( Syntax::Factory::load( &error ) ) {
-        qWarning() << Q_FUNC_INFO << "Syntaxes loaded correctly";
-    }*/
+    switch ( type ) {
+        case QtDebugMsg:
+            string = QString( "Debug: %1" ).arg( msg );
+            break;
+        case QtWarningMsg:
+            string = QString( "Warning: %1" ).arg( msg );
+            break;
+        case QtCriticalMsg:
+            string = QString( "Critical: %1" ).arg( msg );
+            break;
+        case QtFatalMsg:
+            string = QString( "Fatal: %1" ).arg( msg );
+            break;
+    }
+    
+    QMetaObject::invokeMethod( qMain, "appendDebugMessage", Qt::QueuedConnection, Q_ARG( const QString&, string ) );
+    
+    if ( type == QtFatalMsg ) {
+        abort();
+    }
+}
+
+void UIMain::appendDebugMessage( const QString& message )
+{
+    ui->pteDebug->appendPlainText( message );
+    printf( "%s\n", qPrintable( message ) );
+}
+
+QodeEditor* UIMain::editor( int row ) const
+{
+    QListWidgetItem* item = ui->lwEditors->item( row );
+    
+    if ( !item ) {
+        Q_ASSERT( item );
+        return 0;
+    }
+    
+    return item->data( Qt::UserRole ).value<QodeEditor*>();
+}
+
+void UIMain::debug()
+{
+    qWarning() << mManager->mimeTypeForFile( "toto.h" );
+    qWarning() << mManager->mimeTypeForFile( "toto.c" );
+    qWarning() << mManager->mimeTypeForFile( "toto.cpp" );
+    qWarning() << mManager->mimeTypeForFile( "toto.adb" );
+    
+    qWarning() << mManager->mimeTypeForData( "#include <iostream>\n" );
+    qWarning() << mManager->mimeTypeForData( "#include <stdlib.h>\n" );
+    qWarning() << mManager->mimeTypeForData( "#import <stdlib.h>\n" );
+    
+    qWarning() << mManager->mimeTypeForUrl( QUrl( "http://toto.com/test.html" ) );
+    qWarning() << mManager->mimeTypeForUrl( QUrl( "http://toto.com/test.pdf" ) );
+    qWarning() << mManager->mimeTypeForUrl( QUrl( "http://toto.com/test.jpg" ) );
+    
+    qWarning() << mManager->mimeTypesForFileName( "toto.h" );
+    qWarning() << mManager->mimeTypesForFileName( "toto.c" );
+    qWarning() << mManager->mimeTypesForFileName( "toto.cpp" );
+    qWarning() << mManager->mimeTypesForFileName( "toto.adb" );
+    
+    qWarning() << QodeEdit::Tools::rulerToString( QodeEdit::NoRuler );
+    qWarning() << QodeEdit::Tools::rulerToString( QodeEdit::BackgroundRuler );
+    qWarning() << QodeEdit::Tools::stringToRuler( "background" );
+    qWarning() << QodeEdit::Tools::stringToRuler( "backgroundRuler" );
+    qWarning() << QodeEdit::Tools::stringToRuler( "Background" );
+}
+
+void UIMain::on_lwEditors_currentRowChanged( int row )
+{
+    if ( ui->swEditors->currentIndex() != row ) {
+        ui->swEditors->setCurrentIndex( row );
+    }
+}
+
+void UIMain::on_swEditors_currentChanged( int row )
+{
+    if ( ui->lwEditors->currentRow() != row ) {
+        ui->lwEditors->setCurrentRow( row );
+    }
+    
+    ui->cbSyntax->setCurrentSyntax( editor( row )->textDocument()->syntaxHighlighter()->syntaxDocument().name() );
+}
+
+void UIMain::manager_updated()
+{
+#if !defined( QT_NO_DEBUG )
+    //debug();
+#endif
     
     //qWarning() << Syntax::Factory::availableSyntaxes();
     
@@ -130,114 +245,27 @@ UIMain::UIMain( QWidget* parent )
     "Vera", "Verilog", "VHDL", "VRML", "Wesnoth Markup Language", "WINE Config", "x.org Configuration",
     "xHarbour", "XML", "XML (Debug)", "xslt", "XUL", "yacas", "Yacc/Bison", "YAML", "Zonnon", "Zsh"*/
     
-    /*QDir dir( QodeEdit::Manager::sharedDataFilePath( "/samples" ) );
-    const QFileInfoList files = dir.entryInfoList( QDir::Files | QDir::NoDotAndDotDot );
+    const QString path = mManager->sharedDataFilePath( "/samples" );
+    const QStringList filePaths = QodeEdit::Tools::listFilesInPath( path, QStringList(), true );
     
-    foreach ( const QFileInfo& file, files ) {
-        const QString filePath = file.absoluteFilePath();
-        Syntax::Highlighter* highlighter = Syntax::Factory::highlighterForFilePath( filePath );
+    foreach ( const QString& filePath, filePaths ) {
+        Syntax::Highlighter* highlighter = mManager->highlighterForFilePath( filePath );
         
         if ( highlighter ) {
             QodeEditor* editor = new QodeEditor( this );
+            #warning Create a QodeEdit threaded/futured api for file loading
             editor->setInitialText( QodeEditor::fileContent( filePath ) );
             editor->textDocument()->setSyntaxHighlighter( highlighter );
             
             QListWidgetItem* item = new QListWidgetItem( ui->lwEditors );
-            item->setText( QString( "%1 (%2)" ).arg( file.fileName() ).arg( highlighter->syntaxDocument().name() ) );
+            item->setText( QString( "%1 (%2)" ).arg( QFileInfo( filePath ).fileName() ).arg( highlighter->syntaxDocument().name() ) );
             item->setData( Qt::UserRole, QVariant::fromValue( editor ) );
             ui->swEditors->addWidget( editor );
         }
         else {
             qWarning( "%s: Can't create highlighter for '%s'", Q_FUNC_INFO, qPrintable( filePath ) );
         }
-    }*/
-    
-    statusBar()->showMessage( error );
-    
-    /*qWarning() << Syntax::Factory::mimeTypeForFile( "toto.h" );
-    qWarning() << Syntax::Factory::mimeTypeForFile( "toto.c" );
-    qWarning() << Syntax::Factory::mimeTypeForFile( "toto.cpp" );
-    qWarning() << Syntax::Factory::mimeTypeForFile( "toto.adb" );
-    
-    qWarning() << Syntax::Factory::mimeTypeForData( "#include <iostream>\n" );
-    qWarning() << Syntax::Factory::mimeTypeForData( "#include <stdlib.h>\n" );
-    qWarning() << Syntax::Factory::mimeTypeForData( "#import <stdlib.h>\n" );
-    
-    qWarning() << Syntax::Factory::mimeTypeForUrl( QUrl( "http://toto.com/test.html" ) );
-    qWarning() << Syntax::Factory::mimeTypeForUrl( QUrl( "http://toto.com/test.pdf" ) );
-    qWarning() << Syntax::Factory::mimeTypeForUrl( QUrl( "http://toto.com/test.jpg" ) );
-    
-    qWarning() << Syntax::Factory::mimeTypesForFileName( "toto.h" );
-    qWarning() << Syntax::Factory::mimeTypesForFileName( "toto.c" );
-    qWarning() << Syntax::Factory::mimeTypesForFileName( "toto.cpp" );
-    qWarning() << Syntax::Factory::mimeTypesForFileName( "toto.adb" );
-    
-    qWarning() << QodeEdit::rulerToString( QodeEdit::NoRuler );
-    qWarning() << QodeEdit::rulerToString( QodeEdit::BackgroundRuler );
-    qWarning() << QodeEdit::stringToRuler( "background" );
-    qWarning() << QodeEdit::stringToRuler( "backgroundRuler" );
-    qWarning() << QodeEdit::stringToRuler( "Background" );*/
-}
-
-UIMain::~UIMain()
-{
-    if ( UIMain::qMain == this ) {
-        UIMain::qMain = 0;
     }
     
-    delete ui;
-    //Syntax::Factory::free();
-}
-
-void UIMain::appendDebugMessage( const QString& message )
-{
-    ui->pteDebug->appendPlainText( message );
-    printf( "%s\n", qPrintable( message ) );
-}
-
-void UIMain::messageHandler( QtMsgType type, const char* msg )
-{
-    switch ( type ) {
-        case QtDebugMsg:
-            UIMain::qMain->appendDebugMessage( QString( "Debug: %1" ).arg( msg ) );
-            break;
-        case QtWarningMsg:
-            UIMain::qMain->appendDebugMessage( QString( "Warning: %1" ).arg( msg ) );
-            break;
-        case QtCriticalMsg:
-            UIMain::qMain->appendDebugMessage( QString( "Critical: %1" ).arg( msg ) );
-            break;
-        case QtFatalMsg:
-            UIMain::qMain->appendDebugMessage( QString( "Fatal: %1" ).arg( msg ) );
-            //abort();
-            break;
-    }
-}
-
-QodeEditor* UIMain::editor( int row ) const
-{
-    QListWidgetItem* item = ui->lwEditors->item( row );
-    
-    if ( !item ) {
-        Q_ASSERT( item );
-        return 0;
-    }
-    
-    return item->data( Qt::UserRole ).value<QodeEditor*>();
-}
-
-void UIMain::on_lwEditors_currentRowChanged( int row )
-{
-    if ( ui->swEditors->currentIndex() != row ) {
-        ui->swEditors->setCurrentIndex( row );
-    }
-}
-
-void UIMain::on_swEditors_currentChanged( int row )
-{
-    if ( ui->lwEditors->currentRow() != row ) {
-        ui->lwEditors->setCurrentRow( row );
-    }
-    
-    //ui->cbSyntax->setCurrentSyntax( editor( row )->textDocument()->syntaxHighlighter()->syntaxDocument().name() );
+    statusBar()->showMessage( tr( "QodeEdit ready." ) );
 }
