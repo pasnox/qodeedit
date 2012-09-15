@@ -18,6 +18,16 @@
 
 #include "QodeEdit.h"
 
+#include <Qt>
+
+class QString;
+template <class Key, class T> class QHash;
+class QStringList;
+
+namespace Syntax {
+    class Document;
+};
+
 namespace QodeEdit {
 
 namespace Tools {
@@ -38,6 +48,11 @@ namespace Tools {
     bool localeAwareStringEquals( const QString& left, const QString& right );
     bool localeAwareStringLessThan( const QString& left, const QString& right );
     bool versionStringLessThan( const QString& left, const QString& right );
+    
+    QStringList listFilesInPath( const QString& path, const QStringList& filters, bool recursive, bool sort = false );
+    QStringList listFilesInPaths( const QStringList& paths, const QStringList& filters, bool recursive, bool sort = false );
+    QHash<QString, Syntax::Document> parseSyntaxesFiles( const QStringList& paths );
+    QHash<QString, QString> bestMatchingMimeTypesIcons( const QHash<QString, QStringList>& mimeTypes, const QString& defaultMimeType, bool processEvents );
 }; // Tools
 
 }; // QodeEdit

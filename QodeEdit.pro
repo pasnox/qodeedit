@@ -85,7 +85,9 @@ HEADERS *=  \
     src/syntax/Model.h \
     src/syntax/Highlighter.h \
     src/syntax/ComboBox.h \
-    src/theme/Theme.h
+    src/theme/Theme.h \
+    src/Threading.h \
+    src/Manager.h
 
 SOURCES *=  \
     src/QodeEdit.cpp \
@@ -119,4 +121,6 @@ SOURCES *=  \
     src/syntax/Model.cpp \
     src/syntax/Highlighter.cpp \
     src/syntax/ComboBox.cpp \
-    src/theme/Theme.cpp
+    src/theme/Theme.cpp \
+    src/Threading.cpp \
+    src/Manager.cpp

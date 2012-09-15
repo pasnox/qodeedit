@@ -14,12 +14,18 @@
 **
 ****************************************************************************/
 #include "Tools.h"
+#include "Manager.h"
+#include "syntax/Document.h"
+#include "syntax/DocumentBuilder.h"
 
 #include <QStringList>
 #include <QDir>
 #include <QDesktopServices>
 #include <QMetaObject>
 #include <QMetaEnum>
+#include <QTime>
+#include <QIcon>
+#include <QApplication>
 #include <QDebug>
 
 namespace QodeEdit {
@@ -60,7 +66,7 @@ namespace Tools {
     };
     
     const QMetaObject& mo() {
-        return QodeEdit::Manager::staticMetaObject;
+        return *QodeEdit::metaObject();
     }
     
     static CaseInsensitiveEnumerator ruler( mo().enumerator( mo().indexOfEnumerator( "Ruler" ) ) );
@@ -167,4 +173,113 @@ bool QodeEdit::Tools::versionStringLessThan( const QString& left, const QString&
     
     // extra
     return leftParts.value( 4 ) < rightParts.value( 4 ); // not the best but afaik ;)
+}
+
+QStringList QodeEdit::Tools::listFilesInPath( const QString& path, const QStringList& filters, bool recursive, bool sort )
+{
+    QDir dir( path );
+    QStringList files;
+    
+    foreach ( const QFileInfo& file, dir.entryInfoList( filters, QDir::Files ) ) {
+        files << QDir::cleanPath( file.absoluteFilePath() );
+    }
+
+    if ( recursive ) {
+        foreach ( const QFileInfo& file, dir.entryInfoList( QDir::AllDirs | QDir::NoDotAndDotDot ) ) {
+            files << QodeEdit::Tools::listFilesInPath( file.absoluteFilePath(), filters, true );
+        }
+    }
+    
+    if ( sort ) {
+        qSort( files.begin(), files.end(), QodeEdit::Tools::localeAwareStringLessThan );
+    }
+    
+    return files;
+}
+
+QStringList QodeEdit::Tools::listFilesInPaths( const QStringList& paths, const QStringList& filters, bool recursive, bool sort )
+{
+    QStringList files;
+    
+    foreach ( const QString& path, paths ) {
+        files << QodeEdit::Tools::listFilesInPath( path, filters, recursive, false );
+    }
+    
+    if ( sort ) {
+        qSort( files.begin(), files.end(), QodeEdit::Tools::localeAwareStringLessThan );
+    }
+    
+    return files;
+}
+
+QHash<QString, Syntax::Document> QodeEdit::Tools::parseSyntaxesFiles( const QStringList& paths )
+{
+#if !defined( QT_NO_DEBUG )
+    QTime time;
+    time.start();
+#endif
+    
+    const QStringList files = QodeEdit::Tools::listFilesInPaths( paths, QStringList( "*.xml" ), false );
+    QString error;
+    
+#if !defined( QT_NO_DEBUG )
+    qWarning( "%s: Found files in %f seconds", Q_FUNC_INFO , time.elapsed() /1000.0 );
+#endif
+    
+    QHash<QString, Syntax::Document> documents = Syntax::Document::open( files, &error );
+    
+#if !defined( QT_NO_DEBUG )
+    qWarning( "%s: Parsed files in %f seconds", Q_FUNC_INFO , time.elapsed() /1000.0 );
+#endif
+    
+    if ( error.isEmpty() ) {
+        Syntax::DocumentBuilder builder;
+        builder.buildDocuments( documents );
+        
+#if !defined( QT_NO_DEBUG )
+        qWarning( "%s: Build files in %f seconds", Q_FUNC_INFO , time.elapsed() /1000.0 );
+#endif
+    }
+    else {
+#if !defined( QT_NO_DEBUG )
+        qWarning( "%s: %s", Q_FUNC_INFO, qPrintable( error ) );
+        qWarning( "%s: Fails in %f seconds", Q_FUNC_INFO , time.elapsed() /1000.0 );
+#endif
+    }
+    
+    return documents;
+}
+
+QHash<QString, QString> QodeEdit::Tools::bestMatchingMimeTypesIcons( const QHash<QString, QStringList>& mimeTypes, const QString& defaultMimeType, bool processEvents )
+{
+    const QString defaultMimeStringIconName = QString( defaultMimeType ).replace( "/", "-" );
+    QHash<QString, QString> hash;
+    QString iconName;
+    
+    foreach ( const QString& key, mimeTypes.keys() ) {
+        iconName.clear();
+        
+        foreach ( const QString& mimeType, mimeTypes[ key ] ) {
+            iconName = QString( mimeType ).replace( "/", "-" );
+            
+            if ( QIcon::hasThemeIcon( iconName ) ) {
+                break;
+            }
+            else {
+                iconName.clear();
+            }
+        }
+        
+        if ( iconName.isEmpty() ) {
+            iconName = defaultMimeStringIconName;
+        }
+        
+        hash[ key ] = iconName;
+        
+        if ( processEvents ) {
+            QApplication::processEvents();
+        }
+    }
+    
+    return hash;
 }

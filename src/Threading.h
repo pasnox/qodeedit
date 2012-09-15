@@ -1,0 +1,22 @@
+#ifndef THREADING_H
+#define THREADING_H
+
+#include <QStringList>
+#include <QFuture>
+
+namespace Syntax {
+    class Document;
+};
+
+namespace QodeEdit {
+
+namespace Threading
+{
+    QFuture<QStringList> listFilesInPaths( const QStringList& paths, const QStringList& filters, bool recursive, bool sort = true );
+    QFuture<QHash<QString, Syntax::Document> > parseSyntaxesFiles( const QStringList& paths );
+    QFuture<QHash<QString, QString> > bestMatchingMimeTypesIcons( const QHash<QString, QStringList>& mimeTypes, const QString& defaultMimeType );
+}; // Threading
+
+}; // QodeEdit
+
+#endif // THREADING_H

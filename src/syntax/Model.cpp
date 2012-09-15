@@ -14,14 +14,22 @@
 **
 ****************************************************************************/
 #include "Model.h"
+#include "Manager.h"
 #include "Document.h"
 #include "QodeEdit.h"
 #include "Tools.h"
+#include "Threading.h"
 
 #include <QStringList>
 #include <QIcon>
-#include <QApplication>
+#include <QPointer>
+#include <QFutureWatcher>
 #include <QDebug>
+
+// QIcon::hasThemeIcon is not thread safe :(
+#if !defined( IS_HAS_THEME_ICON_THREAD_SAFE )
+    #define IS_HAS_THEME_ICON_THREAD_SAFE false
+#endif
 
 // ModelPrivate
 
@@ -32,72 +40,40 @@ public:
     Syntax::Model* model;
     QodeEdit::Manager* manager;
     QStringList syntaxes;
-    QHash<QString, QIcon> icons; // name, icon
-    bool updatingIcons;
+    QHash<QString, QString> icons; // name, icon name
+    QPointer<QFutureWatcher<QHash<QString, QString> > > mimeTypesIconNamesWatcher;
     
     ModelPrivate( Syntax::Model* _model, QodeEdit::Manager* _manager )
         : model( _model ),
-            manager( _manager ),
-            updatingIcons( false )
+            manager( _manager )
     {
         Q_ASSERT( model );
         Q_ASSERT( manager );
+        connect( manager, SIGNAL( syntaxesUpdated() ), this, SLOT( updateSyntaxes() ) );
         updateSyntaxes();
-        connect( manager, SIGNAL( syntaxesChanged() ), this, SLOT( updateSyntaxes() ) );
     }
     
 public slots:
-    void updateIcons() {
-        if ( updatingIcons ) {
-            return;
+    void updateIcons( const QHash<QString, QStringList>& mimeTypes = QHash<QString, QStringList>() ) {
+        if ( mimeTypesIconNamesWatcher ) {
+            icons = mimeTypesIconNamesWatcher->result();
+            mimeTypesIconNamesWatcher->deleteLater();
+        }
+        else {
+            icons = QodeEdit::Tools::bestMatchingMimeTypesIcons( mimeTypes, "text/plain", true );
         }
         
-        updatingIcons = true;
-        const QHash<QString, Syntax::Document> availableDocuments = manager->availableDocuments();
-        
-        foreach ( const QString& syntax, syntaxes ) {
-            const Syntax::Document& document = availableDocuments[ syntax ];
-            
-            if ( icons.contains( document.name() ) ) {
-                continue;
-            }
-            
-            QString iconName;
-            QIcon icon;
-            
-            foreach ( QString key, document.mimeType() ) {
-                key = key.replace( "/", "-" );
-                
-                if ( !QIcon::hasThemeIcon( key ) ) {
-                    continue;
-                }
-                
-                iconName = key;
-            }
-            
-            if ( iconName.isEmpty() ) {
-                iconName = "text-plain";
-            }
-            
-            icon = icons.value( document.name(), QIcon() );
-            
-            if ( icon.isNull() ) {
-                icon = QIcon::fromTheme( iconName );
-                icons[ document.name() ] = icon;
-            }
-            
-            //QApplication::processEvents(); // avoid possible freeze/lag
-        }
-        
-        updatingIcons = false;
+        emit model->dataChanged( model->index( 0, 0 ), model->index( model->rowCount() -1, 0 ) );
     }
     
     void updateSyntaxes() {
         const QHash<QString, Syntax::Document> availableDocuments = manager->availableDocuments();
         const QStringList oldSyntaxes = syntaxes;
+        QHash<QString, QStringList> mimeTypes;
         QStringList newSyntaxes;
         
         foreach ( const Syntax::Document& document, availableDocuments.values() ) {
+            mimeTypes[ document.name() ] = document.mimeType().toList();
             newSyntaxes << ( document.localizedName().isEmpty() ? document.name() : document.localizedName() );
         }
         
@@ -133,10 +109,18 @@ public slots:
         }
         
         model->changePersistentIndexList( oldIndexes, newIndexes );
-        
-        updateIcons();
-        
         emit model->layoutChanged();
+        
+        if ( IS_HAS_THEME_ICON_THREAD_SAFE ) {
+            if ( !mimeTypesIconNamesWatcher ) {
+                mimeTypesIconNamesWatcher = new QFutureWatcher<QHash<QString, QString> >( this );
+                connect( mimeTypesIconNamesWatcher, SIGNAL( finished() ), this, SLOT( updateIcons() ) );
+                mimeTypesIconNamesWatcher->setFuture( QodeEdit::Threading::bestMatchingMimeTypesIcons( mimeTypes, "text/plain" ) );
+            }
+        }
+        else {
+            updateIcons( mimeTypes );
+        }
     }
 };
 
@@ -167,7 +151,7 @@ QVariant Syntax::Model::data( const QModelIndex& index, int role ) const
     
     switch ( role ) {
         case Qt::DecorationRole:
-            return d->icons.value( document.name() );
+            return QIcon::fromTheme( d->icons.value( document.name() ) );
         case Qt::DisplayRole:
         case Qt::ToolTipRole:
         case Syntax::Model::DisplayName:

@@ -19,7 +19,7 @@
 Syntax::ComboBox::ComboBox( QWidget* parent )
     : QComboBox( parent )
 {
-    //setModel( Syntax::Factory::model( this ) );
+    setSizeAdjustPolicy( QComboBox::AdjustToContents );
 }
 
 Syntax::ComboBox::~ComboBox()
