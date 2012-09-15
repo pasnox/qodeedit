@@ -24,7 +24,7 @@ DEPENDPATH *= $$getFolders( . )
 
 greaterThan( QT_MAJOR_VERSION, 4 ) {
 } else:greaterThan( QT_MAJOR_VERSION, 3 ) {
-    MIMETYPES_QT4_ROOT = ../mimetypes-qt4.git
+    MIMETYPES_QT4_ROOT = ./mimetypes-qt4
 
     exists( $${MIMETYPES_QT4_ROOT} ) {
         SOURCES_PATHS = $$getFolders( $${MIMETYPES_QT4_ROOT} )
@@ -49,7 +49,7 @@ greaterThan( QT_MAJOR_VERSION, 4 ) {
     }
 }
 
-FORMS *= 
+FORMS *=
 
 HEADERS *=  \
     src/QodeEdit.h \
