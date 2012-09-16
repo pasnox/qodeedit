@@ -41,15 +41,12 @@ public:
         // update syntaxes
         syntaxesFilesWatcher = new QFutureWatcher<QHash<QString, Syntax::Document> >( this );
         connect( syntaxesFilesWatcher, SIGNAL( finished() ), this, SLOT( syntaxesFilesParsed() ) );
-        
         syntaxesFilesWatcher->setFuture( QodeEdit::Threading::parseSyntaxesFiles( manager->syntaxDefinitionFilePaths() ) );
         
         // update schemas
         /*schemasFilesWatcher = new QFutureWatcher<QStringList>( this );
         connect( syntaxesFilesWatcher, SIGNAL( finished() ), this, SLOT( syntaxesFilesParsed() ) );
-        
-        const QFuture<QStringList> future = QodeEdit::Threading::listFilesInPaths( manager->syntaxDefinitionFilePaths(), QStringList( "*.xml" ), true );
-        syntaxesFilesWatcher->setFuture( future );*/
+        schemasFilesWatcher->setFuture( QodeEdit::Threading::listFilesInPaths( manager->syntaxDefinitionFilePaths(), QStringList( "*.xml" ), true ) );
     }
 
 public slots:
@@ -226,7 +223,7 @@ Syntax::Highlighter* QodeEdit::Manager::highlighterForFilePath( const QString& f
     }
     
     if ( documents.isEmpty() ) {
-        return 0;
+        return QodeEdit::Manager::highlighter( QString::null, QString::null, textDocument );
     }
     
     return QodeEdit::Manager::highlighter( ( documents.end() -1 ).value()->name(), QString::null, textDocument );
@@ -245,7 +242,7 @@ Syntax::Highlighter* QodeEdit::Manager::highlighterForMimeType( const QString& m
     }
     
     if ( documents.isEmpty() ) {
-        return 0;
+        return QodeEdit::Manager::highlighter( QString::null, QString::null, textDocument );
     }
     
     return QodeEdit::Manager::highlighter( ( documents.end() -1 ).value()->name(), QString::null, textDocument );

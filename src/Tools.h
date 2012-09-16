@@ -19,10 +19,8 @@
 #include "QodeEdit.h"
 
 #include <Qt>
-
-class QString;
-template <class Key, class T> class QHash;
-class QStringList;
+#include <QHash>
+#include <QPair>
 
 namespace Syntax {
     class Document;
@@ -48,11 +46,13 @@ namespace Tools {
     bool localeAwareStringEquals( const QString& left, const QString& right );
     bool localeAwareStringLessThan( const QString& left, const QString& right );
     bool versionStringLessThan( const QString& left, const QString& right );
+    QTextCodec* textCodec( const QByteArray& name, const QByteArray& data = QByteArray() );
     
     QStringList listFilesInPath( const QString& path, const QStringList& filters, bool recursive, bool sort = false );
     QStringList listFilesInPaths( const QStringList& paths, const QStringList& filters, bool recursive, bool sort = false );
     QHash<QString, Syntax::Document> parseSyntaxesFiles( const QStringList& paths );
     QHash<QString, QString> bestMatchingMimeTypesIcons( const QHash<QString, QStringList>& mimeTypes, const QString& defaultMimeType, bool processEvents );
+    QHash<QString, QPair<QString, QString> > getFilesContentWithTextCodec( const QStringList& filePaths, const QByteArray& textCodec, bool processEvents );
 }; // Tools
 
 }; // QodeEdit
