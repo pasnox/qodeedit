@@ -24,8 +24,7 @@
 #include "QodeEdit.h"
 #include "Manager.h"
 #include "Tools.h"
-
-#include <QUrl>
+#include "Threading.h"
 
 static QMutex qMutex;
 static UIMain* qMain = 0;
@@ -46,27 +45,6 @@ QodeEditor::QodeEditor( QWidget* parent )
     
     // fake save document shortcut
     new QShortcut( QKeySequence::Save, this, SLOT( save() ) );
-}
-
-QString QodeEditor::fileContent( const QString& filePath, const QByteArray& textCodec )
-{
-    QFile file( filePath );
-    
-    if ( !file.exists() ) {
-        return QString::null;
-    }
-    
-    if ( !file.open( QIODevice::ReadOnly ) ) {
-        return QString::null;
-    }
-    
-    QTextCodec* codec = QTextCodec::codecForName( textCodec );
-    
-    if ( !codec ) {
-        codec = QTextCodec::codecForLocale();
-    }
-    
-    return codec->toUnicode( file.readAll() );
 }
 
 void QodeEditor::save()
@@ -109,6 +87,10 @@ UIMain::UIMain( QWidget* parent )
     connect( mManager, SIGNAL( updated() ), this, SLOT( manager_updated() ) );
     
     mManager->initialize();
+    
+#if !defined( QT_NO_DEBUG )
+    //debug();
+#endif
 }
 
 UIMain::~UIMain()
@@ -171,6 +153,8 @@ QodeEditor* UIMain::editor( int row ) const
 
 void UIMain::debug()
 {
+    qWarning() << mManager->availableSyntaxes();
+    
     qWarning() << mManager->mimeTypeForFile( "toto.h" );
     qWarning() << mManager->mimeTypeForFile( "toto.c" );
     qWarning() << mManager->mimeTypeForFile( "toto.cpp" );
@@ -212,14 +196,20 @@ void UIMain::on_swEditors_currentChanged( int row )
     ui->cbSyntax->setCurrentSyntax( editor( row )->textDocument()->syntaxHighlighter()->syntaxDocument().name() );
 }
 
-void UIMain::manager_updated()
+void UIMain::listFilesFinished()
 {
-#if !defined( QT_NO_DEBUG )
-    //debug();
-#endif
+    const QStringList files = mListFilesWatcher->result();
+    mListFilesWatcher->deleteLater();
     
-    //qWarning() << Syntax::Factory::availableSyntaxes();
-    
+    if ( !mOpenFilesWatcher ) {
+        mOpenFilesWatcher = new QFutureWatcher<QHash<QString, QPair<QString, QString> > >( this );
+        connect( mOpenFilesWatcher, SIGNAL( finished() ), this, SLOT( openFilesFinished() ) );
+        mOpenFilesWatcher->setFuture( QodeEdit::Threading::getFilesContentWithTextCodec( files, "UTF-8" ) );
+    }
+}
+
+void UIMain::openFilesFinished()
+{
     /*".desktop", "4GL", "4GL-PER", "ABAP", "ABC", "ActionScript 2.0", "Ada", --
     "AHDL", "Alerts", "Alerts_indent", "AMPLE", "ANS-Forth94", "ANSI C89", "Ansys",
     "Apache Configuration", "Asm6502", "ASN.1", "ASP", "Asterisk", "AVR Assembler",
@@ -245,16 +235,18 @@ void UIMain::manager_updated()
     "Vera", "Verilog", "VHDL", "VRML", "Wesnoth Markup Language", "WINE Config", "x.org Configuration",
     "xHarbour", "XML", "XML (Debug)", "xslt", "XUL", "yacas", "Yacc/Bison", "YAML", "Zonnon", "Zsh"*/
     
-    const QString path = mManager->sharedDataFilePath( "/samples" );
-    const QStringList filePaths = QodeEdit::Tools::listFilesInPath( path, QStringList(), true );
+    const QHash<QString, QPair<QString, QString> > contents = mOpenFilesWatcher->result();
+    mOpenFilesWatcher->deleteLater();
     
-    foreach ( const QString& filePath, filePaths ) {
-        Syntax::Highlighter* highlighter = mManager->highlighterForFilePath( filePath );
+    foreach ( const QString& filePath, contents.keys() ) {
+        const QPair<QString, QString>& pair = contents[ filePath ];
         
-        if ( highlighter ) {
+        // File opened
+        if ( pair.second.isEmpty() ) {
             QodeEditor* editor = new QodeEditor( this );
-            #warning Create a QodeEdit threaded/futured api for file loading
-            editor->setInitialText( QodeEditor::fileContent( filePath ) );
+            Syntax::Highlighter* highlighter = mManager->highlighterForFilePath( filePath );
+            
+            editor->setInitialText( pair.first );
             editor->textDocument()->setSyntaxHighlighter( highlighter );
             
             QListWidgetItem* item = new QListWidgetItem( ui->lwEditors );
@@ -262,10 +254,26 @@ void UIMain::manager_updated()
             item->setData( Qt::UserRole, QVariant::fromValue( editor ) );
             ui->swEditors->addWidget( editor );
         }
+        // An error occurs
         else {
-            qWarning( "%s: Can't create highlighter for '%s'", Q_FUNC_INFO, qPrintable( filePath ) );
+            qWarning() << pair.second;
         }
     }
-    
+}
+
+void UIMain::manager_updated()
+{
     statusBar()->showMessage( tr( "QodeEdit ready." ) );
+    
+    if ( ui->swEditors->count() > 0 ) {
+        return;
+    }
+    
+    if ( !mListFilesWatcher ) {
+        const QString path = mManager->sharedDataFilePath( "/samples" );
+        
+        mListFilesWatcher = new QFutureWatcher<QStringList>( this );
+        connect( mListFilesWatcher, SIGNAL( finished() ), this, SLOT( listFilesFinished() ) );
+        mListFilesWatcher->setFuture( QodeEdit::Threading::listFilesInPaths( QStringList( path ), QStringList(), true ) );
+    }
 }
