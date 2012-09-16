@@ -67,14 +67,14 @@ public slots:
     }
     
     void updateSyntaxes() {
-        const QHash<QString, Syntax::Document> availableDocuments = manager->availableDocuments();
+        const QHash<QString, Syntax::Document> availableSyntaxes = manager->availableSyntaxes();
         const QStringList oldSyntaxes = syntaxes;
         QHash<QString, QStringList> mimeTypes;
         QStringList newSyntaxes;
         
-        foreach ( const Syntax::Document& document, availableDocuments.values() ) {
-            mimeTypes[ document.name() ] = document.mimeType().toList();
-            newSyntaxes << ( document.localizedName().isEmpty() ? document.name() : document.localizedName() );
+        foreach ( const Syntax::Document& syntax, availableSyntaxes.values() ) {
+            mimeTypes[ syntax.name() ] = syntax.mimeType().toList();
+            newSyntaxes << ( syntax.localizedName().isEmpty() ? syntax.name() : syntax.localizedName() );
         }
         
         qSort( newSyntaxes.begin(), newSyntaxes.end(), QodeEdit::Tools::localeAwareStringLessThan );
@@ -92,13 +92,13 @@ public slots:
         syntaxes = newSyntaxes;
         
         for ( int i = 0; i < newSyntaxes.count(); i++ ) {
-            const Syntax::Document& document = availableDocuments[ newSyntaxes[ i ] ];
-            newPositions[ document.name() ] = i;
+            const Syntax::Document& syntax = availableSyntaxes[ newSyntaxes[ i ] ];
+            newPositions[ syntax.name() ] = i;
         }
         
         for ( int i = 0; i < oldSyntaxes.count(); i++ ) {
-            const Syntax::Document& document = availableDocuments[ oldSyntaxes[ i ] ];
-            const int row = newPositions.value( document.name(), -1 );
+            const Syntax::Document& syntax = availableSyntaxes[ oldSyntaxes[ i ] ];
+            const int row = newPositions.value( syntax.name(), -1 );
             
             if ( row == -1 ) {
                 newIndexes[ i ] = QModelIndex();
@@ -147,17 +147,17 @@ QVariant Syntax::Model::data( const QModelIndex& index, int role ) const
         return QVariant();
     }
     
-    const Syntax::Document document = d->manager->document( d->syntaxes.at( index.row() ) );
+    const Syntax::Document syntax = d->manager->syntax( d->syntaxes.at( index.row() ) );
     
     switch ( role ) {
         case Qt::DecorationRole:
-            return QIcon::fromTheme( d->icons.value( document.name() ) );
+            return QIcon::fromTheme( d->icons.value( syntax.name() ) );
         case Qt::DisplayRole:
         case Qt::ToolTipRole:
         case Syntax::Model::DisplayName:
-            return document.localizedName().isEmpty() ? document.name() : document.localizedName();    
+            return syntax.localizedName().isEmpty() ? syntax.name() : syntax.localizedName();    
         case Syntax::Model::InternalName:
-            return document.name();
+            return syntax.name();
     }
     
     return QVariant();

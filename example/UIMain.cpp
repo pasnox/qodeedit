@@ -153,7 +153,8 @@ QodeEditor* UIMain::editor( int row ) const
 
 void UIMain::debug()
 {
-    qWarning() << mManager->availableSyntaxes();
+    qWarning() << mManager->availableSyntaxesList();
+    qWarning() << mManager->availableSchemasList();
     
     qWarning() << mManager->mimeTypeForFile( "toto.h" );
     qWarning() << mManager->mimeTypeForFile( "toto.c" );
