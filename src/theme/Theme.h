@@ -33,8 +33,6 @@ class Style : public QTextCharFormat
 
 class Schema
 {
-    Q_ENUMS( DefaultStyle )
-    
 private:
     QExplicitlySharedDataPointer<Theme::SchemaData> d;
     
@@ -45,8 +43,8 @@ public:
     
     QString name() const;
     
-    Theme::Style style( QodeEdit::Style type ) const;
-    void setStyle( QodeEdit::Style type, const Theme::Style& style );
+    Theme::Style defaultStyle( QodeEdit::DefaultStyle type ) const;
+    void setDefaultStyle( QodeEdit::DefaultStyle type, const Theme::Style& style );
 
 protected:
     void setName( const QString& name );
