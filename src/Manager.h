@@ -62,7 +62,7 @@ public:
     
     Syntax::Model* model( QObject* parent = 0 );
     
-    Syntax::Highlighter* highlighter( const QString& syntaxName, const QString& syntaxThemeName = QString::null, TextDocument* textDocument = 0 ) const;
+    Syntax::Highlighter* highlighter( const QString& syntaxName, TextDocument* textDocument = 0 ) const;
     Syntax::Highlighter* highlighterForFilePath( const QString& filePath, TextDocument* textDocument = 0 ) const;
     Syntax::Highlighter* highlighterForMimeType( const QString& mimeType, TextDocument* textDocument = 0 ) const;
     

@@ -203,10 +203,8 @@ Syntax::Model* QodeEdit::Manager::model( QObject* parent )
     return new Syntax::Model( this, parent );
 }
 
-Syntax::Highlighter* QodeEdit::Manager::highlighter( const QString& syntaxName, const QString& syntaxThemeName, TextDocument* textDocument ) const
+Syntax::Highlighter* QodeEdit::Manager::highlighter( const QString& syntaxName, TextDocument* textDocument ) const
 {
-    Q_UNUSED( syntaxThemeName );
-    #warning update me after having themes factory
     return new Syntax::Highlighter( d->documents.value( syntaxName ), Theme::Schema(), textDocument );
 }
 
@@ -223,10 +221,10 @@ Syntax::Highlighter* QodeEdit::Manager::highlighterForFilePath( const QString& f
     }
     
     if ( documents.isEmpty() ) {
-        return QodeEdit::Manager::highlighter( QString::null, QString::null, textDocument );
+        return QodeEdit::Manager::highlighter( QString::null, textDocument );
     }
     
-    return QodeEdit::Manager::highlighter( ( documents.end() -1 ).value()->name(), QString::null, textDocument );
+    return QodeEdit::Manager::highlighter( ( documents.end() -1 ).value()->name(), textDocument );
 }
 
 Syntax::Highlighter* QodeEdit::Manager::highlighterForMimeType( const QString& mimeType, TextDocument* textDocument ) const
@@ -242,10 +240,10 @@ Syntax::Highlighter* QodeEdit::Manager::highlighterForMimeType( const QString& m
     }
     
     if ( documents.isEmpty() ) {
-        return QodeEdit::Manager::highlighter( QString::null, QString::null, textDocument );
+        return QodeEdit::Manager::highlighter( QString::null, textDocument );
     }
     
-    return QodeEdit::Manager::highlighter( ( documents.end() -1 ).value()->name(), QString::null, textDocument );
+    return QodeEdit::Manager::highlighter( ( documents.end() -1 ).value()->name(), textDocument );
 }
 
 const char* QodeEdit::Manager::version()

@@ -234,6 +234,7 @@ void UIMain::openFilesFinished()
             qWarning() << pair.second;
         }
         
+        #warning better use a progressive QtConcurrent way
         QApplication::processEvents();
     }
 }
