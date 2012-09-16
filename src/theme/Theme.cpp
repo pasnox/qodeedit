@@ -41,8 +41,16 @@ public:
     virtual ~SchemaData() {
     }
     
+    QString syntaxStyleKey( const QString& syntaxName, const QString& styleName ) const {
+        return QString( "%1:%2" ).arg( syntaxName.trimmed() ).arg( styleName.trimmed() ).toLower();
+    }
+    
+    QString defaultStyleKey( QodeEdit::DefaultStyle defaultStyle ) const {
+        return QString( "ds%1" ).arg( QodeEdit::Tools::defaultStyleToString( defaultStyle ) ).toLower().trimmed();
+    }
+    
     Theme::Style* defaultStyle( QodeEdit::DefaultStyle defaultStyle ) {
-        return &styles[ QString( "ds%1" ).arg( QodeEdit::Tools::defaultStyleToString( defaultStyle ) ).toLower().trimmed() ];
+        return &styles[ defaultStyleKey( defaultStyle ) ];
     }
     
     void initToDefault() {
@@ -97,22 +105,22 @@ Theme::Schema::~Schema()
 {
 }
 
-Theme::Style Theme::Schema::style( const QString& name ) const
+Theme::Style Theme::Schema::syntaxStyle( const QString& syntaxName, const QString& styleName ) const
 {
-    return d->styles.value( name.toLower().trimmed() );
+    return d->styles.value( d->syntaxStyleKey( syntaxName, styleName ) );
 }
 
-void Theme::Schema::setStyle( const QString& name, const Theme::Style& style )
+void Theme::Schema::setSyntaxStyle( const QString& syntaxName, const QString& styleName, const Theme::Style& style )
 {
-    d->styles[ name.toLower().trimmed() ] = style;
+    d->styles[ d->syntaxStyleKey( syntaxName, styleName ) ] = style;
 }
 
 Theme::Style Theme::Schema::defaultStyle( QodeEdit::DefaultStyle defaultStyle ) const
 {
-    return style( QString( "ds%1" ).arg( QodeEdit::Tools::defaultStyleToString( defaultStyle ) ) );
+    return d->styles.value( d->defaultStyleKey( defaultStyle ) );
 }
 
 void Theme::Schema::setDefaultStyle( QodeEdit::DefaultStyle defaultStyle, const Theme::Style& style )
 {
-    setStyle( QString( "ds%1" ).arg( QodeEdit::Tools::defaultStyleToString( defaultStyle ) ), style );
+    d->styles[ d->defaultStyleKey( defaultStyle ) ] = style;
 }
