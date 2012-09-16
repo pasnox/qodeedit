@@ -40,14 +40,13 @@ public:
     typedef QList<Theme::Style> List;
     
     QE_DECL_SHARED_CLASS( Schema, Theme );
-    
-    QString name() const;
+    QE_DECL_MEMBER( QString, name );
     
     Theme::Style defaultStyle( QodeEdit::DefaultStyle type ) const;
     void setDefaultStyle( QodeEdit::DefaultStyle type, const Theme::Style& style );
-
-protected:
-    void setName( const QString& name );
+    
+    Theme::Style style( const QString& name ) const;
+    void setStyle( const QString& name, const Theme::Style& style );
 };
 
 }; // Theme

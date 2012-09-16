@@ -21,6 +21,7 @@ class Theme::SchemaData : public QSharedData
 {
 public:
     QHash<QodeEdit::DefaultStyle, Theme::Style> defaultStyles;
+    QHash<QString, Theme::Style> styles;
     QString name;
     
     SchemaData()
@@ -33,6 +34,7 @@ public:
     SchemaData( const Theme::SchemaData& other )
         : QSharedData( other ),
             QE_OTHER_INIT( defaultStyles ),
+            QE_OTHER_INIT( styles ),
             QE_OTHER_INIT( name )
     {
     }
@@ -73,19 +75,10 @@ public:
 };
 
 QE_IMPL_SHARED_CLASS( Schema, Theme )
+QE_IMPL_MEMBER( QString, name, Schema, Theme )
 
 Theme::Schema::~Schema()
 {
-}
-
-QString Theme::Schema::name() const
-{
-    return d->name;
-}
-
-void Theme::Schema::setName( const QString& name )
-{
-    d->name = name;
 }
 
 Theme::Style Theme::Schema::defaultStyle( QodeEdit::DefaultStyle type ) const
@@ -96,4 +89,14 @@ Theme::Style Theme::Schema::defaultStyle( QodeEdit::DefaultStyle type ) const
 void Theme::Schema::setDefaultStyle( QodeEdit::DefaultStyle type, const Theme::Style& style )
 {
     d->defaultStyles[ type ] = style;
+}
+
+Theme::Style Theme::Schema::style( const QString& name ) const
+{
+    return d->styles.value( name.toLower().trimmed() );
+}
+
+void Theme::Schema::setStyle( const QString& name, const Theme::Style& style )
+{
+    d->styles[ name.toLower().trimmed() ] = style;
 }
