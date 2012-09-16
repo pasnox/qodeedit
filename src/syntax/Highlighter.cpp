@@ -29,15 +29,19 @@ public:
         : highlighter( _highlighter )
     {
         Q_ASSERT( highlighter );
+        
+        if ( highlighter->textDocument() ) {
+            highlighter->textDocument()->setSyntaxHighlighter( highlighter );
+        }
     }
     
-    TextBlockUserData* testBlockUserData( const QTextBlock& block ) const {
+    /*TextBlockUserData* testBlockUserData( const QTextBlock& block ) const {
         return highlighter->textDocument()->testUserData( block );
     }
 
     TextBlockUserData* blockUserData( QTextBlock& block ) const {
         return highlighter->textDocument()->userData( block );
-    }
+    }*/
 
 private:
     Syntax::Highlighter* highlighter;
