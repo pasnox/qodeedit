@@ -53,11 +53,15 @@ public:
     
 public slots:
     void appendDebugMessage( const QString& message );
+    void listFilesFinished();
+    void openFilesFinished();
     
 protected:
     Ui_UIMain* ui;
     QodeEdit::Manager* mManager;
     QHash<QString, QodeEditor*> mEditors;
+    QPointer<QFutureWatcher<QStringList> > mListFilesWatcher;
+    QPointer<QFutureWatcher<QHash<QString, QPair<QString, QString> > > > mOpenFilesWatcher;
     
     QodeEditor* editor( int row ) const;
     

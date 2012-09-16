@@ -18,3 +18,8 @@ QFuture<QHash<QString, QString> > QodeEdit::Threading::bestMatchingMimeTypesIcon
 {
     return QtConcurrent::run( QodeEdit::Tools::bestMatchingMimeTypesIcons, mimeTypes, defaultMimeType, false );
 }
+
+QFuture<QHash<QString, QPair<QString, QString> > > QodeEdit::Threading::getFilesContentWithTextCodec( const QStringList& filePaths, const QByteArray& textCodec )
+{
+    return QtConcurrent::run( QodeEdit::Tools::getFilesContentWithTextCodec, filePaths, textCodec, false );
+}

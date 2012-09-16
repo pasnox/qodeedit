@@ -26,6 +26,7 @@
 #include <QTime>
 #include <QIcon>
 #include <QApplication>
+#include <QTextCodec>
 #include <QDebug>
 
 namespace QodeEdit {
@@ -175,6 +176,21 @@ bool QodeEdit::Tools::versionStringLessThan( const QString& left, const QString&
     return leftParts.value( 4 ) < rightParts.value( 4 ); // not the best but afaik ;)
 }
 
+QTextCodec* QodeEdit::Tools::textCodec( const QByteArray& name, const QByteArray& data )
+{
+    QTextCodec* codec = QTextCodec::codecForName( name );
+    
+    if ( !codec ) {
+        codec = QTextCodec::codecForUtfText( data );
+    }
+    
+    if ( !codec ) {
+        codec = QTextCodec::codecForLocale();
+    }
+    
+    return codec;
+}
+
 QStringList QodeEdit::Tools::listFilesInPath( const QString& path, const QStringList& filters, bool recursive, bool sort )
 {
     QDir dir( path );
@@ -282,4 +298,27 @@ QHash<QString, QString> QodeEdit::Tools::bestMatchingMimeTypesIcons( const QHash
     }
     
     return hash;
+}
+
+QHash<QString, QPair<QString, QString> > QodeEdit::Tools::getFilesContentWithTextCodec( const QStringList& filePaths, const QByteArray& textCodec, bool processEvents )
+{
+    const QTextCodec* codec = QodeEdit::Tools::textCodec( textCodec );
+    QHash<QString, QPair<QString, QString> > contents;
+    
+    foreach ( const QString& filePath, filePaths ) {
+        QFile file( filePath );
+        
+        if ( file.open( QIODevice::ReadOnly ) ) {
+            contents[ filePath ] = qMakePair( codec->toUnicode( file.readAll() ), QString() );
+        }
+        else {
+            contents[ filePath ] = qMakePair( QString(), file.errorString() );
+        }
+        
+        if ( processEvents ) {
+            QApplication::processEvents();
+        }
+    }
+    
+    return contents;
 }
