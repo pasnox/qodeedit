@@ -46,7 +46,7 @@ public:
         // update schemas
         /*schemasFilesWatcher = new QFutureWatcher<QStringList>( this );
         connect( syntaxesFilesWatcher, SIGNAL( finished() ), this, SLOT( syntaxesFilesParsed() ) );
-        schemasFilesWatcher->setFuture( QodeEdit::Threading::listFilesInPaths( manager->syntaxDefinitionFilePaths(), QStringList( "*.xml" ), true ) );
+        schemasFilesWatcher->setFuture( QodeEdit::Threading::listFilesInPaths( manager->syntaxDefinitionFilePaths(), QStringList( "*.xml" ), true ) );*/
     }
 
 public slots:
