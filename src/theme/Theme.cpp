@@ -14,13 +14,13 @@
 **
 ****************************************************************************/
 #include "Theme.h"
+#include "Tools.h"
 
 #include <QFile>
 
 class Theme::SchemaData : public QSharedData
 {
 public:
-    QHash<QodeEdit::DefaultStyle, Theme::Style> defaultStyles;
     QHash<QString, Theme::Style> styles;
     QString name;
     
@@ -33,7 +33,6 @@ public:
     
     SchemaData( const Theme::SchemaData& other )
         : QSharedData( other ),
-            QE_OTHER_INIT( defaultStyles ),
             QE_OTHER_INIT( styles ),
             QE_OTHER_INIT( name )
     {
@@ -42,35 +41,52 @@ public:
     virtual ~SchemaData() {
     }
     
+    Theme::Style* defaultStyle( QodeEdit::DefaultStyle defaultStyle ) {
+        return &styles[ QString( "ds%1" ).arg( QodeEdit::Tools::defaultStyleToString( defaultStyle ) ).toLower().trimmed() ];
+    }
+    
     void initToDefault() {
-        //defaultStyles[ QodeEdit::NormalStyle ].;
+        Theme::Style* style = 0;
         
-        defaultStyles[ QodeEdit::KeywordStyle ].setFontWeight( QFont::Bold );
+        style = defaultStyle( QodeEdit::NormalStyle );
         
-        defaultStyles[ QodeEdit::DataTypeStyle ].setForeground( QBrush( QColor( "#0057ae" ) ) );
+        style = defaultStyle( QodeEdit::KeywordStyle );
+        style->setFontWeight( QFont::Bold );
         
-        defaultStyles[ QodeEdit::DecValStyle ].setForeground( QBrush( QColor( "#b07e00" ) ) );
-        defaultStyles[ QodeEdit::BaseNStyle ].setForeground( QBrush( QColor( "#b07e00" ) ) );
-        defaultStyles[ QodeEdit::FloatStyle ].setForeground( QBrush( QColor( "#b07e00" ) ) );
+        style = defaultStyle( QodeEdit::DataTypeStyle );
+        style->setForeground( QBrush( QColor( "#0057ae" ) ) );
         
-        defaultStyles[ QodeEdit::CharStyle ].setForeground( QBrush( QColor( "#ff80e0" ) ) );
+        style = defaultStyle( QodeEdit::DecValStyle );
+        style->setForeground( QBrush( QColor( "#b07e00" ) ) );
+        style->setForeground( QBrush( QColor( "#b07e00" ) ) );
+        style->setForeground( QBrush( QColor( "#b07e00" ) ) );
         
-        defaultStyles[ QodeEdit::StringStyle ].setForeground( QBrush( QColor( "#bf0303" ) ) );
+        style = defaultStyle( QodeEdit::CharStyle );
+        style->setForeground( QBrush( QColor( "#ff80e0" ) ) );
         
-        defaultStyles[ QodeEdit::CommentStyle ].setForeground( QBrush( QColor( "#888786" ) ) );
-        defaultStyles[ QodeEdit::CommentStyle ].setFontItalic( true );
+        style = defaultStyle( QodeEdit::StringStyle );
+        style->setForeground( QBrush( QColor( "#bf0303" ) ) );
         
-        defaultStyles[ QodeEdit::OthersStyle ].setForeground( QBrush( QColor( "#006e26" ) ) );
+        style = defaultStyle( QodeEdit::CommentStyle );
+        style->setForeground( QBrush( QColor( "#888786" ) ) );
+        style->setFontItalic( true );
         
-        defaultStyles[ QodeEdit::AlertStyle ].setForeground( QBrush( QColor( "#bf0303" ) ) );
-        defaultStyles[ QodeEdit::AlertStyle ].setBackground( QBrush( QColor( "#f7e7e7" ) ) );
-        defaultStyles[ QodeEdit::AlertStyle ].setFontWeight( QFont::Bold );
+        style = defaultStyle( QodeEdit::OthersStyle );
+        style->setForeground( QBrush( QColor( "#006e26" ) ) );
         
-        defaultStyles[ QodeEdit::FunctionStyle ].setForeground( QBrush( QColor( "#442886" ) ) );
+        style = defaultStyle( QodeEdit::AlertStyle );
+        style->setForeground( QBrush( QColor( "#bf0303" ) ) );
+        style->setBackground( QBrush( QColor( "#f7e7e7" ) ) );
+        style->setFontWeight( QFont::Bold );
         
-        defaultStyles[ QodeEdit::RegionMarkerStyle ].setForeground( QBrush( QColor( "#0057ae" ) ) );
+        style = defaultStyle( QodeEdit::FunctionStyle );
+        style->setForeground( QBrush( QColor( "#442886" ) ) );
         
-        defaultStyles[ QodeEdit::ErrorStyle ].setForeground( QBrush( QColor( "#e1eaf8" ) ) );
+        style = defaultStyle( QodeEdit::RegionMarkerStyle );
+        style->setForeground( QBrush( QColor( "#0057ae" ) ) );
+        
+        style = defaultStyle( QodeEdit::ErrorStyle );
+        style->setForeground( QBrush( QColor( "#e1eaf8" ) ) );
     }
 };
 
@@ -81,16 +97,6 @@ Theme::Schema::~Schema()
 {
 }
 
-Theme::Style Theme::Schema::defaultStyle( QodeEdit::DefaultStyle type ) const
-{
-    return d->defaultStyles.value( type );
-}
-
-void Theme::Schema::setDefaultStyle( QodeEdit::DefaultStyle type, const Theme::Style& style )
-{
-    d->defaultStyles[ type ] = style;
-}
-
 Theme::Style Theme::Schema::style( const QString& name ) const
 {
     return d->styles.value( name.toLower().trimmed() );
@@ -99,4 +105,14 @@ Theme::Style Theme::Schema::style( const QString& name ) const
 void Theme::Schema::setStyle( const QString& name, const Theme::Style& style )
 {
     d->styles[ name.toLower().trimmed() ] = style;
+}
+
+Theme::Style Theme::Schema::defaultStyle( QodeEdit::DefaultStyle defaultStyle ) const
+{
+    return style( QString( "ds%1" ).arg( QodeEdit::Tools::defaultStyleToString( defaultStyle ) ) );
+}
+
+void Theme::Schema::setDefaultStyle( QodeEdit::DefaultStyle defaultStyle, const Theme::Style& style )
+{
+    setStyle( QString( "ds%1" ).arg( QodeEdit::Tools::defaultStyleToString( defaultStyle ) ), style );
 }

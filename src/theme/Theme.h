@@ -42,11 +42,11 @@ public:
     QE_DECL_SHARED_CLASS( Schema, Theme );
     QE_DECL_MEMBER( QString, name );
     
-    Theme::Style defaultStyle( QodeEdit::DefaultStyle type ) const;
-    void setDefaultStyle( QodeEdit::DefaultStyle type, const Theme::Style& style );
-    
     Theme::Style style( const QString& name ) const;
     void setStyle( const QString& name, const Theme::Style& style );
+    
+    Theme::Style defaultStyle( QodeEdit::DefaultStyle defaultStyle ) const;
+    void setDefaultStyle( QodeEdit::DefaultStyle defaultStyle, const Theme::Style& style );
 };
 
 }; // Theme
