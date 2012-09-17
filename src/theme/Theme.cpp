@@ -14,13 +14,14 @@
 **
 ****************************************************************************/
 #include "Theme.h"
+#include "Tools.h"
 
 #include <QFile>
 
 class Theme::SchemaData : public QSharedData
 {
 public:
-    QHash<QodeEdit::Style, Theme::Style> styles;
+    QHash<QString, Theme::Style> styles;
     QString name;
     
     SchemaData()
@@ -40,60 +41,86 @@ public:
     virtual ~SchemaData() {
     }
     
+    QString syntaxStyleKey( const QString& syntaxName, const QString& styleName ) const {
+        return QString( "%1:%2" ).arg( syntaxName.trimmed() ).arg( styleName.trimmed() ).toLower();
+    }
+    
+    QString defaultStyleKey( QodeEdit::DefaultStyle defaultStyle ) const {
+        return QString( "ds%1" ).arg( QodeEdit::Tools::defaultStyleToString( defaultStyle ) ).toLower().trimmed();
+    }
+    
+    Theme::Style* defaultStyle( QodeEdit::DefaultStyle defaultStyle ) {
+        return &styles[ defaultStyleKey( defaultStyle ) ];
+    }
+    
     void initToDefault() {
-        //styles[ QodeEdit::NormalStyle ].;
+        Theme::Style* style = 0;
         
-        styles[ QodeEdit::KeywordStyle ].setFontWeight( QFont::Bold );
+        style = defaultStyle( QodeEdit::NormalStyle );
         
-        styles[ QodeEdit::DataTypeStyle ].setForeground( QBrush( QColor( "#0057ae" ) ) );
+        style = defaultStyle( QodeEdit::KeywordStyle );
+        style->setFontWeight( QFont::Bold );
         
-        styles[ QodeEdit::DecValStyle ].setForeground( QBrush( QColor( "#b07e00" ) ) );
-        styles[ QodeEdit::BaseNStyle ].setForeground( QBrush( QColor( "#b07e00" ) ) );
-        styles[ QodeEdit::FloatStyle ].setForeground( QBrush( QColor( "#b07e00" ) ) );
+        style = defaultStyle( QodeEdit::DataTypeStyle );
+        style->setForeground( QBrush( QColor( "#0057ae" ) ) );
         
-        styles[ QodeEdit::CharStyle ].setForeground( QBrush( QColor( "#ff80e0" ) ) );
+        style = defaultStyle( QodeEdit::DecValStyle );
+        style->setForeground( QBrush( QColor( "#b07e00" ) ) );
+        style->setForeground( QBrush( QColor( "#b07e00" ) ) );
+        style->setForeground( QBrush( QColor( "#b07e00" ) ) );
         
-        styles[ QodeEdit::StringStyle ].setForeground( QBrush( QColor( "#bf0303" ) ) );
+        style = defaultStyle( QodeEdit::CharStyle );
+        style->setForeground( QBrush( QColor( "#ff80e0" ) ) );
         
-        styles[ QodeEdit::CommentStyle ].setForeground( QBrush( QColor( "#888786" ) ) );
-        styles[ QodeEdit::CommentStyle ].setFontItalic( true );
+        style = defaultStyle( QodeEdit::StringStyle );
+        style->setForeground( QBrush( QColor( "#bf0303" ) ) );
         
-        styles[ QodeEdit::OthersStyle ].setForeground( QBrush( QColor( "#006e26" ) ) );
+        style = defaultStyle( QodeEdit::CommentStyle );
+        style->setForeground( QBrush( QColor( "#888786" ) ) );
+        style->setFontItalic( true );
         
-        styles[ QodeEdit::AlertStyle ].setForeground( QBrush( QColor( "#bf0303" ) ) );
-        styles[ QodeEdit::AlertStyle ].setBackground( QBrush( QColor( "#f7e7e7" ) ) );
-        styles[ QodeEdit::AlertStyle ].setFontWeight( QFont::Bold );
+        style = defaultStyle( QodeEdit::OthersStyle );
+        style->setForeground( QBrush( QColor( "#006e26" ) ) );
         
-        styles[ QodeEdit::FunctionStyle ].setForeground( QBrush( QColor( "#442886" ) ) );
+        style = defaultStyle( QodeEdit::AlertStyle );
+        style->setForeground( QBrush( QColor( "#bf0303" ) ) );
+        style->setBackground( QBrush( QColor( "#f7e7e7" ) ) );
+        style->setFontWeight( QFont::Bold );
         
-        styles[ QodeEdit::RegionMarkerStyle ].setForeground( QBrush( QColor( "#0057ae" ) ) );
+        style = defaultStyle( QodeEdit::FunctionStyle );
+        style->setForeground( QBrush( QColor( "#442886" ) ) );
         
-        styles[ QodeEdit::ErrorStyle ].setForeground( QBrush( QColor( "#e1eaf8" ) ) );
+        style = defaultStyle( QodeEdit::RegionMarkerStyle );
+        style->setForeground( QBrush( QColor( "#0057ae" ) ) );
+        
+        style = defaultStyle( QodeEdit::ErrorStyle );
+        style->setForeground( QBrush( QColor( "#e1eaf8" ) ) );
     }
 };
 
 QE_IMPL_SHARED_CLASS( Schema, Theme )
+QE_IMPL_MEMBER( QString, name, Schema, Theme )
 
 Theme::Schema::~Schema()
 {
 }
 
-QString Theme::Schema::name() const
+Theme::Style Theme::Schema::syntaxStyle( const QString& syntaxName, const QString& styleName ) const
 {
-    return d->name;
+    return d->styles.value( d->syntaxStyleKey( syntaxName, styleName ) );
 }
 
-void Theme::Schema::setName( const QString& name )
+void Theme::Schema::setSyntaxStyle( const QString& syntaxName, const QString& styleName, const Theme::Style& style )
 {
-    d->name = name;
+    d->styles[ d->syntaxStyleKey( syntaxName, styleName ) ] = style;
 }
 
-Theme::Style Theme::Schema::style( QodeEdit::Style type ) const
+Theme::Style Theme::Schema::defaultStyle( QodeEdit::DefaultStyle defaultStyle ) const
 {
-    return d->styles.value( type );
+    return d->styles.value( d->defaultStyleKey( defaultStyle ) );
 }
 
-void Theme::Schema::setStyle( QodeEdit::Style type, const Theme::Style& style )
+void Theme::Schema::setDefaultStyle( QodeEdit::DefaultStyle defaultStyle, const Theme::Style& style )
 {
-    d->styles[ type ] = style;
+    d->styles[ d->defaultStyleKey( defaultStyle ) ] = style;
 }

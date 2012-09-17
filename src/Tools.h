@@ -38,8 +38,8 @@ namespace Tools {
     QString ruleToString( QodeEdit::Rule rule );
     QodeEdit::Rule stringToRule( const QString& string );
     
-    QString styleToString( QodeEdit::Style style );
-    QodeEdit::Style stringToStyle( const QString& string );
+    QString defaultStyleToString( QodeEdit::DefaultStyle style );
+    QodeEdit::DefaultStyle stringToDefaultStyle( const QString& string );
     
     bool stringEquals( const QString& left, const QString& right, Qt::CaseSensitivity sensitivity = Qt::CaseInsensitive );
     bool stringLessThan( const QString& left, const QString& right, Qt::CaseSensitivity sensitivity = Qt::CaseInsensitive );

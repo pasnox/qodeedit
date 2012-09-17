@@ -22,7 +22,8 @@ public:
     QodeEdit::Manager* manager;
     QString userSharedDataFilePath;
     QMimeDatabase mimeDatabase;
-    QHash<QString, Syntax::Document> documents;
+    QHash<QString, Syntax::Document> syntaxes;
+    QHash<QString, Theme::Schema> schemas;
     //
     QPointer<QFutureWatcher<QHash<QString, Syntax::Document> > > syntaxesFilesWatcher;
     QPointer<QFutureWatcher<QStringList> > schemasFilesWatcher;
@@ -43,6 +44,8 @@ public:
         connect( syntaxesFilesWatcher, SIGNAL( finished() ), this, SLOT( syntaxesFilesParsed() ) );
         syntaxesFilesWatcher->setFuture( QodeEdit::Threading::parseSyntaxesFiles( manager->syntaxDefinitionFilePaths() ) );
         
+        schemas[ "default" ] = Theme::Schema();
+        
         // update schemas
         /*schemasFilesWatcher = new QFutureWatcher<QStringList>( this );
         connect( syntaxesFilesWatcher, SIGNAL( finished() ), this, SLOT( syntaxesFilesParsed() ) );
@@ -51,7 +54,7 @@ public:
 
 public slots:
     void syntaxesFilesParsed() {
-        documents = syntaxesFilesWatcher->future().result();
+        syntaxes = syntaxesFilesWatcher->future().result();
         syntaxesFilesWatcher->deleteLater();
         emit manager->syntaxesUpdated();
         
@@ -89,7 +92,7 @@ void QodeEdit::Manager::initialize()
 
 void QodeEdit::Manager::deinitialize()
 {
-    d->documents.clear();
+    d->syntaxes.clear();
 }
 
 QString QodeEdit::Manager::userSharedDataFilePath( const QString& extended ) const
@@ -181,21 +184,38 @@ QStringList QodeEdit::Manager::mimeTypesForFileName( const QString& fileName ) c
     return names;
 }
 
-QStringList QodeEdit::Manager::availableSyntaxes() const
+QStringList QodeEdit::Manager::availableSyntaxesList() const
 {
-    QStringList syntaxes = d->documents.keys();
+    QStringList syntaxes = d->syntaxes.keys();
     qSort( syntaxes.begin(), syntaxes.end(), QodeEdit::Tools::localeAwareStringLessThan );
     return syntaxes;
 }
 
-QHash<QString, Syntax::Document> QodeEdit::Manager::availableDocuments() const
+QStringList QodeEdit::Manager::availableSchemasList() const
 {
-    return d->documents;
+    QStringList schemas = d->schemas.keys();
+    qSort( schemas.begin(), schemas.end(), QodeEdit::Tools::localeAwareStringLessThan );
+    return schemas;
 }
 
-Syntax::Document QodeEdit::Manager::document( const QString& name )
+QHash<QString, Syntax::Document> QodeEdit::Manager::availableSyntaxes() const
 {
-    return d->documents.value( name );
+    return d->syntaxes;
+}
+
+Syntax::Document QodeEdit::Manager::syntax( const QString& name )
+{
+    return d->syntaxes.value( name );
+}
+
+QHash<QString, Theme::Schema> QodeEdit::Manager::availableSchemas() const
+{
+    return d->schemas;
+}
+
+Theme::Schema QodeEdit::Manager::schema( const QString& name )
+{
+    return d->schemas.value( name );
 }
 
 Syntax::Model* QodeEdit::Manager::model( QObject* parent )
@@ -203,49 +223,47 @@ Syntax::Model* QodeEdit::Manager::model( QObject* parent )
     return new Syntax::Model( this, parent );
 }
 
-Syntax::Highlighter* QodeEdit::Manager::highlighter( const QString& syntaxName, const QString& syntaxThemeName, TextDocument* textDocument ) const
+Syntax::Highlighter* QodeEdit::Manager::highlighter( const QString& syntaxName, TextDocument* textDocument ) const
 {
-    Q_UNUSED( syntaxThemeName );
-    #warning update me after having themes factory
-    return new Syntax::Highlighter( d->documents.value( syntaxName ), Theme::Schema(), textDocument );
+    return new Syntax::Highlighter( d->syntaxes.value( syntaxName ), Theme::Schema(), textDocument );
 }
 
 Syntax::Highlighter* QodeEdit::Manager::highlighterForFilePath( const QString& filePath, TextDocument* textDocument ) const
 {
-    QMap<int, Syntax::Document*> documents;
+    QMap<int, Syntax::Document*> syntaxes;
     
-    foreach ( const QString& name, d->documents.keys() ) {
-        Syntax::Document& document = d->documents[ name ];
+    foreach ( const QString& name, d->syntaxes.keys() ) {
+        Syntax::Document& syntax = d->syntaxes[ name ];
         
-        if ( QDir::match( document.extensions().toList(), filePath ) ) {
-            documents[ document.priority() ] = &document;
+        if ( QDir::match( syntax.extensions().toList(), filePath ) ) {
+            syntaxes[ syntax.priority() ] = &syntax;
         }
     }
     
-    if ( documents.isEmpty() ) {
-        return QodeEdit::Manager::highlighter( QString::null, QString::null, textDocument );
+    if ( syntaxes.isEmpty() ) {
+        return QodeEdit::Manager::highlighter( QString::null, textDocument );
     }
     
-    return QodeEdit::Manager::highlighter( ( documents.end() -1 ).value()->name(), QString::null, textDocument );
+    return QodeEdit::Manager::highlighter( ( syntaxes.end() -1 ).value()->name(), textDocument );
 }
 
 Syntax::Highlighter* QodeEdit::Manager::highlighterForMimeType( const QString& mimeType, TextDocument* textDocument ) const
 {
-    QMap<int, Syntax::Document*> documents;
+    QMap<int, Syntax::Document*> syntaxes;
     
-    foreach ( const QString& name, d->documents.keys() ) {
-        Syntax::Document& document = d->documents[ name ];
+    foreach ( const QString& name, d->syntaxes.keys() ) {
+        Syntax::Document& syntax = d->syntaxes[ name ];
         
-        if ( document.mimeType().contains( mimeType ) ) {
-            documents[ document.priority() ] = &document;
+        if ( syntax.mimeType().contains( mimeType ) ) {
+            syntaxes[ syntax.priority() ] = &syntax;
         }
     }
     
-    if ( documents.isEmpty() ) {
-        return QodeEdit::Manager::highlighter( QString::null, QString::null, textDocument );
+    if ( syntaxes.isEmpty() ) {
+        return QodeEdit::Manager::highlighter( QString::null, textDocument );
     }
     
-    return QodeEdit::Manager::highlighter( ( documents.end() -1 ).value()->name(), QString::null, textDocument );
+    return QodeEdit::Manager::highlighter( ( syntaxes.end() -1 ).value()->name(), textDocument );
 }
 
 const char* QodeEdit::Manager::version()

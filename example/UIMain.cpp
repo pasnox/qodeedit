@@ -153,7 +153,8 @@ QodeEditor* UIMain::editor( int row ) const
 
 void UIMain::debug()
 {
-    qWarning() << mManager->availableSyntaxes();
+    qWarning() << mManager->availableSyntaxesList();
+    qWarning() << mManager->availableSchemasList();
     
     qWarning() << mManager->mimeTypeForFile( "toto.h" );
     qWarning() << mManager->mimeTypeForFile( "toto.c" );
@@ -210,31 +211,6 @@ void UIMain::listFilesFinished()
 
 void UIMain::openFilesFinished()
 {
-    /*".desktop", "4GL", "4GL-PER", "ABAP", "ABC", "ActionScript 2.0", "Ada", --
-    "AHDL", "Alerts", "Alerts_indent", "AMPLE", "ANS-Forth94", "ANSI C89", "Ansys",
-    "Apache Configuration", "Asm6502", "ASN.1", "ASP", "Asterisk", "AVR Assembler",
-    "AWK", "B-Method", "Bash", "BibTeX", "Boo", "C", "C#", "C++", "Cg", "CGiS", "ChangeLog",
-    "Cisco", "Clipper", "Clojure", "CMake", "CoffeeScript", "ColdFusion", "Common Lisp",
-    "Component-Pascal", "Crack", "CSS", "CUE Sheet", "D", "Debian Changelog", "Debian Control",
-    "Diff", "Django HTML Template", "dot", "Doxygen", "DoxygenLua", "DTD", "E Language", "Eiffel",
-    "Email", "Erlang", "Euphoria", "ferite", "Fortran", "FreeBASIC", "FSharp", "fstab", "GAP",
-    "GDB Backtrace", "GDL", "GlossTex", "GLSL", "GNU Assembler", "GNU Gettext", "GNU Linker Script",
-    "GNU M4", "Go", "Haskell", "Haxe", "HTML", "IDL", "ILERPG", "Inform", "INI Files", "Intel x86 (NASM)",
-    "Jam", "Java", "Javadoc", "JavaScript", "JSON", "JSP", "KBasic", "KDev-PG[-Qt] Grammar", "LaTeX",
-    "LDIF", "Lex/Flex", "LilyPond", "Literate Haskell", "Logtalk", "LPC", "LSL", "Lua", "M3U", "MAB-DB",
-    "Makefile", "Mason", "Matlab", "Maxima", "MediaWiki", "MEL", "mergetag text", "Metapost/Metafont",
-    "MIPS Assembler", "Modelica", "Modelines", "Modula-2", "MonoBasic", "Motorola 68k (VASM/Devpac)",
-    "Motorola DSP56k", "MS-DOS Batch", "Music Publisher", "Nemerle", "noweb", "Objective Caml",
-    "Objective-C", "Objective-C++", "Octave", "OORS", "OPAL", "Pango", "Pascal", "Perl", "PGN",
-    "PHP/PHP", "PicAsm", "Pig", "Pike", "PostScript", "POV-Ray", "progress", "Prolog", "PureBasic",
-    "Python", "QMake", "QML", "Quake Script", "R Script", "RapidQ", "RELAX NG", "RelaxNG-Compact",
-    "RenderMan RIB", "reStructuredText", "REXX", "Roff", "RPM Spec", "RSI IDL", "Ruby", "Ruby/Rails/RHTML",
-    "Sather", "Scala", "Scheme", "scilab", "SCSS", "sed", "SGML", "Sieve", "SiSU", "SML", "Spice", "SQL",
-    "SQL (MySQL)", "SQL (PostgreSQL)", "Stata", "SystemC", "SystemVerilog", "TADS 3", "Tcl/Tk", "Tcsh",
-    "Texinfo", "TI Basic", "Troff Mandoc", "txt2tags", "UnrealScript", "Valgrind Suppression", "Velocity",
-    "Vera", "Verilog", "VHDL", "VRML", "Wesnoth Markup Language", "WINE Config", "x.org Configuration",
-    "xHarbour", "XML", "XML (Debug)", "xslt", "XUL", "yacas", "Yacc/Bison", "YAML", "Zonnon", "Zsh"*/
-    
     const QHash<QString, QPair<QString, QString> > contents = mOpenFilesWatcher->result();
     mOpenFilesWatcher->deleteLater();
     
@@ -258,6 +234,9 @@ void UIMain::openFilesFinished()
         else {
             qWarning() << pair.second;
         }
+        
+        #warning better use a progressive QtConcurrent way
+        QApplication::processEvents();
     }
 }
 
@@ -270,7 +249,7 @@ void UIMain::manager_updated()
     }
     
     if ( !mListFilesWatcher ) {
-        const QString path = mManager->sharedDataFilePath( "/samples" );
+        const QString path = mManager->sharedDataFilePath( "/tests/hl" );
         
         mListFilesWatcher = new QFutureWatcher<QStringList>( this );
         connect( mListFilesWatcher, SIGNAL( finished() ), this, SLOT( listFilesFinished() ) );

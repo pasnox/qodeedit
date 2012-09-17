@@ -18,6 +18,10 @@ namespace Syntax {
     class Model;
 };
 
+namespace Theme {
+    class Schema;
+};
+
 namespace QodeEdit {
 
 class ManagerData;
@@ -55,14 +59,18 @@ public:
     QString mimeTypeForUrl( const QUrl& url ) const;
     QStringList mimeTypesForFileName( const QString& fileName ) const;
     
-    QStringList availableSyntaxes() const;
+    QStringList availableSyntaxesList() const;
+    QStringList availableSchemasList() const;
     
-    QHash<QString, Syntax::Document> availableDocuments() const;
-    Syntax::Document document( const QString& name );
+    QHash<QString, Syntax::Document> availableSyntaxes() const;
+    Syntax::Document syntax( const QString& name );
+    
+    QHash<QString, Theme::Schema> availableSchemas() const;
+    Theme::Schema schema( const QString& name );
     
     Syntax::Model* model( QObject* parent = 0 );
     
-    Syntax::Highlighter* highlighter( const QString& syntaxName, const QString& syntaxThemeName = QString::null, TextDocument* textDocument = 0 ) const;
+    Syntax::Highlighter* highlighter( const QString& syntaxName, TextDocument* textDocument = 0 ) const;
     Syntax::Highlighter* highlighterForFilePath( const QString& filePath, TextDocument* textDocument = 0 ) const;
     Syntax::Highlighter* highlighterForMimeType( const QString& mimeType, TextDocument* textDocument = 0 ) const;
     

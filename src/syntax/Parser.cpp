@@ -430,7 +430,7 @@ bool Syntax::Parser::startElement( const QString& namespaceURI, const QString& l
             else if ( QodeEdit::Tools::stringEquals( name, "defStyleNum" ) ) {
                 itemData.defStyleNum() = atts.value( i );
                 
-                if ( QodeEdit::Tools::stringToStyle( itemData.defStyleNum() ) == -1 ) {
+                if ( QodeEdit::Tools::stringToDefaultStyle( itemData.defStyleNum() ) == -1 ) {
                     qWarning( "%s: Fixed invalid style to dsNormal in %s", Q_FUNC_INFO, qPrintable( d->document->name() ) );
                     itemData.defStyleNum() = "dsNormal";
                 }

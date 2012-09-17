@@ -73,7 +73,7 @@ namespace Tools {
     static CaseInsensitiveEnumerator ruler( mo().enumerator( mo().indexOfEnumerator( "Ruler" ) ) );
     static CaseInsensitiveEnumerator margin( mo().enumerator( mo().indexOfEnumerator( "Margin" ) ) );
     static CaseInsensitiveEnumerator rule( mo().enumerator( mo().indexOfEnumerator( "Rule" ) ) );
-    static CaseInsensitiveEnumerator style( mo().enumerator( mo().indexOfEnumerator( "Style" ) ) );
+    static CaseInsensitiveEnumerator defaultStyle( mo().enumerator( mo().indexOfEnumerator( "DefaultStyle" ) ) );
 }; // Tools
 
 }; // QodeEdit
@@ -108,14 +108,14 @@ QodeEdit::Rule QodeEdit::Tools::stringToRule( const QString& string )
     return QodeEdit::Rule( QodeEdit::Tools::rule.keyToValue( string ) );
 }
 
-QString QodeEdit::Tools::styleToString( QodeEdit::Style style )
+QString QodeEdit::Tools::defaultStyleToString( QodeEdit::DefaultStyle style )
 {
-    return QodeEdit::Tools::style.valueToKey( style );
+    return QodeEdit::Tools::defaultStyle.valueToKey( style );
 }
 
-QodeEdit::Style QodeEdit::Tools::stringToStyle( const QString& string )
+QodeEdit::DefaultStyle QodeEdit::Tools::stringToDefaultStyle( const QString& string )
 {
-    return QodeEdit::Style( QodeEdit::Tools::style.keyToValue( string ) );
+    return QodeEdit::DefaultStyle( QodeEdit::Tools::defaultStyle.keyToValue( string ) );
 }
 
 bool QodeEdit::Tools::stringEquals( const QString& left, const QString& right, Qt::CaseSensitivity sensitivity )
