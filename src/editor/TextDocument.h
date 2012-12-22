@@ -34,6 +34,8 @@ class TextDocument : public QTextDocument
 public:
     TextDocument( QObject* parent = 0 );
     virtual ~TextDocument();
+
+    QTextBlock findBlockByContainsPosition(int position);
     
     PlainTextDocumentLayout* layout() const;
     void setLayout( PlainTextDocumentLayout* layout );

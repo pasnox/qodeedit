@@ -54,7 +54,7 @@ public:
     QE_DECL_MEMBER( bool, hidden ); ///< Hides the syntax from the application's menus
     // Others
     //QE_DECL_MEMBER( QString, identifier ); // ?
-    QE_DECL_MEMBER( QString, defaultDeliminator );
+    QE_DECL_MEMBER( QSet<QChar>, defaultDeliminator );
     QE_DECL_MEMBER( QString, localizedName ); ///< Translated display name
     
     QE_DECL_MEMBER( bool, finalyzed ); ///< Tell if the document has been totally parsed and built

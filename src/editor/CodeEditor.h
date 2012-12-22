@@ -27,6 +27,7 @@ class MarginStacker;
 class CodeEditor : public QPlainTextEdit
 {
     Q_OBJECT
+    Q_ENUMS(IndentationPolicy)
     friend class CodeEditorPrivate;
     friend class MarginStacker;
     friend class MarginStackerPrivate;
@@ -34,6 +35,11 @@ class CodeEditor : public QPlainTextEdit
 public:
     CodeEditor( QWidget* parent = 0 );
     virtual ~CodeEditor();
+
+    enum IndentationPolicy {
+        UseTabs,
+        UseSpaces
+    };
     
     TextDocument* textDocument() const;
     void setTextDocument( TextDocument* document );
@@ -42,8 +48,14 @@ public:
     void setMarginStacker( MarginStacker* marginStacker );
     
     QString text() const;
+    QString text(int line) const;
+
+    CodeEditor::IndentationPolicy indentationPolicy();
+    int indentationWidth();
+
     
     QPoint cursorPosition() const;
+    int lines() const;
     int currentLine() const;
     int currentColumn() const;
     QodeEdit::Ruler rulerMode() const;
@@ -64,6 +76,7 @@ public:
 
 public slots:
     void setText( const QString& text );
+    void setText( int line, const QString &text );
     void setInitialText( const QString& text );
     
     void setCursorPosition( const QPoint& pos );
@@ -84,9 +97,33 @@ public slots:
     void toggleBookmark( const QTextBlock& block );
     void toggleBookmark( int line );
 
+    void indent();
+    void unindent();
+
+    void setTabWidth(int size);
+
+    void setIndentationPolicy(CodeEditor::IndentationPolicy policy);
+    void setIndentationWidth(int width);
+
+    void insertTab();
+    void removeTab();
+
+    void insertLine(int after = -1);
+    void removeLine(int line = -1);
+    void duplicateLine(int line = -1);
+
+    void expandSelectionToLine();
+    void expandSelectionToWord();
+
+    void joinLines();
+    void swapLines(int first, int second);
+    void swapLineUp();
+    void swapLineDown();
+
 protected:
     virtual bool event( QEvent* event );
     virtual void paintEvent( QPaintEvent* event );
+    virtual void keyPressEvent(QKeyEvent *event);
 
 private:
     CodeEditorPrivate* d;

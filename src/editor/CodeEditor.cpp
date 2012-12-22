@@ -18,8 +18,11 @@
 #include "TextBlockUserData.h"
 #include "margin/MarginStacker.h"
 #include "margin/AbstractMargin.h"
+#include "margin/LineNumberMargin.h"
 
+#include <QMessageBox>
 #include <QStyleOptionFrameV3>
+#include <QKeyEvent>
 #include <QTextBlock>
 #include <QPainter>
 #include <QDebug>
@@ -33,13 +36,17 @@ public:
     QPalette originalPalette;
     QodeEdit::Ruler rulerMode;
     int rulerWidth;
+
+    CodeEditor::IndentationPolicy indentationPolicy;
+    int indentationWidth;
     
     CodeEditorPrivate( CodeEditor* _editor )
             : editor( _editor ),
             stacker( 0 ),
             originalPalette( _editor->palette() ),
             rulerMode( QodeEdit::NoRuler ),
-            rulerWidth( 80 )
+            rulerWidth( 80 ),
+            indentationWidth(4)
     {
         Q_ASSERT( editor );
     }
@@ -109,6 +116,10 @@ CodeEditor::CodeEditor( QWidget* parent )
     setTextDocument( new TextDocument( this ) );
     setAutoFillBackground( true );
     setCaretLineBackground( caretLineBackground().color().lighter( 200 ) );
+
+    // As default
+    setIndentationWidth(4);
+    setIndentationPolicy(UseSpaces);
     
     connect( this, SIGNAL( cursorPositionChanged() ), viewport(), SLOT( update() ) );
 }
@@ -155,10 +166,252 @@ QString CodeEditor::text() const
     return textDocument()->text();
 }
 
+QString CodeEditor::text(int line) const
+{
+    return textDocument()->findBlockByNumber(line).text();
+}
+
+CodeEditor::IndentationPolicy CodeEditor::indentationPolicy()
+{
+    return d->indentationPolicy;
+}
+
+int CodeEditor::indentationWidth()
+{
+    return d->indentationWidth;
+}
+
+void CodeEditor::setIndentationPolicy(CodeEditor::IndentationPolicy policy)
+{
+    d->indentationPolicy = policy;
+    if(policy == UseTabs)
+        setTabWidth(d->indentationWidth);
+}
+
+void CodeEditor::setIndentationWidth(int width)
+{
+    d->indentationWidth = width;
+}
+
+void CodeEditor::setTabWidth(int size)
+{
+    QFontMetrics metrics(font());
+    setTabStopWidth((metrics.charWidth("W", 0)*size) / 2);
+}
+
+void CodeEditor::insertTab()
+{
+    QTextCursor cursor = textCursor();
+
+    if (d->indentationPolicy == UseSpaces) {
+        QString spaces(d->indentationWidth, ' ');
+        cursor.insertText(spaces);
+    } else {
+        cursor.insertText("\t");
+    }
+
+    setTextCursor(cursor);
+}
+
+void CodeEditor::removeTab()
+{
+    const int width = d->indentationWidth;
+
+    QTextCursor cursor = textCursor();
+
+    if (d->indentationPolicy == UseSpaces) {
+        if(currentColumn() - width > width) {
+            cursor.movePosition(QTextCursor::Left, QTextCursor::KeepAnchor, width);
+        } else {
+            cursor.movePosition(QTextCursor::StartOfLine, QTextCursor::KeepAnchor);
+        }
+        cursor.removeSelectedText();
+    } else {
+        cursor.movePosition(QTextCursor::Left, QTextCursor::KeepAnchor, 1);
+        cursor.removeSelectedText();
+    }
+
+    setTextCursor(cursor);
+}
+
+void CodeEditor::indent()
+{
+    QPoint position = cursorPosition();
+    QTextCursor cursor = textCursor();
+
+    cursor.movePosition(QTextCursor::StartOfLine, QTextCursor::MoveAnchor);
+    setTextCursor(cursor);
+    insertTab();
+
+    if(d->indentationPolicy == UseSpaces) {
+        position.setX( position.x()+d->indentationWidth );
+    } else {
+        position.setX( position.x()+1 );
+    }
+
+    setCursorPosition(position);
+}
+
+void CodeEditor::unindent()
+{
+    QPoint position = cursorPosition();
+
+    QTextCursor cursor = textCursor();
+    QString line = text(currentLine());
+    int logicalBegin = 0;
+    for(int k = 0; k != line.size(); k++) {
+        if(line[k] == ' ' || line[k] == '\t') {
+            logicalBegin++;
+        } else {
+            break;
+        }
+    }
+    if(logicalBegin == 0)
+        return;
+    qDebug() << logicalBegin;
+    cursor.movePosition(QTextCursor::StartOfLine, QTextCursor::MoveAnchor);
+    if(d->indentationPolicy == UseSpaces) {
+        cursor.movePosition(QTextCursor::Right, QTextCursor::MoveAnchor, d->indentationWidth);
+    } else {
+        cursor.movePosition(QTextCursor::Right, QTextCursor::MoveAnchor, 1);
+    }
+    setTextCursor(cursor);
+    removeTab();
+
+    if(d->indentationPolicy == UseSpaces) {
+        position.setX( position.x()-d->indentationWidth );
+    } else {
+        position.setX( position.x()-1 );
+    }
+    setCursorPosition(position);
+}
+
 void CodeEditor::setText( const QString& text )
 {
-    textDocument()->setText( text );
-    moveCursor( QTextCursor::Start, QTextCursor::MoveAnchor );
+    textDocument()->setText(text);
+    moveCursor(QTextCursor::Start, QTextCursor::MoveAnchor);
+}
+
+void CodeEditor::setText( int line, const QString &text )
+{
+    setCurrentLine(line);
+    setCurrentColumn(0);
+    QTextCursor cursor = textCursor();
+    cursor.movePosition(QTextCursor::EndOfLine, QTextCursor::KeepAnchor);
+    cursor.insertText(text);
+    setTextCursor(cursor);
+}
+
+void CodeEditor::insertLine( int after )
+{
+    if (after < 0)
+        after = currentLine();
+    if (after > (lines()-1))
+        after = firstVisibleBlock().blockNumber();
+
+    setCurrentLine(after);
+    setCurrentColumn(0);
+    QTextCursor c = textCursor();
+    c.movePosition(QTextCursor::EndOfLine, QTextCursor::MoveAnchor);
+    c.insertText("\n");
+    setTextCursor(c);
+}
+
+void CodeEditor::removeLine( int line )
+{
+    if (line < 0)
+        line = currentLine();
+    if (line > (lines()-1))
+        line = firstVisibleBlock().blockNumber();
+
+    setCurrentLine(line);
+    setCurrentColumn(0);
+    QTextCursor c = textCursor();
+    QTextBlock block = textDocument()->findBlockByNumber(line);
+    c.movePosition(QTextCursor::Right, QTextCursor::KeepAnchor, block.length());
+    c.removeSelectedText();
+    setTextCursor(c);
+}
+
+void CodeEditor::duplicateLine(int line)
+{
+    if (line < 0)
+        line = currentLine();
+    QPoint nat = cursorPosition();
+
+    setCurrentLine(line);
+    QTextCursor curz = textCursor();
+    curz.movePosition(QTextCursor::EndOfLine, QTextCursor::MoveAnchor);
+    curz.insertText("\n"+text(line));
+
+    nat.setY(nat.y()+2);
+    setCursorPosition(nat);
+}
+
+void CodeEditor::expandSelectionToLine()
+{
+    QTextCursor cursor = textCursor();
+    cursor.movePosition(QTextCursor::Down, QTextCursor::KeepAnchor);
+    cursor.movePosition(QTextCursor::EndOfLine, QTextCursor::KeepAnchor);
+    setTextCursor(cursor);
+}
+
+void CodeEditor::expandSelectionToWord()
+{
+    QTextCursor cursor = textCursor();
+    cursor.movePosition(QTextCursor::WordRight, QTextCursor::KeepAnchor);
+    cursor.movePosition(QTextCursor::EndOfWord, QTextCursor::KeepAnchor);
+    setTextCursor(cursor);
+}
+
+void CodeEditor::joinLines()
+{
+    const int selectionStart = textCursor().selectionStart();
+    const int selectionEnd = textCursor().selectionEnd();
+    int start = textDocument()->findBlockByContainsPosition(selectionStart).blockNumber();
+    int end   = textDocument()->findBlockByContainsPosition(selectionEnd).blockNumber();
+
+    if (start == end)
+        return;
+    if (start > end)
+        qSwap(start, end);
+
+    QString buffer = text(start);
+    buffer += " ";
+    for(int k = start+1; k <= end; k++) {
+        QString currentText = text(start+1);
+        currentText.remove("\t");
+        currentText += " ";
+        buffer += currentText;
+        removeLine(start+1);
+    }
+    buffer.remove(buffer.size()-1, 1);
+    setText(start, buffer);
+}
+
+void CodeEditor::swapLines(int first, int second)
+{
+    if ((first < 0 || first >= lines()) || (second < 0 || second >= lines()))
+        return;
+
+    QPoint nat = cursorPosition();
+    nat.setY( nat.y() + (second-first) );
+
+    QString temp = text(first);
+    setText(first, text(second));
+    setText(second, temp);
+
+    setCursorPosition(nat);
+}
+
+void CodeEditor::swapLineUp()
+{
+    swapLines(currentLine(), currentLine()-1);
+}
+
+void CodeEditor::swapLineDown()
+{
+    swapLines(currentLine(), currentLine()+1);
 }
 
 void CodeEditor::setInitialText( const QString& text )
@@ -180,6 +433,11 @@ void CodeEditor::setCursorPosition( const QPoint& pos )
     QTextCursor cursor = textCursor();
     cursor.setPosition( position, QTextCursor::MoveAnchor );
     setTextCursor( cursor );
+}
+
+int CodeEditor::lines() const
+{
+    return textDocument()->blockCount();
 }
 
 int CodeEditor::currentLine() const
@@ -394,4 +652,22 @@ void CodeEditor::paintEvent( QPaintEvent* event )
     
     // normal editor painting
     QPlainTextEdit::paintEvent( event );
+}
+
+void CodeEditor::keyPressEvent(QKeyEvent *event)
+{
+    if (event->key() == Qt::Key_Tab) {
+        if (event->modifiers() == Qt::NoModifier) {
+            insertTab();
+            return;
+        } else if (event->modifiers() == Qt::ShiftModifier) {
+            removeTab();
+            return;
+        }
+    }
+
+    if(d->stacker->margin(QodeEdit::NumberMargin))
+        d->stacker->margin(QodeEdit::NumberMargin)->update();
+
+    QPlainTextEdit::keyPressEvent(event);
 }

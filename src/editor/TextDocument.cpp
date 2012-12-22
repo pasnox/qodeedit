@@ -95,11 +95,23 @@ TextDocument::TextDocument( QObject* parent )
 {
     setLayout( new PlainTextDocumentLayout( this ) );
     setDocumentMargin( 0 );
-    setDefaultFont( QFont( "Monospace", 9 ) );
+    setDefaultFont( QFont( "Courier New", 10 ) );
 }
 
 TextDocument::~TextDocument()
 {
+}
+
+QTextBlock TextDocument::findBlockByContainsPosition(int position)
+{
+    int counter = 0;
+    for(int k = 0; k != this->blockCount(); k++) {
+        QTextBlock current = findBlockByNumber(k);
+        counter += current.length();
+        if(counter > position)
+            return current;
+    }
+    return firstBlock();
 }
 
 PlainTextDocumentLayout* TextDocument::layout() const
@@ -158,7 +170,7 @@ QString TextDocument::text() const
 
 void TextDocument::setText( const QString& text )
 {
-#warning TODO: Do asynchrone document loading
+    //#warning TODO: Do asynchrone document loading
     QTextCursor cursor( this );
     
     cursor.beginEditBlock();
@@ -169,7 +181,7 @@ void TextDocument::setText( const QString& text )
 
 void TextDocument::setInitialText( const QString& text )
 {
-#warning TODO: Do asynchrone document loading
+    //#warning TODO: Do asynchrone document loading
     setPlainText( text );
     
     d->lastUnmodifiedRevision = revision();

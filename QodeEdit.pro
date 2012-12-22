@@ -49,7 +49,7 @@ greaterThan( QT_MAJOR_VERSION, 4 ) {
     }
 }
 
-FORMS *=
+FORMS *= 
 
 HEADERS *=  \
     src/QodeEdit.h \
@@ -85,6 +85,8 @@ HEADERS *=  \
     src/syntax/Model.h \
     src/syntax/Highlighter.h \
     src/syntax/ComboBox.h \
+    src/syntax/ContextStack.h \
+    src/syntax/ContextSwitcher.h \
     src/theme/Theme.h \
     src/Threading.h \
     src/Manager.h
@@ -121,6 +123,8 @@ SOURCES *=  \
     src/syntax/Model.cpp \
     src/syntax/Highlighter.cpp \
     src/syntax/ComboBox.cpp \
+    src/syntax/ContextStack.cpp \
+    src/syntax/ContextSwitcher.cpp \
     src/theme/Theme.cpp \
     src/Threading.cpp \
     src/Manager.cpp

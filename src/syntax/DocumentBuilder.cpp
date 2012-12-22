@@ -64,7 +64,7 @@ public:
         
         // get source context name if needed
         if ( rule.context().startsWith( "##" ) ) {
-            srcContextName = srcDocument.highlighting().defaultContext();
+            srcContextName = srcDocument.highlighting().defaultContextName();
         }
         
         // get source context

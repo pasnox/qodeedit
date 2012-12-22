@@ -73,3 +73,8 @@ QE_IMPL_MEMBER( QString, fallThroughContext, Context, Syntax );
 QE_IMPL_MEMBER( bool, dynamic, Context, Syntax );
 QE_IMPL_MEMBER( bool, noIndentationBasedFolding, Context, Syntax );
 QE_IMPL_MEMBER( Syntax::Rule::List, rules, Context, Syntax );
+
+bool Syntax::Context::isNull() const
+{
+    return d->name.isEmpty();
+}

@@ -18,7 +18,7 @@
 class Syntax::HighlightingData : public QSharedData
 {
 public:
-    QString defaultContext;
+    QString defaultContextName;
     Syntax::HashList lists;
     Syntax::Context::Hash contexts;
     Syntax::ItemData::Hash itemDatas;
@@ -30,7 +30,7 @@ public:
     
     HighlightingData( const Syntax::HighlightingData& other )
         : QSharedData( other ),
-            QE_OTHER_INIT( defaultContext ),
+            QE_OTHER_INIT( defaultContextName ),
             QE_OTHER_INIT( lists ),
             QE_OTHER_INIT( contexts ),
             QE_OTHER_INIT( itemDatas )
@@ -47,7 +47,7 @@ Syntax::Highlighting::~Highlighting()
 {
 }
 
-QE_IMPL_MEMBER( QString, defaultContext, Highlighting, Syntax );
+QE_IMPL_MEMBER( QString, defaultContextName, Highlighting, Syntax );
 QE_IMPL_MEMBER( Syntax::HashList, lists, Highlighting, Syntax );
 QE_IMPL_MEMBER( Syntax::Context::Hash, contexts, Highlighting, Syntax );
 QE_IMPL_MEMBER( Syntax::ItemData::Hash, itemDatas, Highlighting, Syntax );
@@ -55,4 +55,14 @@ QE_IMPL_MEMBER( Syntax::ItemData::Hash, itemDatas, Highlighting, Syntax );
 Syntax::List Syntax::Highlighting::list( const QString& name ) const
 {
     return d->lists.value( name );
+}
+
+Syntax::Context Syntax::Highlighting::context( const QString& name ) const
+{
+    return d->contexts.value( name );
+}
+
+Syntax::Context Syntax::Highlighting::defaultContext() const
+{
+    return d->contexts.value( d->defaultContextName );
 }

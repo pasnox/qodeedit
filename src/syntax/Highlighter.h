@@ -31,6 +31,9 @@ class Document;
 
 class Highlighter : public QSyntaxHighlighter
 {
+    Q_OBJECT
+    friend class HighlighterPrivate;
+    
 public:
     Highlighter( const Syntax::Document& syntaxDocument, const Theme::Schema& themeSchema, TextDocument* textDocument );
     Highlighter( TextDocument* textDocument );

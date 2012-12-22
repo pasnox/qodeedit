@@ -41,9 +41,11 @@ public:
     QE_DECL_MEMBER( Syntax::Context::Hash, contexts );
     QE_DECL_MEMBER( Syntax::ItemData::Hash, itemDatas );
     // Others
-    QE_DECL_MEMBER( QString, defaultContext );
+    QE_DECL_MEMBER( QString, defaultContextName );
     
     Syntax::List list( const QString& name ) const;
+    Syntax::Context context( const QString& name ) const;
+    Syntax::Context defaultContext() const;
 };
 
 }; // Syntax

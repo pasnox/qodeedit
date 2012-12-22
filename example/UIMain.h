@@ -37,6 +37,7 @@ public:
 
 protected slots:
     void save();
+    void test();
 };
 
 Q_DECLARE_METATYPE( QodeEditor* )

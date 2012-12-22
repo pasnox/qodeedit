@@ -25,7 +25,7 @@
 class Syntax::DocumentData : public QSharedData
 {
 public:
-    static QString globalDefaultDeliminator;
+    static const QString globalDefaultDeliminator;
     
     QString name;
     QString localizedName;
@@ -42,7 +42,7 @@ public:
     QString license;
     bool caseSensitive;
     //QString identifier;
-    QString defaultDeliminator;
+    QSet<QChar> defaultDeliminator;
     bool finalyzed;
     Syntax::Highlighting highlighting;
     Syntax::General general;
@@ -53,7 +53,7 @@ public:
             priority( -1 ),
             hidden( false ),
             caseSensitive( true ),
-            defaultDeliminator( Syntax::DocumentData::globalDefaultDeliminator ),
+            defaultDeliminator( QodeEdit::Tools::stringToSet( Syntax::DocumentData::globalDefaultDeliminator ) ),
             finalyzed( false )
     {
     }
@@ -87,8 +87,7 @@ public:
     }
 };
 
-QString Syntax::DocumentData::globalDefaultDeliminator( ".():!+,-<=>%&*/;?[]^{|}~\\ \t" );
-
+const QString Syntax::DocumentData::globalDefaultDeliminator( " \t.():!+,-<=>%&*/;?[]^{|}~\\" );
 
 QE_IMPL_SHARED_CLASS( Document, Syntax );
 
@@ -120,7 +119,7 @@ QE_IMPL_MEMBER( QString, author, Document, Syntax );
 QE_IMPL_MEMBER( QString, license, Document, Syntax );
 QE_IMPL_MEMBER( bool, caseSensitive, Document, Syntax );
 //QE_IMPL_MEMBER( QString, identifier, Document, Syntax );
-QE_IMPL_MEMBER( QString, defaultDeliminator, Document, Syntax );
+QE_IMPL_MEMBER( QSet<QChar>, defaultDeliminator, Document, Syntax );
 QE_IMPL_MEMBER( bool, finalyzed, Document, Syntax );
 QE_IMPL_MEMBER( Syntax::Highlighting, highlighting, Document, Syntax )
 QE_IMPL_MEMBER( Syntax::General, general, Document, Syntax )

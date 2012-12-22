@@ -333,8 +333,8 @@ bool Syntax::Parser::startElement( const QString& namespaceURI, const QString& l
         
         d->document->highlighting().contexts()[ context.name() ] = context;
         
-        if ( d->document->highlighting().defaultContext().isEmpty() ) {
-            d->document->highlighting().defaultContext() = context.name();
+        if ( d->document->highlighting().defaultContextName().isEmpty() ) {
+            d->document->highlighting().defaultContextName() = context.name();
         }
         
         Q_ASSERT( !context.name().isEmpty() );

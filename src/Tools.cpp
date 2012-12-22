@@ -74,6 +74,7 @@ namespace Tools {
     static CaseInsensitiveEnumerator margin( mo().enumerator( mo().indexOfEnumerator( "Margin" ) ) );
     static CaseInsensitiveEnumerator rule( mo().enumerator( mo().indexOfEnumerator( "Rule" ) ) );
     static CaseInsensitiveEnumerator defaultStyle( mo().enumerator( mo().indexOfEnumerator( "DefaultStyle" ) ) );
+    static QHash<QString, QSet<QChar> > sets;
 }; // Tools
 
 }; // QodeEdit
@@ -191,6 +192,19 @@ QTextCodec* QodeEdit::Tools::textCodec( const QByteArray& name, const QByteArray
     return codec;
 }
 
+const QSet<QChar>& QodeEdit::Tools::stringToSet( const QString& string )
+{
+    QSet<QChar>& set = QodeEdit::Tools::sets[ string ];
+    
+    if ( set.count() != string.count() ) {
+        foreach ( const QChar& c, string ) {
+            set << c;
+        }
+    }
+    
+    return set;
+}
+
 QStringList QodeEdit::Tools::listFilesInPath( const QString& path, const QStringList& filters, bool recursive, bool sort )
 {
     QDir dir( path );
@@ -248,7 +262,7 @@ QHash<QString, Syntax::Document> QodeEdit::Tools::parseSyntaxesFiles( const QStr
     qWarning( "%s: Parsed files in %f seconds", Q_FUNC_INFO , time.elapsed() /1000.0 );
 #endif
     
-    if ( error.isEmpty() ) {
+    /*if ( error.isEmpty() ) {
         Syntax::DocumentBuilder builder;
         builder.buildDocuments( documents );
         
@@ -261,7 +275,7 @@ QHash<QString, Syntax::Document> QodeEdit::Tools::parseSyntaxesFiles( const QStr
         qWarning( "%s: %s", Q_FUNC_INFO, qPrintable( error ) );
         qWarning( "%s: Fails in %f seconds", Q_FUNC_INFO , time.elapsed() /1000.0 );
 #endif
-    }
+    }*/
     
     return documents;
 }

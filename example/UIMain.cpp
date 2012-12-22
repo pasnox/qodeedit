@@ -42,14 +42,34 @@ QodeEditor::QodeEditor( QWidget* parent )
     margins->setVisible( QodeEdit::RevisionMargin, true );
     margins->setVisible( QodeEdit::FoldMargin, true );
     margins->setVisible( QodeEdit::SpaceMargin, true );
+
+    setCaretLineBackground(paper());
     
     // fake save document shortcut
     new QShortcut( QKeySequence::Save, this, SLOT( save() ) );
+
+    new QShortcut( QKeySequence("Ctrl+Shift+D"), this, SLOT(duplicateLine()) );
+
+    new QShortcut( QKeySequence("Ctrl+Shift+Up"), this, SLOT(swapLineUp()) );
+    new QShortcut( QKeySequence("Ctrl+Shift+Down"), this, SLOT(swapLineDown()) );
+
+    new QShortcut( QKeySequence("Ctrl+]"), this, SLOT(indent()) );
+    new QShortcut( QKeySequence("Ctrl+["), this, SLOT(unindent()) );
+
+    new QShortcut( QKeySequence("Ctrl+J"), this, SLOT(joinLines()) );
+
+    new QShortcut( QKeySequence("Ctrl+Shift+L"), this, SLOT(expandSelectionToLine()) );
+    new QShortcut( QKeySequence("Ctrl+Shift+W"), this, SLOT(expandSelectionToWord()) );
 }
 
 void QodeEditor::save()
 {
     document()->setModified( false );
+}
+
+void QodeEditor::test()
+{
+    // NOTE: method to test new features
 }
 
 // SpacerWidget
@@ -235,7 +255,7 @@ void UIMain::openFilesFinished()
             qWarning() << pair.second;
         }
         
-        #warning better use a progressive QtConcurrent way
+        //#warning better use a progressive QtConcurrent way
         QApplication::processEvents();
     }
 }

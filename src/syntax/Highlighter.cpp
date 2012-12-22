@@ -35,13 +35,18 @@ public:
         }
     }
     
-    /*TextBlockUserData* testBlockUserData( const QTextBlock& block ) const {
+    TextBlockUserData* testBlockUserData( const QTextBlock& block ) const {
         return highlighter->textDocument()->testUserData( block );
     }
 
     TextBlockUserData* blockUserData( QTextBlock& block ) const {
         return highlighter->textDocument()->userData( block );
-    }*/
+    }
+    
+    TextBlockUserData* previousblockData() {
+        const QTextBlock block = highlighter->currentBlock().previous();
+        return testBlockUserData( block );
+    }
 
 private:
     Syntax::Highlighter* highlighter;
@@ -97,6 +102,9 @@ void Syntax::Highlighter::setSyntaxTheme( const Theme::Schema& themeSchema )
 
 void Syntax::Highlighter::highlightBlock( const QString& text )
 {
+    TextBlockUserData* previousData = d->previousblockData();
+    
+    
     /*lineData, matchedContexts = self._syntax.parseBlock(text, self._prevData())
     print self._syntax.parseBlockTextualResults(text, self._prevData())
     contextAreaStartPos = 0
@@ -109,16 +117,3 @@ void Syntax::Highlighter::highlightBlock( const QString& text )
     
     self.setCurrentBlockUserData(_TextBlockUserData(lineData))*/
 }
-
-/*TextBlockUserData* testUserData( const QTextBlock& block ) const;
-    TextBlockUserData* userData( QTextBlock& block ) const;*/
-
-
-
-/*def _prevData(self):
-        prevBlock = self.currentBlock().previous()
-        if prevBlock.isValid():
-            dataObject = prevBlock.userData()
-            if dataObject is not None:
-                return dataObject.data
-        return None*/
