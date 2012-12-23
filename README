@@ -1,12 +1,18 @@
-A source code component editor based on QPlainTextEdit, QTextDocument and QSyntaxHighlighter with the use of Kate xml language definition files.
+QodeEdit Source Code Editor
+===========================
+
+A source code component editor for Qt based on QPlainTextEdit, QTextDocument and QSyntaxHighlighter with the use of Kate xml language definition files.
+
 It could be considered an alternative/replacement of QScintilla library.
+
 A technical document can be found here: https://docs.google.com/document/d/1X9VnZ6fFRgWB8afhvTSQpChvO7U408ozxeHYCFWYG1A/edit
 
 Homepage:
     https://github.com/pasnox/qodeedit
-    
+
+Development team:
+    Filipe Azevedo aka Nox P@sNox <pasnox@gmail.com>              (main)
+    Illya Kovalevskyy             <illya.kovalevskyy@gmail.com> (editor)
+
 License:
     LGPL3
-
-Contact:
-    pasnox@gmail.com
