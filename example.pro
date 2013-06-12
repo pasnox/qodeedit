@@ -13,6 +13,8 @@
 ##  WARRANTY OF DESIGN, MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE.
 ##
 ###########################################################################################
+QT *= core gui widgets xml
+
 win32|macx {
     OXYGEN_THEME_PATH = $$PWD/../oxygen-icons-png.git
     
@@ -36,5 +38,5 @@ FORMS *= \
 HEADERS *= \
     example/UIMain.h
 
-SOURCES *= main.cpp \
+SOURCES *= example/main.cpp \
     example/UIMain.cpp

@@ -99,7 +99,7 @@ QString QodeEdit::Manager::userSharedDataFilePath( const QString& extended ) con
 {
     return d->userSharedDataFilePath.isEmpty()
         ? QDir::cleanPath( QString( "%1/%2/%3" )
-            .arg( QDesktopServices::storageLocation( QDesktopServices::DataLocation ) )
+            .arg( QStandardPaths::StandardLocation( QStandardPaths::DataLocation) )
             .arg( QString::fromUtf8( PACKAGE_NAME ) )
             .arg( extended ) )
         : d->userSharedDataFilePath

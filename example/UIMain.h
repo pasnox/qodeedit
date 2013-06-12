@@ -17,8 +17,9 @@
 #define UIMAIN_H
 
 #include <QtGui>
-
-#include "CodeEditor.h"
+#include <QMainWindow>
+#include <QApplication>
+#include "editor/CodeEditor.h"
 
 class Ui_UIMain;
 
@@ -50,7 +51,7 @@ public:
     UIMain( QWidget* parent = 0 );
     virtual ~UIMain();
     
-    static void messageHandler( QtMsgType type, const char* msg );
+    static void messageHandler(QtMsgType type, const QMessageLogContext &context, const QString &msg );
     
 public slots:
     void appendDebugMessage( const QString& message );

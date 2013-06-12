@@ -20,6 +20,8 @@
 
 #include <Qt>
 #include <QHash>
+#include <QStringList>
+#include <QTextCodec>
 #include <QPair>
 
 namespace Syntax {

@@ -17,7 +17,7 @@ include( config.pri )
 initializeProject( lib, $${BUILD_TARGET}, $${BUILD_MODE}, $${BUILD_PATH}/$${TARGET_NAME}, $${BUILD_TARGET_PATH}, $${BUILD_TYPE}, $${BUILD_VERSION} )
 autoGenerateFile( "QodeEditConfig.h.in", "src/QodeEditConfig.h" )
 
-QT *= xml
+QT *= core gui widgets xml
 
 INCLUDEPATH *= src
 DEPENDPATH *= $$getFolders( . )

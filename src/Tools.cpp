@@ -35,7 +35,7 @@ namespace Tools {
     class CaseInsensitiveEnumerator {
     public:
         CaseInsensitiveEnumerator( const QMetaEnum& enumerator = QMetaEnum() ) {
-            name = QString::fromAscii( enumerator.name() ).toLower();
+            name = QString( enumerator.name() ).toLower();
             
             for ( int i = 0; i < enumerator.keyCount(); i++ ) {
                 const int value( enumerator.value( i ) );
