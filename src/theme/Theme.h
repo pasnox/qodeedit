@@ -45,8 +45,8 @@ public:
     Theme::Style syntaxStyle( const QString& syntaxName, const QString& styleName ) const;
     void setSyntaxStyle( const QString& syntaxName, const QString& styleName, const Theme::Style& style );
     
-    Theme::Style defaultStyle( QodeEdit::DefaultStyle defaultStyle ) const;
-    void setDefaultStyle( QodeEdit::DefaultStyle defaultStyle, const Theme::Style& style );
+    Theme::Style defaultStyle( QodeEdit::Style defaultStyle ) const;
+    void setDefaultStyle( QodeEdit::Style defaultStyle, const Theme::Style& style );
 };
 
 }; // Theme
