@@ -13,6 +13,8 @@
 ** WARRANTY OF DESIGN, MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE.
 **
 ****************************************************************************/
+#include <QStatusBar>
+#include <QShortcut>
 #include "UIMain.h"
 #include "ui_UIMain.h"
 #include "editor/CodeEditor.h"
@@ -103,7 +105,7 @@ UIMain::UIMain( QWidget* parent )
     ui->toolBar->addWidget( new SpacerWidget( this ) );
     ui->toolBar->addWidget( ui->cbSyntax );
     
-    qInstallMsgHandler( UIMain::messageHandler );
+    qInstallMessageHandler( UIMain::messageHandler );
     connect( mManager, SIGNAL( updated() ), this, SLOT( manager_updated() ) );
     
     mManager->initialize();
@@ -126,7 +128,7 @@ UIMain::~UIMain()
     delete ui;
 }
 
-void UIMain::messageHandler( QtMsgType type, const char* msg )
+void UIMain::messageHandler( QtMsgType type,const QMessageLogContext &context,const QString &msg )
 {
     QMutexLocker locker( &qMutex );
     QString string;

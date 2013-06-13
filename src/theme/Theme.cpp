@@ -45,11 +45,11 @@ public:
         return QString( "%1:%2" ).arg( syntaxName.trimmed() ).arg( styleName.trimmed() ).toLower();
     }
     
-    QString defaultStyleKey( QodeEdit::DefaultStyle defaultStyle ) const {
+    QString defaultStyleKey( QodeEdit::Style defaultStyle ) const {
         return QString( "ds%1" ).arg( QodeEdit::Tools::defaultStyleToString( defaultStyle ) ).toLower().trimmed();
     }
     
-    Theme::Style* defaultStyle( QodeEdit::DefaultStyle defaultStyle ) {
+    Theme::Style* defaultStyle( QodeEdit::Style defaultStyle ) {
         return &styles[ defaultStyleKey( defaultStyle ) ];
     }
     
@@ -115,12 +115,12 @@ void Theme::Schema::setSyntaxStyle( const QString& syntaxName, const QString& st
     d->styles[ d->syntaxStyleKey( syntaxName, styleName ) ] = style;
 }
 
-Theme::Style Theme::Schema::defaultStyle( QodeEdit::DefaultStyle defaultStyle ) const
+Theme::Style Theme::Schema::defaultStyle( QodeEdit::Style defaultStyle ) const
 {
     return d->styles.value( d->defaultStyleKey( defaultStyle ) );
 }
 
-void Theme::Schema::setDefaultStyle( QodeEdit::DefaultStyle defaultStyle, const Theme::Style& style )
+void Theme::Schema::setDefaultStyle( QodeEdit::Style defaultStyle, const Theme::Style& style )
 {
     d->styles[ d->defaultStyleKey( defaultStyle ) ] = style;
 }

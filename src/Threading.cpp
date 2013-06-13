@@ -2,7 +2,7 @@
 #include "Tools.h"
 #include "syntax/Document.h"
 
-#include <QtConcurrentRun>
+#include <QtConcurrent/QtConcurrentRun>
 
 QFuture<QStringList> QodeEdit::Threading::listFilesInPaths( const QStringList& paths, const QStringList& filters, bool recursive, bool sort )
 {

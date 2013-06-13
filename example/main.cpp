@@ -14,7 +14,7 @@
 **
 ****************************************************************************/
 #include <QtGui>
-
+#include <QDesktopWidget>
 #include "QodeEditExampleConfig.h"
 #include "UIMain.h"
 

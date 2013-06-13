@@ -496,7 +496,7 @@ Syntax::Rule Syntax::Rule::create( QodeEdit::Rule type, const QHash<QString, QVa
 {
     static QHash<QodeEdit::Rule, QSet<QString> > requiredAttributes;
     
-    if ( requiredAttributes.isEmpty() ) {
+    if ( requiredAttributes[type].isEmpty() ) {
         switch ( type ) {
             case QodeEdit::KeywordRule:
                 requiredAttributes[ type ] << "string";

@@ -72,7 +72,7 @@ public:
         IncludeRulesRule
     };
 
-    enum DefaultStyle {
+    enum Style {
         InvalidStyle = -1,
         NormalStyle,
         KeywordStyle,
