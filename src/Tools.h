@@ -19,51 +19,55 @@
 #include "QodeEdit.h"
 
 #include <Qt>
+#include <QByteArray>
 #include <QHash>
 #include <QPair>
 
+class QStringList;
+class QTextCodec;
+
 namespace Syntax {
     class Document;
-};
+}
 
 namespace QodeEdit {
 
 namespace Tools {
     QString rulerToString( QodeEdit::Ruler ruler );
     QodeEdit::Ruler stringToRuler( const QString& string );
-    
+
     QString marginToString( QodeEdit::Margin margin );
     QodeEdit::Margin stringToMargin( const QString& string );
-    
+
     QString ruleToString( QodeEdit::Rule rule );
     QodeEdit::Rule stringToRule( const QString& string );
-    
+
     QString defaultStyleToString( QodeEdit::DefaultStyle style );
     QodeEdit::DefaultStyle stringToDefaultStyle( const QString& string );
-    
+
     bool stringEquals( const QString& left, const QString& right, Qt::CaseSensitivity sensitivity = Qt::CaseInsensitive );
     bool stringLessThan( const QString& left, const QString& right, Qt::CaseSensitivity sensitivity = Qt::CaseInsensitive );
     bool localeAwareStringEquals( const QString& left, const QString& right );
     bool localeAwareStringLessThan( const QString& left, const QString& right );
     bool versionStringLessThan( const QString& left, const QString& right );
     QTextCodec* textCodec( const QByteArray& name, const QByteArray& data = QByteArray() );
-    
+
     const QSet<QChar>& stringToSet( const QString& string );
     QStringList listFilesInPath( const QString& path, const QStringList& filters, bool recursive, bool sort = false );
     QStringList listFilesInPaths( const QStringList& paths, const QStringList& filters, bool recursive, bool sort = false );
     QHash<QString, Syntax::Document> parseSyntaxesFiles( const QStringList& paths );
     QHash<QString, QString> bestMatchingMimeTypesIcons( const QHash<QString, QStringList>& mimeTypes, const QString& defaultMimeType, bool processEvents );
     QHash<QString, QPair<QString, QString> > getFilesContentWithTextCodec( const QStringList& filePaths, const QByteArray& textCodec, bool processEvents );
-    
+
     template <class T> QList<T> startingListItems( const QList<T>& list, int count ) {
         if ( list.count() < count ) {
             return QList<T>();
         }
-        
+
         return list.mid( 0, count );
     }
-}; // Tools
+} // Tools
 
-}; // QodeEdit
+} // QodeEdit
 
 #endif // TOOLS_H

@@ -16,15 +16,19 @@
 #ifndef UIMAIN_H
 #define UIMAIN_H
 
-#include <QtGui>
-
 #include "CodeEditor.h"
+
+#if QT_VERSION < 0x050000
+#include <QtGui>
+#else
+#include <QtWidgets>
+#endif
 
 class Ui_UIMain;
 
 namespace QodeEdit {
     class Manager;
-};
+}
 
 class QodeEditor : public CodeEditor
 {
@@ -32,7 +36,7 @@ class QodeEditor : public CodeEditor
 
 public:
     QodeEditor( QWidget* parent = 0 );
-    
+
     static QString fileContent( const QString& filePath, const QByteArray& textCodec = QByteArray( "UTF-8" ) );
 
 protected slots:
@@ -49,25 +53,29 @@ class UIMain : public QMainWindow
 public:
     UIMain( QWidget* parent = 0 );
     virtual ~UIMain();
-    
+
+#if QT_VERSION < 0x050000
     static void messageHandler( QtMsgType type, const char* msg );
-    
+#else
+    static void messageHandler( QtMsgType type, const QMessageLogContext& context, const QString& msg );
+#endif
+
 public slots:
     void appendDebugMessage( const QString& message );
     void listFilesFinished();
     void openFilesFinished();
-    
+
 protected:
     Ui_UIMain* ui;
     QodeEdit::Manager* mManager;
     QHash<QString, QodeEditor*> mEditors;
     QPointer<QFutureWatcher<QStringList> > mListFilesWatcher;
     QPointer<QFutureWatcher<QHash<QString, QPair<QString, QString> > > > mOpenFilesWatcher;
-    
+
     QodeEditor* editor( int row ) const;
-    
+
     void debug();
-    
+
 protected slots:
     void on_lwEditors_currentRowChanged( int row );
     void on_swEditors_currentChanged( int row );

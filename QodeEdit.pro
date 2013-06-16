@@ -18,6 +18,7 @@ initializeProject( lib, $${BUILD_TARGET}, $${BUILD_MODE}, $${BUILD_PATH}/$${TARG
 autoGenerateFile( "QodeEditConfig.h.in", "src/QodeEditConfig.h" )
 
 QT *= xml
+greaterThan( QT_MAJOR_VERSION, 4 ):QT *= widgets
 
 INCLUDEPATH *= src
 DEPENDPATH *= $$getFolders( . )
@@ -49,7 +50,7 @@ greaterThan( QT_MAJOR_VERSION, 4 ) {
     }
 }
 
-FORMS *= 
+FORMS *=
 
 HEADERS *=  \
     src/QodeEdit.h \

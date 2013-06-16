@@ -35,8 +35,8 @@ namespace Tools {
     class CaseInsensitiveEnumerator {
     public:
         CaseInsensitiveEnumerator( const QMetaEnum& enumerator = QMetaEnum() ) {
-            name = QString::fromAscii( enumerator.name() ).toLower();
-            
+            name = QString::fromUtf8( enumerator.name() ).toLower();
+
             for ( int i = 0; i < enumerator.keyCount(); i++ ) {
                 const int value( enumerator.value( i ) );
                 QString key( enumerator.key( i ) );
@@ -45,18 +45,18 @@ namespace Tools {
                 lower[ key.toLower() ] = value;
             }
         }
-        
+
         QString valueToKey( int value ) const {
             return normal.value( value );
         }
-        
+
         int keyToValue( const QString& key ) const {
             QString string = key.toLower();
-            
+
             if ( string.endsWith( name ) ) {
                 string.chop( name.size() );
             }
-            
+
             return lower.value( string );
         }
 
@@ -65,11 +65,11 @@ namespace Tools {
         QHash<int, QString> normal;
         QHash<QString, int> lower;
     };
-    
+
     const QMetaObject& mo() {
         return *QodeEdit::metaObject();
     }
-    
+
     static CaseInsensitiveEnumerator ruler( mo().enumerator( mo().indexOfEnumerator( "Ruler" ) ) );
     static CaseInsensitiveEnumerator margin( mo().enumerator( mo().indexOfEnumerator( "Margin" ) ) );
     static CaseInsensitiveEnumerator rule( mo().enumerator( mo().indexOfEnumerator( "Rule" ) ) );
@@ -144,10 +144,10 @@ bool QodeEdit::Tools::versionStringLessThan( const QString& left, const QString&
     if ( left == right ) {
         return false;
     }
-    
+
     const QStringList leftParts = left.split( "." );
     const QStringList rightParts = right.split( "." );
-    
+
     // major
     if ( leftParts.value( 0 ).toInt() != rightParts.value( 0 ).toInt() ) {
         return leftParts.value( 0 ).toInt() < rightParts.value( 0 ).toInt();
@@ -172,7 +172,7 @@ bool QodeEdit::Tools::versionStringLessThan( const QString& left, const QString&
     else if ( !leftParts.value( 4 ).isEmpty() && rightParts.value( 4 ).isEmpty() ) {
         return true;
     }
-    
+
     // extra
     return leftParts.value( 4 ) < rightParts.value( 4 ); // not the best but afaik ;)
 }
@@ -180,28 +180,28 @@ bool QodeEdit::Tools::versionStringLessThan( const QString& left, const QString&
 QTextCodec* QodeEdit::Tools::textCodec( const QByteArray& name, const QByteArray& data )
 {
     QTextCodec* codec = QTextCodec::codecForName( name );
-    
+
     if ( !codec ) {
         codec = QTextCodec::codecForUtfText( data );
     }
-    
+
     if ( !codec ) {
         codec = QTextCodec::codecForLocale();
     }
-    
+
     return codec;
 }
 
 const QSet<QChar>& QodeEdit::Tools::stringToSet( const QString& string )
 {
     QSet<QChar>& set = QodeEdit::Tools::sets[ string ];
-    
+
     if ( set.count() != string.count() ) {
         foreach ( const QChar& c, string ) {
             set << c;
         }
     }
-    
+
     return set;
 }
 
@@ -209,7 +209,7 @@ QStringList QodeEdit::Tools::listFilesInPath( const QString& path, const QString
 {
     QDir dir( path );
     QStringList files;
-    
+
     foreach ( const QFileInfo& file, dir.entryInfoList( filters, QDir::Files ) ) {
         files << QDir::cleanPath( file.absoluteFilePath() );
     }
@@ -219,26 +219,26 @@ QStringList QodeEdit::Tools::listFilesInPath( const QString& path, const QString
             files << QodeEdit::Tools::listFilesInPath( file.absoluteFilePath(), filters, true );
         }
     }
-    
+
     if ( sort ) {
         qSort( files.begin(), files.end(), QodeEdit::Tools::localeAwareStringLessThan );
     }
-    
+
     return files;
 }
 
 QStringList QodeEdit::Tools::listFilesInPaths( const QStringList& paths, const QStringList& filters, bool recursive, bool sort )
 {
     QStringList files;
-    
+
     foreach ( const QString& path, paths ) {
         files << QodeEdit::Tools::listFilesInPath( path, filters, recursive, false );
     }
-    
+
     if ( sort ) {
         qSort( files.begin(), files.end(), QodeEdit::Tools::localeAwareStringLessThan );
     }
-    
+
     return files;
 }
 
@@ -248,24 +248,24 @@ QHash<QString, Syntax::Document> QodeEdit::Tools::parseSyntaxesFiles( const QStr
     QTime time;
     time.start();
 #endif
-    
+
     const QStringList files = QodeEdit::Tools::listFilesInPaths( paths, QStringList( "*.xml" ), false );
     QString error;
-    
+
 #if !defined( QT_NO_DEBUG )
     qWarning( "%s: Found files in %f seconds", Q_FUNC_INFO , time.elapsed() /1000.0 );
 #endif
-    
+
     QHash<QString, Syntax::Document> documents = Syntax::Document::open( files, &error );
-    
+
 #if !defined( QT_NO_DEBUG )
     qWarning( "%s: Parsed files in %f seconds", Q_FUNC_INFO , time.elapsed() /1000.0 );
 #endif
-    
+
     /*if ( error.isEmpty() ) {
         Syntax::DocumentBuilder builder;
         builder.buildDocuments( documents );
-        
+
 #if !defined( QT_NO_DEBUG )
         qWarning( "%s: Build files in %f seconds", Q_FUNC_INFO , time.elapsed() /1000.0 );
 #endif
@@ -276,7 +276,7 @@ QHash<QString, Syntax::Document> QodeEdit::Tools::parseSyntaxesFiles( const QStr
         qWarning( "%s: Fails in %f seconds", Q_FUNC_INFO , time.elapsed() /1000.0 );
 #endif
     }*/
-    
+
     return documents;
 }
 
@@ -285,13 +285,13 @@ QHash<QString, QString> QodeEdit::Tools::bestMatchingMimeTypesIcons( const QHash
     const QString defaultMimeStringIconName = QString( defaultMimeType ).replace( "/", "-" );
     QHash<QString, QString> hash;
     QString iconName;
-    
+
     foreach ( const QString& key, mimeTypes.keys() ) {
         iconName.clear();
-        
+
         foreach ( const QString& mimeType, mimeTypes[ key ] ) {
             iconName = QString( mimeType ).replace( "/", "-" );
-            
+
             if ( QIcon::hasThemeIcon( iconName ) ) {
                 break;
             }
@@ -299,18 +299,18 @@ QHash<QString, QString> QodeEdit::Tools::bestMatchingMimeTypesIcons( const QHash
                 iconName.clear();
             }
         }
-        
+
         if ( iconName.isEmpty() ) {
             iconName = defaultMimeStringIconName;
         }
-        
+
         hash[ key ] = iconName;
-        
+
         if ( processEvents ) {
             QApplication::processEvents();
         }
     }
-    
+
     return hash;
 }
 
@@ -318,21 +318,21 @@ QHash<QString, QPair<QString, QString> > QodeEdit::Tools::getFilesContentWithTex
 {
     const QTextCodec* codec = QodeEdit::Tools::textCodec( textCodec );
     QHash<QString, QPair<QString, QString> > contents;
-    
+
     foreach ( const QString& filePath, filePaths ) {
         QFile file( filePath );
-        
+
         if ( file.open( QIODevice::ReadOnly ) ) {
             contents[ filePath ] = qMakePair( codec->toUnicode( file.readAll() ), QString() );
         }
         else {
             contents[ filePath ] = qMakePair( QString(), file.errorString() );
         }
-        
+
         if ( processEvents ) {
             QApplication::processEvents();
         }
     }
-    
+
     return contents;
 }

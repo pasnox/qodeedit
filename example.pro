@@ -15,7 +15,7 @@
 ###########################################################################################
 win32|macx {
     OXYGEN_THEME_PATH = $$PWD/../oxygen-icons-png.git
-    
+
     exists( $${OXYGEN_THEME_PATH} ) {
         QICON_THEMES_PATH = $${OXYGEN_THEME_PATH}
     }
@@ -24,6 +24,8 @@ win32|macx {
 include( config.pri )
 initializeProject( app, $${BUILD_TARGET}, $${BUILD_MODE}, $${BUILD_PATH}/$${TARGET_NAME}, $${BUILD_TARGET_PATH} )
 autoGenerateFile( "QodeEditExampleConfig.h.in", "example/QodeEditExampleConfig.h" )
+
+greaterThan( QT_MAJOR_VERSION, 4 ):QT *= widgets
 
 INCLUDEPATH *= $$getFolders( example ) $$getFolders( src )
 DEPENDPATH *= $${INCLUDEPATH}
@@ -36,5 +38,5 @@ FORMS *= \
 HEADERS *= \
     example/UIMain.h
 
-SOURCES *= main.cpp \
+SOURCES *= example/main.cpp \
     example/UIMain.cpp

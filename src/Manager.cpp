@@ -9,11 +9,16 @@
 
 #include <QStringList>
 #include <QDir>
-#include <QDesktopServices>
 #include <QMimeDatabase>
 #include <QHash>
 #include <QPointer>
 #include <QFutureWatcher>
+
+#if QT_VERSION < 0x050000
+#include <QDesktopServices>
+#else
+#include <QStandardPaths>
+#endif
 
 class QodeEdit::ManagerData : public QObject {
     Q_OBJECT
@@ -27,25 +32,25 @@ public:
     //
     QPointer<QFutureWatcher<QHash<QString, Syntax::Document> > > syntaxesFilesWatcher;
     QPointer<QFutureWatcher<QStringList> > schemasFilesWatcher;
-    
+
     ManagerData( QodeEdit::Manager* _manager )
         : QObject( _manager ),
             manager( _manager )
     {
     }
-    
+
     void initialize() {
         if ( syntaxesFilesWatcher || schemasFilesWatcher ) {
             return;
         }
-        
+
         // update syntaxes
         syntaxesFilesWatcher = new QFutureWatcher<QHash<QString, Syntax::Document> >( this );
         connect( syntaxesFilesWatcher, SIGNAL( finished() ), this, SLOT( syntaxesFilesParsed() ) );
         syntaxesFilesWatcher->setFuture( QodeEdit::Threading::parseSyntaxesFiles( manager->syntaxDefinitionFilePaths() ) );
-        
+
         schemas[ "default" ] = Theme::Schema();
-        
+
         // update schemas
         /*schemasFilesWatcher = new QFutureWatcher<QStringList>( this );
         connect( syntaxesFilesWatcher, SIGNAL( finished() ), this, SLOT( syntaxesFilesParsed() ) );
@@ -57,17 +62,17 @@ public slots:
         syntaxes = syntaxesFilesWatcher->future().result();
         syntaxesFilesWatcher->deleteLater();
         emit manager->syntaxesUpdated();
-        
+
         if ( !schemasFilesWatcher ) {
             emit manager->updated();
         }
     }
-    
+
     void schemasFilesParsed() {
         /*schemasFilesWatcher = new QFutureWatcher<QStringList>( this );
         schemasFilesWatcher->deleteLater();
         emit manager->schemasUpdated();
-        
+
         if ( !syntaxesFilesWatcher ) {
             emit manager->updated();
         }*/
@@ -99,7 +104,11 @@ QString QodeEdit::Manager::userSharedDataFilePath( const QString& extended ) con
 {
     return d->userSharedDataFilePath.isEmpty()
         ? QDir::cleanPath( QString( "%1/%2/%3" )
+#if QT_VERSION < 0x050000
             .arg( QDesktopServices::storageLocation( QDesktopServices::DataLocation ) )
+#else
+            .arg( QStandardPaths::standardLocations( QStandardPaths::DataLocation ).value( 0 ) )
+#endif
             .arg( QString::fromUtf8( PACKAGE_NAME ) )
             .arg( extended ) )
         : d->userSharedDataFilePath
@@ -176,11 +185,11 @@ QStringList QodeEdit::Manager::mimeTypesForFileName( const QString& fileName ) c
 {
     const QList<QMimeType> mimeTypes = d->mimeDatabase.mimeTypesForFileName( fileName );
     QStringList names;
-    
+
     for ( int i = 0; i < mimeTypes.count(); i++ ) {
         names << mimeTypes[ i ].name();
     }
-    
+
     return names;
 }
 
@@ -231,38 +240,38 @@ Syntax::Highlighter* QodeEdit::Manager::highlighter( const QString& syntaxName, 
 Syntax::Highlighter* QodeEdit::Manager::highlighterForFilePath( const QString& filePath, TextDocument* textDocument ) const
 {
     QMap<int, Syntax::Document*> syntaxes;
-    
+
     foreach ( const QString& name, d->syntaxes.keys() ) {
         Syntax::Document& syntax = d->syntaxes[ name ];
-        
+
         if ( QDir::match( syntax.extensions().toList(), filePath ) ) {
             syntaxes[ syntax.priority() ] = &syntax;
         }
     }
-    
+
     if ( syntaxes.isEmpty() ) {
         return QodeEdit::Manager::highlighter( QString::null, textDocument );
     }
-    
+
     return QodeEdit::Manager::highlighter( ( syntaxes.end() -1 ).value()->name(), textDocument );
 }
 
 Syntax::Highlighter* QodeEdit::Manager::highlighterForMimeType( const QString& mimeType, TextDocument* textDocument ) const
 {
     QMap<int, Syntax::Document*> syntaxes;
-    
+
     foreach ( const QString& name, d->syntaxes.keys() ) {
         Syntax::Document& syntax = d->syntaxes[ name ];
-        
+
         if ( syntax.mimeType().contains( mimeType ) ) {
             syntaxes[ syntax.priority() ] = &syntax;
         }
     }
-    
+
     if ( syntaxes.isEmpty() ) {
         return QodeEdit::Manager::highlighter( QString::null, textDocument );
     }
-    
+
     return QodeEdit::Manager::highlighter( ( syntaxes.end() -1 ).value()->name(), textDocument );
 }
 
