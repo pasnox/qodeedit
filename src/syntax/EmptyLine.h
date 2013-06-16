@@ -29,18 +29,18 @@ class EmptyLine
 {
 private:
     QExplicitlySharedDataPointer<Syntax::EmptyLineData> d;
-    
+
 public:
     typedef QList<Syntax::EmptyLine> List;
-    
+
     QE_DECL_SHARED_CLASS( EmptyLine, Syntax );
-    
+
     // Required
     QE_DECL_MEMBER( QString, regExpr );
     // Optional
     QE_DECL_MEMBER( bool, caseSensitive );
 };
 
-}; // Syntax
+} // Syntax
 
 #endif // EMPTYLINE_H

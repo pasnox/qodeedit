@@ -33,10 +33,10 @@ class General
 {
 private:
     QExplicitlySharedDataPointer<Syntax::GeneralData> d;
-    
+
 public:
     QE_DECL_SHARED_CLASS( General, Syntax );
-    
+
     QE_DECL_MEMBER( Syntax::Folding, folding );
     QE_DECL_MEMBER( Syntax::Comment::List, comments );
     QE_DECL_MEMBER( Syntax::Keywords, keywords );
@@ -44,6 +44,6 @@ public:
     QE_DECL_MEMBER( Syntax::EmptyLine::List, emptyLines );
 };
 
-}; // Syntax
+} // Syntax
 
 #endif // GENERAL_H

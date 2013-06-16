@@ -31,12 +31,12 @@ class ItemData
 {
 private:
     QExplicitlySharedDataPointer<Syntax::ItemDataData> d;
-    
+
 public:
     typedef QHash<QString, Syntax::ItemData> Hash;
-    
+
     QE_DECL_SHARED_CLASS( ItemData, Syntax );
-    
+
     // Required
     QE_DECL_MEMBER( QString, name ); ///< Name of the item data
     QE_DECL_MEMBER( QString, defStyleNum );
@@ -52,6 +52,6 @@ public:
     QE_DECL_MEMBER( bool, spellChecking );
 };
 
-}; // Syntax
+} // Syntax
 
 #endif // ITEMDATA_H

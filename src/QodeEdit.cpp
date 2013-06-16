@@ -19,7 +19,7 @@
 
 namespace QodeEdit {
     extern const QMetaObject staticMetaObject;
-};
+}
 
 #include "moc_QodeEdit.cpp"
 

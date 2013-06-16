@@ -29,15 +29,15 @@ class Configuration
 {
 private:
     QExplicitlySharedDataPointer<Syntax::ConfigurationData> d;
-    
+
 public:
     QE_DECL_SHARED_CLASS( Configuration, Syntax );
-    
+
     // Required
     // Optional
     QE_DECL_MEMBER( QString, encodingReplacementPolicy ); // enum: EncodeAlways, EncodeWhenPresent, EncodeNever,
 };
 
-}; // Syntax
+} // Syntax
 
 #endif // CONFIGURATION_H

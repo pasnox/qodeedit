@@ -30,13 +30,13 @@ class Context
 {
 private:
     QExplicitlySharedDataPointer<Syntax::ContextData> d;
-    
+
 public:
     typedef QHash<QString, Syntax::Context> Hash;
     typedef QList<Syntax::Context> List;
-    
+
     QE_DECL_SHARED_CLASS( Context, Syntax );
-    
+
     // Required
     QE_DECL_MEMBER( QString, attribute );
     QE_DECL_MEMBER( QString, lineEndContext );
@@ -49,10 +49,10 @@ public:
     QE_DECL_MEMBER( bool, noIndentationBasedFolding );
     // Others
     QE_DECL_MEMBER( Syntax::Rule::List, rules ); ///< Rules of the context
-    
+
     bool isNull() const;
 };
 
-}; // Syntax
+} // Syntax
 
 #endif // CONTEXT_H

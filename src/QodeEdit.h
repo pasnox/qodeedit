@@ -89,8 +89,8 @@ public:
         RegionMarkerStyle,
         ErrorStyle
     };
-    
+
     const QMetaObject* metaObject();
-}; // QodeEdit
+} // QodeEdit
 
 #endif // QODEEDIT_H

@@ -29,10 +29,10 @@ class Keywords
 {
 private:
     QExplicitlySharedDataPointer<Syntax::KeywordsData> d;
-    
+
 public:
     QE_DECL_SHARED_CLASS( Keywords, Syntax );
-    
+
     // Required
     // Optional
     QE_DECL_MEMBER( bool, caseSensitive );
@@ -41,6 +41,6 @@ public:
     QE_DECL_MEMBER( QString, wordWrapDeliminator );
 };
 
-}; // Syntax
+} // Syntax
 
 #endif // KEYWORDS_H

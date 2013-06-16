@@ -30,12 +30,12 @@ class Comment
 {
 private:
     QExplicitlySharedDataPointer<Syntax::CommentData> d;
-    
+
 public:
     typedef QList<Syntax::Comment> List;
-    
+
     QE_DECL_SHARED_CLASS( Comment, Syntax );
-    
+
     // Required
     QE_DECL_MEMBER( QString, name ); ///< Name of the item data
     QE_DECL_MEMBER( QString, start ); ///< Comment start string
@@ -45,6 +45,6 @@ public:
     QE_DECL_MEMBER( QString, position ); // enum: afterwhitespace
 };
 
-}; // Syntax
+} // Syntax
 
 #endif // COMMENT_H

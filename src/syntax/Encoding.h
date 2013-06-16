@@ -30,12 +30,12 @@ class Encoding
 {
 private:
     QExplicitlySharedDataPointer<Syntax::EncodingData> d;
-    
+
 public:
     typedef QList<Syntax::Encoding> List;
-    
+
     QE_DECL_SHARED_CLASS( Encoding, Syntax );
-    
+
     // Required
     QE_DECL_MEMBER( QString, string );
     // Optional
@@ -43,6 +43,6 @@ public:
     QE_DECL_MEMBER( bool, ignored );
 };
 
-}; // Syntax
+} // Syntax
 
 #endif // ENCODING_H

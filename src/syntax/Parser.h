@@ -33,11 +33,11 @@ public:
 class Parser : public QXmlDefaultHandler
 {
     friend class Syntax::Reader;
-    
+
 public:
     Parser();
     virtual ~Parser();
-    
+
     virtual bool attributeDecl( const QString& eName, const QString& aName, const QString& type, const QString& valueDefault, const QString& value );
     virtual bool comment( const QString& ch );
     virtual bool endCDATA();
@@ -66,7 +66,7 @@ public:
     virtual bool startPrefixMapping( const QString& prefix, const QString& uri );
     virtual bool unparsedEntityDecl( const QString& name, const QString& publicId, const QString& systemId, const QString& notationName );
     virtual bool warning( const QXmlParseException& exception );
-    
+
 #if !defined( QT_NO_DEBUG )
     void debug() const;
 #endif
@@ -75,6 +75,6 @@ private:
     ParserPrivate* d;
 };
 
-}; // Syntax
+} // Syntax
 
 #endif // PARSER_H

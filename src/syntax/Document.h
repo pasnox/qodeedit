@@ -30,13 +30,13 @@ class Document
 {
 private:
     QExplicitlySharedDataPointer<Syntax::DocumentData> d;
-    
+
 public:
     typedef QList<Syntax::Document> List;
-    
+
     QE_DECL_SHARED_CLASS( Document, Syntax );
     virtual bool operator<( const Syntax::Document& other ) const;
-    
+
     // Required
     QE_DECL_MEMBER( QString, name ); ///< Name of the syntax document (ie: Asm6502)
     QE_DECL_MEMBER( QString, section ); ///< Submenu section (ie: Assembly)
@@ -56,18 +56,18 @@ public:
     //QE_DECL_MEMBER( QString, identifier ); // ?
     QE_DECL_MEMBER( QSet<QChar>, defaultDeliminator );
     QE_DECL_MEMBER( QString, localizedName ); ///< Translated display name
-    
+
     QE_DECL_MEMBER( bool, finalyzed ); ///< Tell if the document has been totally parsed and built
-    
+
     QE_DECL_MEMBER( Syntax::Highlighting, highlighting );
     QE_DECL_MEMBER( Syntax::General, general );
     QE_DECL_MEMBER( Syntax::SpellChecking, spellChecking );
-    
+
     bool open( const QString& filePath, QString* error = 0 );
-    
+
     static QHash<QString, Syntax::Document> open( const QStringList& filePaths, QString* error = 0 );
 };
 
-}; // Syntax
+} // Syntax
 
 #endif // DOCUMENT_H

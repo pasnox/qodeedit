@@ -31,10 +31,10 @@ class Highlighting
 {
 private:
     QExplicitlySharedDataPointer<Syntax::HighlightingData> d;
-    
+
 public:
     QE_DECL_SHARED_CLASS( Highlighting, Syntax );
-    
+
     // Required
     // Optional
     QE_DECL_MEMBER( Syntax::HashList, lists );
@@ -42,12 +42,12 @@ public:
     QE_DECL_MEMBER( Syntax::ItemData::Hash, itemDatas );
     // Others
     QE_DECL_MEMBER( QString, defaultContextName );
-    
+
     Syntax::List list( const QString& name ) const;
     Syntax::Context context( const QString& name ) const;
     Syntax::Context defaultContext() const;
 };
 
-}; // Syntax
+} // Syntax
 
 #endif // HIGHLIGHTING_H

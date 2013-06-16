@@ -77,18 +77,18 @@ class Rule
 {
 protected:
     QExplicitlySharedDataPointer<Syntax::RuleData> d;
-    
+
 public:
     typedef QList<Syntax::Rule> List;
-    
+
     QE_DECL_SHARED_CLASS( Rule, Syntax );
-    
+
     QE_DECL_MEMBER( QodeEdit::Rule, type );
-    
+
     bool isNull() const;
     QString context() const;
     Syntax::Rule::List rules() const;
-    
+
     Syntax::CommonRule toCommon() const;
     Syntax::KeywordRule toKeyword() const;
     Syntax::FloatRule toFloat() const;
@@ -109,7 +109,7 @@ public:
     Syntax::DetectSpacesRule toDetectSpaces() const;
     Syntax::DetectIdentifierRule toDetectIdentifier() const;
     Syntax::IncludeRulesRule toIncludeRules() const;
-    
+
     static Syntax::Rule create( QodeEdit::Rule type, const QHash<QString, QVariant>& data );
 };
 
@@ -117,7 +117,7 @@ class CommonRule : public Syntax::Rule
 {
 public:
     QE_DECL_SHARED_CLASS( CommonRule, Syntax );
-    
+
     QE_DECL_MEMBER( QString, attribute );
     QE_DECL_MEMBER( QString, context );
     QE_DECL_MEMBER( QString, beginRegion );
@@ -131,7 +131,7 @@ class CommonRulesRule : public Syntax::CommonRule
 {
 public:
     QE_DECL_SHARED_CLASS( CommonRulesRule, Syntax );
-    
+
     QE_DECL_MEMBER( Syntax::Rule::List, rules );
 };
 
@@ -139,7 +139,7 @@ class KeywordRule : public Syntax::CommonRule
 {
 public:
     QE_DECL_SHARED_CLASS( KeywordRule, Syntax );
-    
+
     QE_DECL_MEMBER( bool, insensitive );
     QE_DECL_MEMBER( QString, string );
     QE_DECL_MEMBER( QString, weakDelimiter );
@@ -179,7 +179,7 @@ class DetectCharRule : public Syntax::CommonRule
 {
 public:
     QE_DECL_SHARED_CLASS( DetectCharRule, Syntax );
-    
+
     QE_DECL_MEMBER( QChar, char_ );
     QE_DECL_MEMBER( bool, dynamic );
 };
@@ -188,7 +188,7 @@ class Detect2CharsRule : public Syntax::DetectCharRule
 {
 public:
     QE_DECL_SHARED_CLASS( Detect2CharsRule, Syntax );
-    
+
     QE_DECL_MEMBER( QChar, char1 );
 };
 
@@ -196,7 +196,7 @@ class AnyCharRule : public Syntax::CommonRule
 {
 public:
     QE_DECL_SHARED_CLASS( AnyCharRule, Syntax );
-    
+
     QE_DECL_MEMBER( QString, string );
 };
 
@@ -204,7 +204,7 @@ class StringDetectRule : public Syntax::CommonRule
 {
 public:
     QE_DECL_SHARED_CLASS( StringDetectRule, Syntax );
-    
+
     QE_DECL_MEMBER( QString, string );
     QE_DECL_MEMBER( bool, insensitive );
     QE_DECL_MEMBER( bool, dynamic );
@@ -214,7 +214,7 @@ class WordDetectRule : public Syntax::StringDetectRule
 {
 public:
     QE_DECL_SHARED_CLASS( WordDetectRule, Syntax );
-    
+
     QE_DECL_MEMBER( QString, string );
     QE_DECL_MEMBER( bool, insensitive );
     QE_DECL_MEMBER( bool, dynamic );
@@ -224,7 +224,7 @@ class RegExprRule : public Syntax::StringDetectRule
 {
 public:
     QE_DECL_SHARED_CLASS( RegExprRule, Syntax );
-    
+
     QE_DECL_MEMBER( bool, minimal );
 };
 
@@ -244,7 +244,7 @@ class RangeDetectRule : public Syntax::CommonRule
 {
 public:
     QE_DECL_SHARED_CLASS( RangeDetectRule, Syntax );
-    
+
     QE_DECL_MEMBER( QChar, char_ );
     QE_DECL_MEMBER( QChar, char1 );
 };
@@ -271,12 +271,12 @@ class IncludeRulesRule : public Syntax::Rule
 {
 public:
     QE_DECL_SHARED_CLASS( IncludeRulesRule, Syntax );
-    
+
     QE_DECL_MEMBER( QString, context );
     QE_DECL_MEMBER( bool, includeAttrib );
     QE_DECL_MEMBER( Syntax::Rule::List, rules );
 };
 
-}; // Syntax
+} // Syntax
 
 #endif // RULE_H

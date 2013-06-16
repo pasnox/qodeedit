@@ -19,13 +19,13 @@ public:
     ContextSwitcher& operator=( const ContextSwitcher& other );
     bool operator==( const ContextSwitcher& other ) const;
     bool operator!=( const ContextSwitcher& other ) const;
-    
+
     Syntax::ContextStack nextContextStack( const Syntax::ContextStack& contextStack, const QStringList& matches = QStringList() ) const;
 
 private:
     Syntax::ContextSwitcherData* d;
 };
 
-}; // Syntax
+} // Syntax
 
 #endif // CONTEXTSWITCHER_H

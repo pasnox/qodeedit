@@ -25,6 +25,6 @@ namespace Syntax {
 typedef QSet<QString> List;
 typedef QHash<QString, Syntax::List> HashList;
 
-}; // Syntax
+} // Syntax
 
 #endif // LIST_H

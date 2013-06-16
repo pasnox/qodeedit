@@ -6,7 +6,7 @@
 
 namespace Syntax {
     class Document;
-};
+}
 
 namespace QodeEdit {
 
@@ -16,8 +16,8 @@ namespace Threading
     QFuture<QHash<QString, Syntax::Document> > parseSyntaxesFiles( const QStringList& paths );
     QFuture<QHash<QString, QString> > bestMatchingMimeTypesIcons( const QHash<QString, QStringList>& mimeTypes, const QString& defaultMimeType );
     QFuture<QHash<QString, QPair<QString, QString> > > getFilesContentWithTextCodec( const QStringList& filePaths, const QByteArray& textCodec );
-}; // Threading
+} // Threading
 
-}; // QodeEdit
+} // QodeEdit
 
 #endif // THREADING_H

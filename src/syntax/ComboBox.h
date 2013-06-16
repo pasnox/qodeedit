@@ -23,17 +23,17 @@ namespace Syntax {
 class ComboBox : public QComboBox
 {
     Q_OBJECT
-    
+
 public:
     ComboBox( QWidget* parent = 0 );
     virtual ~ComboBox();
-    
+
     QString currentSyntax() const;
 
 public slots:
     void setCurrentSyntax( const QString& name );
 };
 
-}; // Syntax
+} // Syntax
 
 #endif // COMBOBOX_H

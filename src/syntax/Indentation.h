@@ -29,15 +29,15 @@ class Indentation
 {
 private:
     QExplicitlySharedDataPointer<Syntax::IndentationData> d;
-    
+
 public:
     QE_DECL_SHARED_CLASS( Indentation, Syntax );
-    
+
     // Required
     // Optional
     QE_DECL_MEMBER( QString, mode );
 };
 
-}; // Syntax
+} // Syntax
 
 #endif // INDENTATION_H

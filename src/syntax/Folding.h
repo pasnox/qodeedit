@@ -29,15 +29,15 @@ class Folding
 {
 private:
     QExplicitlySharedDataPointer<Syntax::FoldingData> d;
-    
+
 public:
     QE_DECL_SHARED_CLASS( Folding, Syntax );
-    
+
     // Required
     // optional
     QE_DECL_MEMBER( bool, indentationSensitive );
 };
 
-}; // Syntax
+} // Syntax
 
 #endif // FOLDING_H

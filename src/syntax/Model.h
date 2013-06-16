@@ -20,7 +20,7 @@
 
 namespace QodeEdit {
     class Manager;
-};
+}
 
 namespace Syntax {
 
@@ -30,16 +30,16 @@ class Model : public QAbstractListModel
 {
     Q_OBJECT
     friend class Syntax::ModelPrivate;
-    
+
 public:
     enum ExtendedRole {
         InternalName = Qt::UserRole,
         DisplayName
     };
-    
+
     Model( QodeEdit::Manager* manager, QObject* parent = 0 );
     virtual ~Model();
-    
+
     virtual int rowCount( const QModelIndex& parent = QModelIndex() ) const;
     virtual QVariant data( const QModelIndex& index, int role = Qt::DisplayRole ) const;
 
@@ -47,6 +47,6 @@ private:
     Syntax::ModelPrivate* d;
 };
 
-}; //Syntax
+} //Syntax
 
 #endif // MODEL_H

@@ -75,9 +75,9 @@ namespace Tools {
     static CaseInsensitiveEnumerator rule( mo().enumerator( mo().indexOfEnumerator( "Rule" ) ) );
     static CaseInsensitiveEnumerator defaultStyle( mo().enumerator( mo().indexOfEnumerator( "DefaultStyle" ) ) );
     static QHash<QString, QSet<QChar> > sets;
-}; // Tools
+} // Tools
 
-}; // QodeEdit
+} // QodeEdit
 
 QString QodeEdit::Tools::rulerToString( QodeEdit::Ruler ruler )
 {

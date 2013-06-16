@@ -30,13 +30,13 @@ class DocumentBuilder
 {
 private:
     QExplicitlySharedDataPointer<Syntax::DocumentBuilderData> d;
-    
+
 public:
     QE_DECL_SHARED_CLASS( DocumentBuilder, Syntax );
-    
+
     void buildDocuments( const QHash<QString, Syntax::Document>& documents );
 };
 
-}; //Syntax
+} //Syntax
 
 #endif // DOCUMENTBUILDER_H

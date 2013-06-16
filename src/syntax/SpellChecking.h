@@ -30,16 +30,16 @@ class SpellChecking
 {
 private:
     QExplicitlySharedDataPointer<Syntax::SpellCheckingData> d;
-    
+
 public:
     QE_DECL_SHARED_CLASS( SpellChecking, Syntax );
-    
+
     // Required
     // Optional
     QE_DECL_MEMBER( Syntax::Configuration, configuration );
     QE_DECL_MEMBER( Syntax::Encoding::List, encodings );
 };
 
-}; // Syntax
+} // Syntax
 
 #endif // SPELLCHECKING_H
