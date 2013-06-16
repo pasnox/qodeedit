@@ -24,19 +24,19 @@ class Syntax::RuleData : public QSharedData
 {
 public:
     QodeEdit::Rule type; // the type of the rule, default InvalidRule
-    
+
     RuleData()
         : QSharedData(),
             type( QodeEdit::InvalidRule )
     {
     }
-    
+
     RuleData( const Syntax::RuleData& other )
         : QSharedData( other ),
             QE_OTHER_INIT( type )
     {
     }
-    
+
     virtual ~RuleData() {
     }
 };
@@ -52,7 +52,7 @@ public:
     bool lookAhead; // lookAhead, if true, the highlighting system will not process the matches length. Default: false.
     bool firstNonSpace; // firstNonSpace, if true, the rule only matches, if the string is the first non-whitespace in the line. Default: false.
     int column; // column defines the column. The rule only matches, if the current column matches the given one. Default: unset.
-    
+
     CommonRuleData()
         : Syntax::RuleData(),
             context( "#stay" ),
@@ -61,7 +61,7 @@ public:
             column( -1 )
     {
     }
-    
+
     CommonRuleData( const Syntax::CommonRuleData& other )
         : Syntax::RuleData( other ),
             QE_OTHER_INIT( attribute ),
@@ -71,10 +71,10 @@ public:
             QE_OTHER_INIT( lookAhead ),
             QE_OTHER_INIT( firstNonSpace ),
             QE_OTHER_INIT( column )
-            
+
     {
     }
-    
+
     virtual ~CommonRuleData() {
     }
 };
@@ -83,18 +83,18 @@ class Syntax::CommonRulesRuleData : public Syntax::CommonRuleData
 {
 public:
     Syntax::Rule::List rules;
-    
+
     CommonRulesRuleData()
         : Syntax::CommonRuleData()
     {
     }
-    
+
     CommonRulesRuleData( const Syntax::CommonRulesRuleData& other )
         : Syntax::CommonRuleData( other ),
             QE_OTHER_INIT( rules )
     {
     }
-    
+
     virtual ~CommonRulesRuleData() {
     }
 };
@@ -107,14 +107,14 @@ public:
     // Optional
     bool insensitive;
     bool dynamic;
-    
+
     CommonStringRuleData()
         : Syntax::CommonRuleData(),
             insensitive( false ),
             dynamic( false )
     {
     }
-    
+
     CommonStringRuleData( const Syntax::CommonStringRuleData& other )
         : Syntax::CommonRuleData( other ),
             QE_OTHER_INIT( string ),
@@ -122,7 +122,7 @@ public:
             QE_OTHER_INIT( dynamic )
     {
     }
-    
+
     virtual ~CommonStringRuleData() {
     }
 };
@@ -134,13 +134,13 @@ public:
     bool insensitive;
     QString string;
     QString weakDelimiter;
-    
+
     KeywordRuleData()
         : Syntax::CommonRuleData(),
             insensitive( false )
     {
     }
-    
+
     KeywordRuleData( const Syntax::KeywordRuleData& other )
         : Syntax::CommonRuleData( other ),
             QE_OTHER_INIT( insensitive ),
@@ -148,7 +148,7 @@ public:
             QE_OTHER_INIT( weakDelimiter )
     {
     }
-    
+
     virtual ~KeywordRuleData() {
     }
 };
@@ -160,20 +160,20 @@ public:
     QChar char_;
     // Optional
     bool dynamic;
-    
+
     DetectCharRuleData()
         : Syntax::CommonRuleData(),
             dynamic( false )
     {
     }
-    
+
     DetectCharRuleData( const Syntax::DetectCharRuleData& other )
         : Syntax::CommonRuleData( other ),
             QE_OTHER_INIT( char_ ),
             QE_OTHER_INIT( dynamic )
     {
     }
-    
+
     virtual ~DetectCharRuleData() {
     }
 };
@@ -183,18 +183,18 @@ class Syntax::Detect2CharsRuleData : public Syntax::DetectCharRuleData
 public:
     // Required
     QChar char1;
-    
+
     Detect2CharsRuleData()
         : Syntax::DetectCharRuleData()
     {
     }
-    
+
     Detect2CharsRuleData( const Syntax::Detect2CharsRuleData& other )
         : Syntax::DetectCharRuleData( other ),
             QE_OTHER_INIT( char1 )
     {
     }
-    
+
     virtual ~Detect2CharsRuleData() {
     }
 };
@@ -204,18 +204,18 @@ class Syntax::AnyCharRuleData : public Syntax::CommonRuleData
 public:
     // Required
     QString string;
-    
+
     AnyCharRuleData()
         : Syntax::CommonRuleData()
     {
     }
-    
+
     AnyCharRuleData( const Syntax::AnyCharRuleData& other )
         : Syntax::CommonRuleData( other ),
             QE_OTHER_INIT( string )
     {
     }
-    
+
     virtual ~AnyCharRuleData() {
     }
 };
@@ -225,19 +225,19 @@ class Syntax::RegExprRuleData : public Syntax::CommonStringRuleData
 public:
     // Optional
     bool minimal;
-    
+
     RegExprRuleData()
         : Syntax::CommonStringRuleData(),
             minimal( false )
     {
     }
-    
+
     RegExprRuleData( const Syntax::RegExprRuleData& other )
         : Syntax::CommonStringRuleData( other ),
             QE_OTHER_INIT( minimal )
     {
     }
-    
+
     virtual ~RegExprRuleData() {
     }
 };
@@ -248,19 +248,19 @@ public:
     // Required
     QChar char_;
     QChar char1;
-    
+
     RangeDetectRuleData()
         : Syntax::CommonRuleData()
     {
     }
-    
+
     RangeDetectRuleData( const Syntax::RangeDetectRuleData& other )
         : Syntax::CommonRuleData( other ),
             QE_OTHER_INIT( char_ ),
             QE_OTHER_INIT( char1 )
     {
     }
-    
+
     virtual ~RangeDetectRuleData() {
     }
 };
@@ -272,15 +272,15 @@ public:
     QString context;
     // Optional
     bool includeAttrib;
-    
+
     Syntax::Rule::List rules;
-    
+
     IncludeRulesRuleData()
         : Syntax::RuleData(),
             includeAttrib( false )
     {
     }
-    
+
     IncludeRulesRuleData( const Syntax::IncludeRulesRuleData& other )
         : Syntax::RuleData( other ),
             QE_OTHER_INIT( context ),
@@ -288,14 +288,14 @@ public:
             QE_OTHER_INIT( rules )
     {
     }
-    
+
     virtual ~IncludeRulesRuleData() {
     }
 };
 
 // Rule
 
-QE_IMPL_SHARED_CLASS_WITH_DEFAULT_DESTRUCTOR( Rule, Syntax );
+QE_IMPL_SHARED_CLASS_WITH_DEFAULT_DESTRUCTOR( Rule, Syntax )
 QE_IMPL_MEMBER( QodeEdit::Rule, type, Rule, Syntax )
 
 bool Syntax::Rule::isNull() const
@@ -495,7 +495,7 @@ Syntax::IncludeRulesRule Syntax::Rule::toIncludeRules() const
 Syntax::Rule Syntax::Rule::create( QodeEdit::Rule type, const QHash<QString, QVariant>& data )
 {
     static QHash<QodeEdit::Rule, QSet<QString> > requiredAttributes;
-    
+
     if ( requiredAttributes.isEmpty() ) {
         switch ( type ) {
             case QodeEdit::KeywordRule:
@@ -539,11 +539,11 @@ Syntax::Rule Syntax::Rule::create( QodeEdit::Rule type, const QHash<QString, QVa
                 break;
         }
     }
-    
+
     const QSet<QString> requiredKeys = requiredAttributes.value( type );
-    
+
     if ( !requiredAttributes.value( type ).isEmpty() ) {
-        
+
         foreach ( const QString& requiredKey, requiredKeys ) {
             if ( data.value( requiredKey ).isNull() ) {
                 qWarning( "%s: Missing required attribute '%s' for type %i", Q_FUNC_INFO, qPrintable( requiredKey ), type );
@@ -551,19 +551,19 @@ Syntax::Rule Syntax::Rule::create( QodeEdit::Rule type, const QHash<QString, QVa
             }
         }
     }
-    
+
     if ( type == QodeEdit::IncludeRulesRule ) {
         Syntax::IncludeRulesRuleData* d = new Syntax::IncludeRulesRuleData;
-        
+
         d->type = type;
         d->context = data.value( "context", d->context ).toString().toLower();
         d->includeAttrib = data.value( "includeattrib", d->includeAttrib ).toBool();
-        
+
         return Syntax::IncludeRulesRule( d );
     }
-    
+
     Syntax::CommonRuleData* d = 0;
-    
+
     switch ( type ) {
         case QodeEdit::InvalidRule:
         case QodeEdit::IncludeRulesRule:
@@ -681,7 +681,7 @@ Syntax::Rule Syntax::Rule::create( QodeEdit::Rule type, const QHash<QString, QVa
             break;
         }
     }
-    
+
     // common attributes
     if ( d ) {
         d->type = type;
@@ -693,114 +693,114 @@ Syntax::Rule Syntax::Rule::create( QodeEdit::Rule type, const QHash<QString, QVa
         d->firstNonSpace = data.value( "firstnonspace", d->firstNonSpace ).toBool();
         d->column = data.value( "column", d->column ).toInt();
     }
-    
+
     return Syntax::Rule( d );
 }
 
 // CommonRule
 
-QE_IMPL_HERITED_SHARED_CLASS_WITH_DEFAULT_DESTRUCTOR( CommonRule, Rule, Syntax );
-QE_IMPL_MEMBER( QString, attribute, CommonRule, Syntax );
-QE_IMPL_MEMBER( QString, context, CommonRule, Syntax );
-QE_IMPL_MEMBER( QString, beginRegion, CommonRule, Syntax );
-QE_IMPL_MEMBER( QString, endRegion, CommonRule, Syntax );
-QE_IMPL_MEMBER( bool, lookAhead, CommonRule, Syntax );
-QE_IMPL_MEMBER( bool, firstNonSpace, CommonRule, Syntax );
-QE_IMPL_MEMBER( int, column, CommonRule, Syntax );
+QE_IMPL_HERITED_SHARED_CLASS_WITH_DEFAULT_DESTRUCTOR( CommonRule, Rule, Syntax )
+QE_IMPL_MEMBER( QString, attribute, CommonRule, Syntax )
+QE_IMPL_MEMBER( QString, context, CommonRule, Syntax )
+QE_IMPL_MEMBER( QString, beginRegion, CommonRule, Syntax )
+QE_IMPL_MEMBER( QString, endRegion, CommonRule, Syntax )
+QE_IMPL_MEMBER( bool, lookAhead, CommonRule, Syntax )
+QE_IMPL_MEMBER( bool, firstNonSpace, CommonRule, Syntax )
+QE_IMPL_MEMBER( int, column, CommonRule, Syntax )
 
 // CommonRulesRule
 
-QE_IMPL_HERITED_SHARED_CLASS_WITH_DEFAULT_DESTRUCTOR( CommonRulesRule, CommonRule, Syntax );
+QE_IMPL_HERITED_SHARED_CLASS_WITH_DEFAULT_DESTRUCTOR( CommonRulesRule, CommonRule, Syntax )
 QE_IMPL_MEMBER( Syntax::Rule::List, rules, CommonRulesRule, Syntax )
 
 // KeywordRule
 
-QE_IMPL_HERITED_SHARED_CLASS_WITH_DEFAULT_DESTRUCTOR( KeywordRule, CommonRule, Syntax );
-QE_IMPL_MEMBER( bool, insensitive, KeywordRule, Syntax );
-QE_IMPL_MEMBER( QString, string, KeywordRule, Syntax );
-QE_IMPL_MEMBER( QString, weakDelimiter, KeywordRule, Syntax );
+QE_IMPL_HERITED_SHARED_CLASS_WITH_DEFAULT_DESTRUCTOR( KeywordRule, CommonRule, Syntax )
+QE_IMPL_MEMBER( bool, insensitive, KeywordRule, Syntax )
+QE_IMPL_MEMBER( QString, string, KeywordRule, Syntax )
+QE_IMPL_MEMBER( QString, weakDelimiter, KeywordRule, Syntax )
 
 // FloatRule
 
-QE_IMPL_HERITED_SHARED_CLASS_WITH_DEFAULT_DESTRUCTOR( FloatRule, CommonRulesRule, Syntax );
+QE_IMPL_HERITED_SHARED_CLASS_WITH_DEFAULT_DESTRUCTOR( FloatRule, CommonRulesRule, Syntax )
 
 // HlCOctRule
 
-QE_IMPL_HERITED_SHARED_CLASS_WITH_DEFAULT_DESTRUCTOR( HlCOctRule, CommonRule, Syntax );
+QE_IMPL_HERITED_SHARED_CLASS_WITH_DEFAULT_DESTRUCTOR( HlCOctRule, CommonRule, Syntax )
 
 // HlCHexRule
 
-QE_IMPL_HERITED_SHARED_CLASS_WITH_DEFAULT_DESTRUCTOR( HlCHexRule, CommonRule, Syntax );
+QE_IMPL_HERITED_SHARED_CLASS_WITH_DEFAULT_DESTRUCTOR( HlCHexRule, CommonRule, Syntax )
 
 // HlCFloatRule
 
-QE_IMPL_HERITED_SHARED_CLASS_WITH_DEFAULT_DESTRUCTOR( HlCFloatRule, CommonRule, Syntax );
+QE_IMPL_HERITED_SHARED_CLASS_WITH_DEFAULT_DESTRUCTOR( HlCFloatRule, CommonRule, Syntax )
 
 // IntRule
 
-QE_IMPL_HERITED_SHARED_CLASS_WITH_DEFAULT_DESTRUCTOR( IntRule, CommonRulesRule, Syntax );
+QE_IMPL_HERITED_SHARED_CLASS_WITH_DEFAULT_DESTRUCTOR( IntRule, CommonRulesRule, Syntax )
 
 // DetectCharRule
 
-QE_IMPL_HERITED_SHARED_CLASS_WITH_DEFAULT_DESTRUCTOR( DetectCharRule, CommonRule, Syntax );
-QE_IMPL_MEMBER( QChar, char_, DetectCharRule, Syntax );
-QE_IMPL_MEMBER( bool, dynamic, DetectCharRule, Syntax );
+QE_IMPL_HERITED_SHARED_CLASS_WITH_DEFAULT_DESTRUCTOR( DetectCharRule, CommonRule, Syntax )
+QE_IMPL_MEMBER( QChar, char_, DetectCharRule, Syntax )
+QE_IMPL_MEMBER( bool, dynamic, DetectCharRule, Syntax )
 
 // Detect2CharsRule
 
-QE_IMPL_HERITED_SHARED_CLASS_WITH_DEFAULT_DESTRUCTOR( Detect2CharsRule, DetectCharRule, Syntax );
-QE_IMPL_MEMBER( QChar, char1, Detect2CharsRule, Syntax );
+QE_IMPL_HERITED_SHARED_CLASS_WITH_DEFAULT_DESTRUCTOR( Detect2CharsRule, DetectCharRule, Syntax )
+QE_IMPL_MEMBER( QChar, char1, Detect2CharsRule, Syntax )
 
 // AnyCharRule
 
-QE_IMPL_HERITED_SHARED_CLASS_WITH_DEFAULT_DESTRUCTOR( AnyCharRule, CommonRule, Syntax );
-QE_IMPL_MEMBER( QString, string, AnyCharRule, Syntax );
+QE_IMPL_HERITED_SHARED_CLASS_WITH_DEFAULT_DESTRUCTOR( AnyCharRule, CommonRule, Syntax )
+QE_IMPL_MEMBER( QString, string, AnyCharRule, Syntax )
 
 // StringDetectRule
 
-QE_IMPL_HERITED_SHARED_CLASS_WITH_DEFAULT_DESTRUCTOR( StringDetectRule, CommonRule, Syntax );
-QE_IMPL_MEMBER( QString, string, StringDetectRule, Syntax );
-QE_IMPL_MEMBER( bool, insensitive, StringDetectRule, Syntax );
-QE_IMPL_MEMBER( bool, dynamic, StringDetectRule, Syntax );
+QE_IMPL_HERITED_SHARED_CLASS_WITH_DEFAULT_DESTRUCTOR( StringDetectRule, CommonRule, Syntax )
+QE_IMPL_MEMBER( QString, string, StringDetectRule, Syntax )
+QE_IMPL_MEMBER( bool, insensitive, StringDetectRule, Syntax )
+QE_IMPL_MEMBER( bool, dynamic, StringDetectRule, Syntax )
 
 // WordDetectRule
 
-QE_IMPL_HERITED_SHARED_CLASS_WITH_DEFAULT_DESTRUCTOR( WordDetectRule, StringDetectRule, Syntax );
+QE_IMPL_HERITED_SHARED_CLASS_WITH_DEFAULT_DESTRUCTOR( WordDetectRule, StringDetectRule, Syntax )
 
 // RegExprRule
 
-QE_IMPL_HERITED_SHARED_CLASS_WITH_DEFAULT_DESTRUCTOR( RegExprRule, StringDetectRule, Syntax );
-QE_IMPL_MEMBER( bool, minimal, RegExprRule, Syntax );
+QE_IMPL_HERITED_SHARED_CLASS_WITH_DEFAULT_DESTRUCTOR( RegExprRule, StringDetectRule, Syntax )
+QE_IMPL_MEMBER( bool, minimal, RegExprRule, Syntax )
 
 // LineContinueRule
 
-QE_IMPL_HERITED_SHARED_CLASS_WITH_DEFAULT_DESTRUCTOR( LineContinueRule, CommonRule, Syntax );
+QE_IMPL_HERITED_SHARED_CLASS_WITH_DEFAULT_DESTRUCTOR( LineContinueRule, CommonRule, Syntax )
 
 // HlCStringCharRule
 
-QE_IMPL_HERITED_SHARED_CLASS_WITH_DEFAULT_DESTRUCTOR( HlCStringCharRule, CommonRule, Syntax );
+QE_IMPL_HERITED_SHARED_CLASS_WITH_DEFAULT_DESTRUCTOR( HlCStringCharRule, CommonRule, Syntax )
 
 // RangeDetectRule
 
-QE_IMPL_HERITED_SHARED_CLASS_WITH_DEFAULT_DESTRUCTOR( RangeDetectRule, CommonRule, Syntax );
-QE_IMPL_MEMBER( QChar, char_, RangeDetectRule, Syntax );
-QE_IMPL_MEMBER( QChar, char1, RangeDetectRule, Syntax );
+QE_IMPL_HERITED_SHARED_CLASS_WITH_DEFAULT_DESTRUCTOR( RangeDetectRule, CommonRule, Syntax )
+QE_IMPL_MEMBER( QChar, char_, RangeDetectRule, Syntax )
+QE_IMPL_MEMBER( QChar, char1, RangeDetectRule, Syntax )
 
 // HlCCharRule
 
-QE_IMPL_HERITED_SHARED_CLASS_WITH_DEFAULT_DESTRUCTOR( HlCCharRule, CommonRule, Syntax );
+QE_IMPL_HERITED_SHARED_CLASS_WITH_DEFAULT_DESTRUCTOR( HlCCharRule, CommonRule, Syntax )
 
 // DetectSpacesRule
 
-QE_IMPL_HERITED_SHARED_CLASS_WITH_DEFAULT_DESTRUCTOR( DetectSpacesRule, CommonRule, Syntax );
+QE_IMPL_HERITED_SHARED_CLASS_WITH_DEFAULT_DESTRUCTOR( DetectSpacesRule, CommonRule, Syntax )
 
 // DetectIdentifierRule
 
-QE_IMPL_HERITED_SHARED_CLASS_WITH_DEFAULT_DESTRUCTOR( DetectIdentifierRule, CommonRule, Syntax );
+QE_IMPL_HERITED_SHARED_CLASS_WITH_DEFAULT_DESTRUCTOR( DetectIdentifierRule, CommonRule, Syntax )
 
 // IncludeRulesRule
 
-QE_IMPL_HERITED_SHARED_CLASS_WITH_DEFAULT_DESTRUCTOR( IncludeRulesRule, Rule, Syntax );
-QE_IMPL_MEMBER( QString, context, IncludeRulesRule, Syntax );
-QE_IMPL_MEMBER( bool, includeAttrib, IncludeRulesRule, Syntax );
-QE_IMPL_MEMBER( Syntax::Rule::List, rules, IncludeRulesRule, Syntax );;
+QE_IMPL_HERITED_SHARED_CLASS_WITH_DEFAULT_DESTRUCTOR( IncludeRulesRule, Rule, Syntax )
+QE_IMPL_MEMBER( QString, context, IncludeRulesRule, Syntax )
+QE_IMPL_MEMBER( bool, includeAttrib, IncludeRulesRule, Syntax )
+QE_IMPL_MEMBER( Syntax::Rule::List, rules, IncludeRulesRule, Syntax )

@@ -22,26 +22,26 @@ class Syntax::DocumentBuilderData : public QSharedData
 {
 public:
     QHash<QString, Syntax::Document> documents;
-    
+
     DocumentBuilderData()
         : QSharedData()
     {
     }
-    
+
     DocumentBuilderData( const Syntax::DocumentBuilderData& other )
         : QSharedData( other ),
             QE_OTHER_INIT( documents )
     {
     }
-    
+
     virtual ~DocumentBuilderData() {
     }
-    
+
     void mergeRules( Syntax::Document& document, Syntax::Context& context, Syntax::Rule& _rule ) {
         Syntax::IncludeRulesRule rule = _rule.toIncludeRules();
         QString srcContextName = rule.context();
         QString srcSyntaxName = document.name();
-        
+
         // import external initial context rules
         if ( srcContextName.startsWith( "##" ) ) {
             srcSyntaxName = srcContextName.mid( 2 );
@@ -57,20 +57,20 @@ public:
         else {
             // nothing to do
         }
-        
+
         // get source document
         Q_ASSERT( documents.contains( srcSyntaxName ) );
         Syntax::Document& srcDocument = documents[ srcSyntaxName ];
-        
+
         // get source context name if needed
         if ( rule.context().startsWith( "##" ) ) {
             srcContextName = srcDocument.highlighting().defaultContextName();
         }
-        
+
         // get source context
         Q_ASSERT( srcDocument.highlighting().contexts().contains( srcContextName ) );
         Syntax::Context& srcContext = srcDocument.highlighting().contexts()[ srcContextName ];
-        
+
         // make sure the document is built
         if ( srcDocument.name() != document.name() ) {
             buildDocument( srcDocument );
@@ -79,86 +79,86 @@ public:
         else {
             buildContextRules( srcDocument, srcContext );
         }
-        
+
         // update context attribute
         if ( rule.includeAttrib() ) {
             context.attribute() = srcContext.attribute();
         }
-        
+
         // update rules
         const Syntax::Rule::List& rules = srcContext.rules();
-        
+
         for ( int i = 0; i < rules.count(); i++ ) {
             rule.rules() << rules[ i ];
         }
     }
-    
+
     void buildRuleRule( Syntax::Document& document, Syntax::Context& context, Syntax::Rule& rule ) {
         Q_ASSERT( rule.type() != QodeEdit::InvalidRule );
-        
+
         if ( rule.type() == QodeEdit::IncludeRulesRule ) {
             mergeRules( document, context, rule );
         }
         else {
             Syntax::Rule::List rules = rule.rules();
-            
+
             for ( int i = rules.count() -1; i >= 0; i-- ) {
                 buildRuleRule( document, context, rules[ i ] );
             }
         }
     }
-    
+
     void buildContextRule( Syntax::Document& document, Syntax::Context& context, Syntax::Rule& rule ) {
         Q_ASSERT( rule.type() != QodeEdit::InvalidRule );
-        
+
         if ( rule.type() == QodeEdit::IncludeRulesRule ) {
             mergeRules( document, context, rule );
         }
         else {
             Syntax::Rule::List rules = rule.rules();
-            
+
             for ( int i = rules.count() -1; i >= 0; i-- ) {
                 buildRuleRule( document, context, rules[ i ] );
             }
         }
     }
-    
+
     void buildContextRules( Syntax::Document& document, Syntax::Context& context ) {
         if ( document.finalyzed() ) {
             return;
         }
-        
+
         Syntax::Rule::List& rules = context.rules();
-        
+
         for ( int i = rules.count() -1; i >= 0; i-- ) {
             buildContextRule( document, context, rules[ i ] );
         }
     }
-    
+
     void buildDocument( Syntax::Document& document ) {
         if ( document.finalyzed() ) {
             return;
         }
-        
+
         Syntax::Context::Hash& contexts = document.highlighting().contexts();
-        
+
         foreach ( const QString& contextName, contexts.keys() ) {
             buildContextRules( document, contexts[ contextName ] );
         }
-        
+
         document.finalyzed() = true;
     }
-    
+
     void buildDocuments( const QHash<QString, Syntax::Document>& _documents ) {
         documents = _documents;
-        
+
         foreach ( const QString& syntaxName, documents.keys() ) {
             buildDocument( documents[ syntaxName ] );
         }
     }
 };
 
-QE_IMPL_SHARED_CLASS( DocumentBuilder, Syntax );
+QE_IMPL_SHARED_CLASS( DocumentBuilder, Syntax )
 
 Syntax::DocumentBuilder::~DocumentBuilder()
 {

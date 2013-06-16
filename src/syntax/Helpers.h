@@ -25,7 +25,7 @@
     virtual ~className(); \
     virtual bool operator==( const nameSpace::className& other ) const; \
     virtual bool operator!=( const nameSpace::className& other ) const; \
-    virtual nameSpace::className& operator=( const nameSpace::className& other );
+    virtual nameSpace::className& operator=( const nameSpace::className& other )
 
 #define QE_IMPL_SHARED_CLASS( className, nameSpace ) \
     nameSpace::className::className() : d( new nameSpace::className##Data ) {} \
@@ -63,7 +63,7 @@
 
 #define QE_DECL_MEMBER( type, name ) \
     const type& name() const; \
-    type& name();
+    type& name()
 
 #define QE_IMPL_MEMBER( type, name, className, nameSpace ) \
     const type& nameSpace::className::name() const { return static_cast<nameSpace::className##Data*>( d.data() )->name; } \

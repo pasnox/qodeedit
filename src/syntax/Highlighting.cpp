@@ -22,12 +22,12 @@ public:
     Syntax::HashList lists;
     Syntax::Context::Hash contexts;
     Syntax::ItemData::Hash itemDatas;
-    
+
     HighlightingData()
         : QSharedData()
     {
     }
-    
+
     HighlightingData( const Syntax::HighlightingData& other )
         : QSharedData( other ),
             QE_OTHER_INIT( defaultContextName ),
@@ -36,21 +36,21 @@ public:
             QE_OTHER_INIT( itemDatas )
     {
     }
-    
+
     virtual ~HighlightingData() {
     }
 };
 
-QE_IMPL_SHARED_CLASS( Highlighting, Syntax );
+QE_IMPL_SHARED_CLASS( Highlighting, Syntax )
 
 Syntax::Highlighting::~Highlighting()
 {
 }
 
-QE_IMPL_MEMBER( QString, defaultContextName, Highlighting, Syntax );
-QE_IMPL_MEMBER( Syntax::HashList, lists, Highlighting, Syntax );
-QE_IMPL_MEMBER( Syntax::Context::Hash, contexts, Highlighting, Syntax );
-QE_IMPL_MEMBER( Syntax::ItemData::Hash, itemDatas, Highlighting, Syntax );
+QE_IMPL_MEMBER( QString, defaultContextName, Highlighting, Syntax )
+QE_IMPL_MEMBER( Syntax::HashList, lists, Highlighting, Syntax )
+QE_IMPL_MEMBER( Syntax::Context::Hash, contexts, Highlighting, Syntax )
+QE_IMPL_MEMBER( Syntax::ItemData::Hash, itemDatas, Highlighting, Syntax )
 
 Syntax::List Syntax::Highlighting::list( const QString& name ) const
 {

@@ -29,7 +29,7 @@ public:
     bool underline;
     QColor backgroundColor;
     QColor selBackgroundColor;
-    
+
     ItemDataData()
         : QSharedData(),
             spellChecking( false ),
@@ -39,7 +39,7 @@ public:
             underline( false )
     {
     }
-    
+
     ItemDataData( const Syntax::ItemDataData& other )
         : QSharedData( other ),
             QE_OTHER_INIT( name ),
@@ -55,25 +55,25 @@ public:
             QE_OTHER_INIT( selBackgroundColor )
     {
     }
-    
+
     virtual ~ItemDataData() {
     }
 };
 
-QE_IMPL_SHARED_CLASS( ItemData, Syntax );
+QE_IMPL_SHARED_CLASS( ItemData, Syntax )
 
 Syntax::ItemData::~ItemData()
 {
 }
 
-QE_IMPL_MEMBER( QString, name, ItemData, Syntax );
-QE_IMPL_MEMBER( QString, defStyleNum, ItemData, Syntax );
-QE_IMPL_MEMBER( bool, spellChecking, ItemData, Syntax );
-QE_IMPL_MEMBER( QColor, color, ItemData, Syntax );
-QE_IMPL_MEMBER( QColor, selColor, ItemData, Syntax );
-QE_IMPL_MEMBER( bool, bold, ItemData, Syntax );
-QE_IMPL_MEMBER( bool, italic, ItemData, Syntax );
-QE_IMPL_MEMBER( bool, strikeOut, ItemData, Syntax );
-QE_IMPL_MEMBER( bool, underline, ItemData, Syntax );
-QE_IMPL_MEMBER( QColor, backgroundColor, ItemData, Syntax );
-QE_IMPL_MEMBER( QColor, selBackgroundColor, ItemData, Syntax );
+QE_IMPL_MEMBER( QString, name, ItemData, Syntax )
+QE_IMPL_MEMBER( QString, defStyleNum, ItemData, Syntax )
+QE_IMPL_MEMBER( bool, spellChecking, ItemData, Syntax )
+QE_IMPL_MEMBER( QColor, color, ItemData, Syntax )
+QE_IMPL_MEMBER( QColor, selColor, ItemData, Syntax )
+QE_IMPL_MEMBER( bool, bold, ItemData, Syntax )
+QE_IMPL_MEMBER( bool, italic, ItemData, Syntax )
+QE_IMPL_MEMBER( bool, strikeOut, ItemData, Syntax )
+QE_IMPL_MEMBER( bool, underline, ItemData, Syntax )
+QE_IMPL_MEMBER( QColor, backgroundColor, ItemData, Syntax )
+QE_IMPL_MEMBER( QColor, selBackgroundColor, ItemData, Syntax )

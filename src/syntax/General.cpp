@@ -23,12 +23,12 @@ public:
     Syntax::Folding folding;
     Syntax::Indentation indentation;
     Syntax::EmptyLine::List emptyLines;
-    
+
     GeneralData()
         : QSharedData()
     {
     }
-    
+
     GeneralData( const Syntax::GeneralData& other )
         : QSharedData( other ),
             QE_OTHER_INIT( comments ),
@@ -38,19 +38,19 @@ public:
             QE_OTHER_INIT( emptyLines )
     {
     }
-    
+
     virtual ~GeneralData() {
     }
 };
 
-QE_IMPL_SHARED_CLASS( General, Syntax );
+QE_IMPL_SHARED_CLASS( General, Syntax )
 
 Syntax::General::~General()
 {
 }
 
-QE_IMPL_MEMBER( Syntax::Comment::List, comments, General, Syntax );
-QE_IMPL_MEMBER( Syntax::Keywords, keywords, General, Syntax );
-QE_IMPL_MEMBER( Syntax::Folding, folding, General, Syntax );
-QE_IMPL_MEMBER( Syntax::Indentation, indentation, General, Syntax );
-QE_IMPL_MEMBER( Syntax::EmptyLine::List, emptyLines, General, Syntax );
+QE_IMPL_MEMBER( Syntax::Comment::List, comments, General, Syntax )
+QE_IMPL_MEMBER( Syntax::Keywords, keywords, General, Syntax )
+QE_IMPL_MEMBER( Syntax::Folding, folding, General, Syntax )
+QE_IMPL_MEMBER( Syntax::Indentation, indentation, General, Syntax )
+QE_IMPL_MEMBER( Syntax::EmptyLine::List, emptyLines, General, Syntax )
