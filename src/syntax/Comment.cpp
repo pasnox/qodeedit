@@ -23,12 +23,12 @@ public:
     QString end;
     QString region;
     QString position;
-    
+
     CommentData()
         : QSharedData()
     {
     }
-    
+
     CommentData( const Syntax::CommentData& other )
         : QSharedData( other ),
             QE_OTHER_INIT( name ),
@@ -38,19 +38,19 @@ public:
             QE_OTHER_INIT( position )
     {
     }
-    
+
     virtual ~CommentData() {
     }
 };
 
-QE_IMPL_SHARED_CLASS( Comment, Syntax );
+QE_IMPL_SHARED_CLASS( Comment, Syntax )
 
 Syntax::Comment::~Comment()
 {
 }
 
-QE_IMPL_MEMBER( QString, name, Comment, Syntax );
-QE_IMPL_MEMBER( QString, start, Comment, Syntax );
-QE_IMPL_MEMBER( QString, end, Comment, Syntax );
-QE_IMPL_MEMBER( QString, region, Comment, Syntax );
-QE_IMPL_MEMBER( QString, position, Comment, Syntax );
+QE_IMPL_MEMBER( QString, name, Comment, Syntax )
+QE_IMPL_MEMBER( QString, start, Comment, Syntax )
+QE_IMPL_MEMBER( QString, end, Comment, Syntax )
+QE_IMPL_MEMBER( QString, region, Comment, Syntax )
+QE_IMPL_MEMBER( QString, position, Comment, Syntax )

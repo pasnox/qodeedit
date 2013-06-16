@@ -27,7 +27,7 @@ public:
     bool dynamic;
     bool noIndentationBasedFolding;
     Syntax::Rule::List rules;
-    
+
     ContextData()
         : QSharedData(),
             attribute( "normal" ),
@@ -39,7 +39,7 @@ public:
             noIndentationBasedFolding( false )
     {
     }
-    
+
     ContextData( const Syntax::ContextData& other )
         : QSharedData( other ),
             QE_OTHER_INIT( name ),
@@ -53,26 +53,26 @@ public:
             QE_OTHER_INIT( rules )
     {
     }
-    
+
     virtual ~ContextData() {
     }
 };
 
-QE_IMPL_SHARED_CLASS( Context, Syntax );
+QE_IMPL_SHARED_CLASS( Context, Syntax )
 
 Syntax::Context::~Context()
 {
 }
 
-QE_IMPL_MEMBER( QString, name, Context, Syntax );
-QE_IMPL_MEMBER( QString, attribute, Context, Syntax );
-QE_IMPL_MEMBER( QString, lineBeginContext, Context, Syntax );
-QE_IMPL_MEMBER( QString, lineEndContext, Context, Syntax );
-QE_IMPL_MEMBER( bool, fallThrough, Context, Syntax );
-QE_IMPL_MEMBER( QString, fallThroughContext, Context, Syntax );
-QE_IMPL_MEMBER( bool, dynamic, Context, Syntax );
-QE_IMPL_MEMBER( bool, noIndentationBasedFolding, Context, Syntax );
-QE_IMPL_MEMBER( Syntax::Rule::List, rules, Context, Syntax );
+QE_IMPL_MEMBER( QString, name, Context, Syntax )
+QE_IMPL_MEMBER( QString, attribute, Context, Syntax )
+QE_IMPL_MEMBER( QString, lineBeginContext, Context, Syntax )
+QE_IMPL_MEMBER( QString, lineEndContext, Context, Syntax )
+QE_IMPL_MEMBER( bool, fallThrough, Context, Syntax )
+QE_IMPL_MEMBER( QString, fallThroughContext, Context, Syntax )
+QE_IMPL_MEMBER( bool, dynamic, Context, Syntax )
+QE_IMPL_MEMBER( bool, noIndentationBasedFolding, Context, Syntax )
+QE_IMPL_MEMBER( Syntax::Rule::List, rules, Context, Syntax )
 
 bool Syntax::Context::isNull() const
 {
