@@ -27,7 +27,7 @@ autoGenerateFile( "QodeEditExampleConfig.h.in", "example/QodeEditExampleConfig.h
 
 greaterThan( QT_MAJOR_VERSION, 4 ):QT *= widgets
 
-INCLUDEPATH *= $$getFolders( example ) $$getFolders( src )
+INCLUDEPATH *= $$getFolders( $${PWD}/example ) $$getFolders( $${PWD}/src )
 DEPENDPATH *= $${INCLUDEPATH}
 
 LIBS *= -L$${BUILD_TARGET_PATH} -l$$targetForMode( QodeEdit )

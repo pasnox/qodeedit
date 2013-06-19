@@ -20,30 +20,33 @@ autoGenerateFile( "QodeEditConfig.h.in", "src/QodeEditConfig.h" )
 QT *= xml
 greaterThan( QT_MAJOR_VERSION, 4 ):QT *= widgets
 
-INCLUDEPATH *= src
-DEPENDPATH *= $$getFolders( . )
+INCLUDEPATH *= $${PWD}/src
+DEPENDPATH *= $$getFolders( $${PWD} )
 
 greaterThan( QT_MAJOR_VERSION, 4 ) {
 } else:greaterThan( QT_MAJOR_VERSION, 3 ) {
-    MIMETYPES_QT4_ROOT = ./mimetypes-qt4
+    MIMETYPES_QT4_ROOT = $${PWD}/mimetypes-qt4
 
     exists( $${MIMETYPES_QT4_ROOT} ) {
-        SOURCES_PATHS = $$getFolders( $${MIMETYPES_QT4_ROOT} )
+        SOURCES_PATHS = $$getFolders( $${MIMETYPES_QT4_ROOT}/src )
         DEPENDPATH *= $${SOURCES_PATHS}
         INCLUDEPATH *= $${SOURCES_PATHS}
 
-        include( $${MIMETYPES_QT4_ROOT}/mimetypes/mimetypes.pri )
+        include( $${MIMETYPES_QT4_ROOT}/src/mimetypes/mimetypes.pri )
 
-        HEADERS *= $${MIMETYPES_QT4_ROOT}/io/qstandardpaths.h
-        SOURCES *= $${MIMETYPES_QT4_ROOT}/io/qstandardpaths.cpp
+        HEADERS *= $${MIMETYPES_QT4_ROOT}/src/mimetypes-qt4-helpers.h
+        SOURCES *= $${MIMETYPES_QT4_ROOT}/src/mimetypes-qt4-helpers.cpp
+
+        HEADERS *= $${MIMETYPES_QT4_ROOT}/src/io/qstandardpaths.h
+        SOURCES *= $${MIMETYPES_QT4_ROOT}/src/io/qstandardpaths.cpp
 
         macx {
-            SOURCES *= $${MIMETYPES_QT4_ROOT}/io/*_mac.c*
+            SOURCES *= $${MIMETYPES_QT4_ROOT}/src/io/qstandardpaths_mac.cpp
             LIBS *= "-framework Carbon"
         } else:unix {
-            SOURCES *= $${MIMETYPES_QT4_ROOT}/io/*_unix.c*
+            SOURCES *= $${MIMETYPES_QT4_ROOT}/src/io/qstandardpaths_unix.cpp
         } else:win32 {
-            SOURCES *= $${MIMETYPES_QT4_ROOT}/io/*_win.c*
+            SOURCES *= $${MIMETYPES_QT4_ROOT}/src/io/qstandardpaths_win.cpp
         }
     } else {
         error( Qt 4 build need dependency project mimetypes-qt4 uncompressed in $${MIMETYPES_QT4_ROOT} folder. You can get it here https://github.com/pasnox/mimetypes-qt4 )

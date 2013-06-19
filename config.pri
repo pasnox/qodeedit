@@ -24,7 +24,7 @@ exists( $${BUILD_RAMDISK} ):BUILD_PATH = $${BUILD_RAMDISK}/build
 else:BUILD_PATH = build
 BUILD_PATH = $${BUILD_PATH}/$${BUILD_TARGET}
 BUILD_TARGET_PATH = bin/$${Q_TARGET}
-BUILD_MODE = debug
+BUILD_MODE = release
 BUILD_TYPE = shared
 BUILD_VERSION = 0.1.0
 ABSOLUTE_DATA_DIR = $$PWD/share
@@ -41,31 +41,31 @@ defineTest( initializeProject ) {
     # template
     q_template = $${1}
     isEmpty( q_template ):error( Fatal error: no template given )
-    
+
     # target
     q_target = $${2}
     isEmpty( q_target ):error( Fatal error: no target name given )
-    
+
     # mode
     q_mode = $${3}
     isEmpty( q_mode ):q_mode = $${BUILD_MODE}
-    
+
     # type
     q_type = $${6}
     isEmpty( q_type ):q_type = $${BUILD_TYPE}
-    
+
     # path
     q_path = $${4}
     isEmpty( q_path ) {
         q_path = $${BUILD_PATH}/$${BUILD_TARGET}
     }
-    
+
     # target path
     q_target_path = $${5}
     isEmpty( q_target_path ) {
         q_target_path = $${BUILD_TARGET_PATH}
     }
-    
+
     # version
     q_version = $${7}
 
@@ -73,13 +73,13 @@ defineTest( initializeProject ) {
     CONFIG *= warn_on thread x11 windows qt $${q_mode} $${q_type}
     isEqual( q_mode, debug ):CONFIG *= console
     VERSION = $${q_version}
-    
+
     QMAKE_RPATHDIR *= $${BUILD_TARGET_PATH}
-    
+
     export( CONFIG )
     export( QMAKE_RPATHDIR )
     export( VERSION )
-    
+
     setTemplate( $${q_template} )
     setTarget( $${q_target}, $${q_mode} )
     setTargetDirectory( $${q_target_path} )
