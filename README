@@ -5,8 +5,6 @@ A source code component editor for Qt based on QPlainTextEdit, QTextDocument and
 
 It could be considered an alternative/replacement of QScintilla library.
 
-A technical document can be found here: https://docs.google.com/document/d/1X9VnZ6fFRgWB8afhvTSQpChvO7U408ozxeHYCFWYG1A/edit
-
 Homepage:
     https://github.com/pasnox/qodeedit
 
